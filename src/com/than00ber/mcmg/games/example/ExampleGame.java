@@ -22,9 +22,10 @@ public class ExampleGame extends MiniGame implements Configurable<ExampleGame> {
 
     protected final GameProperty.LocationProperty playgroundSpawn = new GameProperty.LocationProperty("playground.spawn");
     protected final GameProperty.IntegerProperty playgroundRadius = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
-    protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("duration.round", 120).validate(i -> i > 0 && i < 84600);
-    protected final GameProperty.IntegerProperty durationIdle = new GameProperty.IntegerProperty("duration.idle", 30).validate(i -> i > 0 && i < 86400);
+    protected final GameProperty.IntegerProperty idleDuration = new GameProperty.IntegerProperty("idle.duration", 30).validate(i -> i > 0 && i < 86400);
     protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= Bukkit.getServer().getMaxPlayers());
+    protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("round.duration", 120).validate(i -> i > 0 && i < 84600);
+    protected final GameProperty.IntegerProperty countRound = new GameProperty.IntegerProperty("round.count", 1).validate(i -> i > 0);
 
     @Override
     public String getGameName() {
@@ -36,12 +37,7 @@ public class ExampleGame extends MiniGame implements Configurable<ExampleGame> {
         return new GameEngine.Options() {
             @Override
             public Integer getIdleDuration() {
-                return durationIdle.get();
-            }
-
-            @Override
-            public Integer getRoundDuration() {
-                return durationRound.get();
+                return idleDuration.get();
             }
 
             @Override
@@ -57,6 +53,16 @@ public class ExampleGame extends MiniGame implements Configurable<ExampleGame> {
             @Override
             public Integer getPlaygroundRadius() {
                 return playgroundRadius.get();
+            }
+
+            @Override
+            public Integer getRoundDuration() {
+                return durationRound.get();
+            }
+
+            @Override
+            public Integer getRoundCount() {
+                return countRound.get();
             }
         };
     }
@@ -85,6 +91,22 @@ public class ExampleGame extends MiniGame implements Configurable<ExampleGame> {
     }
 
     @Override
+    public String getConfigName() {
+        return getGameName().toLowerCase() + "-latest.lock";
+    }
+
+    @Override
+    public List<? extends ConfigProperty<?>> getProperties() {
+        return Arrays.asList(
+                playgroundSpawn,
+                playgroundRadius,
+                playerMinimum,
+                durationRound,
+                idleDuration
+        );
+    }
+
+    @Override
     public void onGameStarted() {
         Console.debug("ExampleGame#onGameStarted");
     }
@@ -107,21 +129,5 @@ public class ExampleGame extends MiniGame implements Configurable<ExampleGame> {
     @Override
     public void onRoundWon(WinCondition<?> condition) {
         Console.debug("ExampleGame#onRoundWon");
-    }
-
-    @Override
-    public String getConfigName() {
-        return getGameName().toLowerCase() + "-latest.lock";
-    }
-
-    @Override
-    public List<? extends ConfigProperty<?>> getProperties() {
-        return Arrays.asList(
-                playgroundSpawn,
-                playgroundRadius,
-                playerMinimum,
-                durationRound,
-                durationIdle
-        );
     }
 }

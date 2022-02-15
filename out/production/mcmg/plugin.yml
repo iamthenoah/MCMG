@@ -7,7 +7,7 @@ api-version: 1.18
 commands:
   game:
     description: Allows to start, end and restart games
-    usage: /game [start | end | restart] <Option?>
+    usage: /game [start | end | restart | play] <Option?>
     permission: admin
 
 permissions:

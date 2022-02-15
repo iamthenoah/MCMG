@@ -3,7 +3,6 @@ package com.than00ber.mcmg;
 import com.than00ber.mcmg.commands.GameCommandExecutor;
 import com.than00ber.mcmg.games.GameEngine;
 import com.than00ber.mcmg.games.MiniGame;
-import com.than00ber.mcmg.games.example.ExampleGame;
 import com.than00ber.mcmg.util.ConfigUtil;
 import com.than00ber.mcmg.util.config.Configurable;
 import org.bukkit.Bukkit;
@@ -20,10 +19,6 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         new GameCommandExecutor(this, WORLD);
         GAME_ENGINE = new GameEngine<>(this);
-
-        ExampleGame game = new ExampleGame();
-        ConfigUtil.loadConfigs(this, game);
-        GAME_ENGINE.mount(game);
     }
 
     @Override

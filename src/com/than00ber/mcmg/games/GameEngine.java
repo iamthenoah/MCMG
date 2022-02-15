@@ -33,11 +33,13 @@ public class GameEngine<G extends MiniGame> {
             private BossBar BAR;
             private int countdownIdle;
             private int countdownRound;
+            private int roundCount;
 
             @Override
             public void activate() {
                 countdownIdle = GAME.getOptions().getIdleDuration();
                 countdownRound = GAME.getOptions().getRoundDuration();
+                roundCount = GAME.getOptions().getRoundCount();
                 BAR = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
                 GAME.getCurrentPlayers().forEach(p -> BAR.addPlayer(p));
             }
@@ -60,7 +62,12 @@ public class GameEngine<G extends MiniGame> {
                 } else {
                     if (countdownRound <= 0) {
                         GAME.onRoundEnded();
-                        endGame(null);
+
+                        if (roundCount == 0) {
+                            endGame(null);
+                        } else {
+                            roundCount--;
+                        }
                     }
 
                     BAR.setColor(BarColor.GREEN);
@@ -73,6 +80,9 @@ public class GameEngine<G extends MiniGame> {
     }
 
     public ActionResult startGame(@Nullable String message) {
+        if (GAME == null) {
+            return ActionResult.warn("No game is set.");
+        }
         if (CURRENT_HANDLER != null) {
             return ActionResult.warn("A game of " + GAME.getGameName() + " is already running.");
         }
@@ -87,7 +97,7 @@ public class GameEngine<G extends MiniGame> {
     }
 
     public ActionResult endGame(@Nullable String reason) {
-        if (CURRENT_HANDLER == null) {
+        if (CURRENT_HANDLER == null || GAME == null) {
             return ActionResult.warn("No game is currently running.");
         }
 
@@ -117,13 +127,15 @@ public class GameEngine<G extends MiniGame> {
 
         Integer getIdleDuration();
 
-        Integer getRoundDuration();
-
         Integer getMinimumPlayer();
 
         List<Location> getSpawnLocations();
 
         Integer getPlaygroundRadius();
+
+        Integer getRoundDuration();
+
+        Integer getRoundCount();
     }
 
     private interface GameHandler extends Runnable {
