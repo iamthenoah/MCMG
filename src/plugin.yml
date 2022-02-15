@@ -1,0 +1,5 @@
+name: MCMG
+version: 1.0.0
+author: Than00ber
+main: com.than00ber.mcmg.Main
+api-version: 1.18
