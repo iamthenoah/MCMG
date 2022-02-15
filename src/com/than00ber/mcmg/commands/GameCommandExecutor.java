@@ -4,8 +4,11 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.games.MiniGame;
 import com.than00ber.mcmg.init.MiniGames;
 import com.than00ber.mcmg.util.ActionResult;
+import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ConfigUtil;
 import com.than00ber.mcmg.util.TextUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +26,7 @@ public class GameCommandExecutor extends CommandExecutor {
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
         return switch (args[0]) {
-            case "play"     -> handleMount(args);
+            case "play"     -> handleMount(sender, args);
             case "start"    -> Main.GAME_ENGINE.startGame(getReason(sender, args, "started"));
             case "end"      -> Main.GAME_ENGINE.endGame(getReason(sender, args, "ended"));
             case "restart"  -> Main.GAME_ENGINE.restartGame(getReason(sender, args, "restarted"));
@@ -39,7 +42,7 @@ public class GameCommandExecutor extends CommandExecutor {
         return args.length == 0 ? TextUtil.getMatching(args, List.of("play", "start", "end", "restart")) : List.of();
     }
 
-    private ActionResult handleMount(String[] args) {
+    private ActionResult handleMount(CommandSender sender, String[] args) {
         if (args.length == 0) {
             return CommandExecutor.INVALID_COMMAND;
         }
@@ -49,8 +52,20 @@ public class GameCommandExecutor extends CommandExecutor {
         if (game != null) {
             ConfigUtil.loadConfigs(instance, game);
             Main.GAME_ENGINE.mount(game);
-            return ActionResult.success(game.getGameName() + " game ready!");
+
+            String name = game.getGameName();
+            int total = Bukkit.getOnlinePlayers().size();
+            ReadyCommandExecutor.GAME_NAME = name;
+            ReadyCommandExecutor.TOTAL_COUNT = total;
+            ReadyCommandExecutor.CURRENT_COUNT = 0;
+            String info = "Next game: " + ChatColor.BLUE + ChatColor.ITALIC + name;
+            String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
+            String status = "Current vote count: " + ChatColor.YELLOW + "0/" + total;
+            ChatUtil.toAll(info, vote, status);
+
+            return ActionResult.success();
         }
+
 
         return ActionResult.failure("Game '" + args[1] + "' not found.");
     }

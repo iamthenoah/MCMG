@@ -2,6 +2,7 @@ package com.than00ber.mcmg;
 
 import com.than00ber.mcmg.commands.ConfigsCommandExecutor;
 import com.than00ber.mcmg.commands.GameCommandExecutor;
+import com.than00ber.mcmg.commands.ReadyCommandExecutor;
 import com.than00ber.mcmg.games.GameEngine;
 import com.than00ber.mcmg.games.MiniGame;
 import com.than00ber.mcmg.util.ConfigUtil;
@@ -11,14 +12,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
 
-    public static final World WORLD = Bukkit.getWorld("world");
     public static final String PLUGIN_ID = "MCMG";
+    public static final World WORLD = Bukkit.getWorld("world");
     public static GameEngine<MiniGame> GAME_ENGINE;
 
     @Override
     public void onEnable() {
         new GameCommandExecutor(this, WORLD);
         new ConfigsCommandExecutor(this, WORLD);
+        new ReadyCommandExecutor(this, WORLD);
 
         GAME_ENGINE = new GameEngine<>(this);
     }
