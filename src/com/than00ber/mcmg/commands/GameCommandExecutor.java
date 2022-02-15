@@ -6,7 +6,6 @@ import com.than00ber.mcmg.init.MiniGames;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ConfigUtil;
 import com.than00ber.mcmg.util.TextUtil;
-import com.than00ber.mcmg.util.config.Configurable;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +47,7 @@ public class GameCommandExecutor extends CommandExecutor {
         MiniGame game = MiniGames.MINI_GAMES.getOrDefault(args[1].toLowerCase(), null);
 
         if (game != null) {
-            ConfigUtil.loadConfigs(instance, (Configurable<?>) game);
+            ConfigUtil.loadConfigs(instance, game);
             Main.GAME_ENGINE.mount(game);
             return ActionResult.success(game.getGameName() + " game ready!");
         }

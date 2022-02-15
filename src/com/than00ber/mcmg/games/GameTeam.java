@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.bukkit.scoreboard.Team.OptionStatus;
 
-public class GameTeam implements Configurable<GameTeam> {
+public class GameTeam implements Configurable {
 
     private final GameProperty.StringProperty teamId;
     private final GameProperty.StringProperty displayName;

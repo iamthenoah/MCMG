@@ -1,10 +1,11 @@
 package com.than00ber.mcmg.games;
 
+import com.than00ber.mcmg.util.config.Configurable;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public abstract class MiniGame implements GameLifeCycle {
+public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     public abstract String getGameName();
 

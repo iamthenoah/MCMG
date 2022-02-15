@@ -123,6 +123,10 @@ public class GameEngine<G extends MiniGame> {
         return GAME;
     }
 
+    public boolean hasRunningGame() {
+        return GAME != null;
+    }
+
     public interface Options {
 
         Integer getIdleDuration();

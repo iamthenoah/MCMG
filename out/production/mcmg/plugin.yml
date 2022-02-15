@@ -9,6 +9,10 @@ commands:
     description: Allows to start, end and restart games
     usage: /game [start | end | restart | play] <Option?>
     permission: admin
+  configs:
+    description: Allows editing of all current game properties
+    usage: /configs <Property> <Option?>
+    permission: admin
 
 permissions:
   none:

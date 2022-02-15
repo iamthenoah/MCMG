@@ -37,20 +37,18 @@ public abstract class CommandExecutor implements org.bukkit.command.CommandExecu
 
             if (result.hasMessages()) {
                 String[] messages = result.getFormattedMessages();
-                ChatUtil.toSelf(sender, messages);
                 Console.debug(messages);
+                ChatUtil.toSelf(sender, messages);
             }
         } catch (Exception e) {
             Console.error(e);
             Console.error(e.getStackTrace());
             ChatUtil.toSelf(sender, INVALID_COMMAND.getFormattedMessages());
-            String shouldBe = ChatColor.RED + "Should be: " + ChatColor.ITALIC + command.getUsage();
-            ChatUtil.toSelf(sender, shouldBe);
+            ChatUtil.toSelf(sender, ChatColor.RED + "Should be: " + ChatColor.ITALIC + command.getUsage());
         }
         return true;
     }
 
-    @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         return this.onTabComplete(sender, args[0], Arrays.copyOfRange(args, 1, args.length));

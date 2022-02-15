@@ -8,7 +8,6 @@ import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.config.ConfigProperty;
-import com.than00ber.mcmg.util.config.Configurable;
 import com.than00ber.mcmg.util.config.GameProperty;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExampleGame extends MiniGame implements Configurable<ExampleGame> {
+public class ExampleGame extends MiniGame {
 
     protected final GameProperty.LocationProperty playgroundSpawn = new GameProperty.LocationProperty("playground.spawn");
     protected final GameProperty.IntegerProperty playgroundRadius = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);

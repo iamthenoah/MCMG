@@ -4,7 +4,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
 
-public interface Configurable<T> {
+public interface Configurable {
     /**
      * Get default file name to be used to save the configs on.
      * @return Default file name.
@@ -33,13 +33,11 @@ public interface Configurable<T> {
     /**
      * Sets the configuration.
      * @param configs Configuration object.
-     * @return Instance.
      * @default Configures of properties.
      */
-    default T setConfig(YamlConfiguration configs) {
+    default void setConfig(YamlConfiguration configs) {
         for (ConfigProperty<?> property : this.getProperties()) {
             property.load(configs);
         }
-        return (T) this;
     }
 }
