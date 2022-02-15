@@ -24,8 +24,8 @@ public class ExampleGame extends MiniGame implements Configurable<ExampleGame> {
     protected final GameProperty.IntegerProperty playgroundRadius = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
     protected final GameProperty.IntegerProperty idleDuration = new GameProperty.IntegerProperty("idle.duration", 30).validate(i -> i > 0 && i < 86400);
     protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= Bukkit.getServer().getMaxPlayers());
-    protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("round.duration", 120).validate(i -> i > 0 && i < 84600);
-    protected final GameProperty.IntegerProperty countRound = new GameProperty.IntegerProperty("round.count", 1).validate(i -> i > 0);
+    protected final GameProperty.IntegerProperty roundDuration = new GameProperty.IntegerProperty("round.duration", 120).validate(i -> i > 0 && i < 84600);
+    protected final GameProperty.IntegerProperty roundCount = new GameProperty.IntegerProperty("round.count", 1).validate(i -> i > 0);
 
     @Override
     public String getGameName() {
@@ -57,12 +57,12 @@ public class ExampleGame extends MiniGame implements Configurable<ExampleGame> {
 
             @Override
             public Integer getRoundDuration() {
-                return durationRound.get();
+                return roundDuration.get();
             }
 
             @Override
             public Integer getRoundCount() {
-                return countRound.get();
+                return roundCount.get();
             }
         };
     }
@@ -100,9 +100,10 @@ public class ExampleGame extends MiniGame implements Configurable<ExampleGame> {
         return Arrays.asList(
                 playgroundSpawn,
                 playgroundRadius,
+                idleDuration,
                 playerMinimum,
-                durationRound,
-                idleDuration
+                roundDuration,
+                roundCount
         );
     }
 
