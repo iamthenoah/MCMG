@@ -66,7 +66,6 @@ public class GameCommandExecutor extends CommandExecutor {
             return ActionResult.success();
         }
 
-
         return ActionResult.failure("Game '" + args[1] + "' not found.");
     }
 

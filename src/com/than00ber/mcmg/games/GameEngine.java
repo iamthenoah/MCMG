@@ -16,7 +16,6 @@ import java.util.function.Supplier;
 public class GameEngine<G extends MiniGame> {
 
     private final Main INSTANCE;
-
     private G GAME;
     private Supplier<GameHandler> HANDLER_SUPPLIER;
     private GameHandler CURRENT_HANDLER;
@@ -41,7 +40,7 @@ public class GameEngine<G extends MiniGame> {
                 countdownRound = GAME.getOptions().getRoundDuration();
                 roundCount = GAME.getOptions().getRoundCount();
                 BAR = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
-                GAME.getCurrentPlayers().forEach(p -> BAR.addPlayer(p));
+                GAME.getCurrentPlayers().forEach((p, r) -> BAR.addPlayer(p));
             }
 
             @Override
@@ -51,30 +50,54 @@ public class GameEngine<G extends MiniGame> {
 
             @Override
             public void run() {
-                if (countdownIdle >= 0) {
+                if (roundCount == 0) {
+                    endGame(null);
+                } else if (countdownIdle >= 0) {
                     if (countdownIdle == 0) {
                         GAME.onRoundStarted();
                     }
 
-                    BAR.setProgress((float) countdownIdle / GAME.getOptions().getIdleDuration());
-                    BAR.setTitle("Next round starting in " + countdownIdle + " seconds.");
+                    updateProgressBar(
+                            BarColor.WHITE,
+                            countdownIdle,
+                            GAME.getOptions().getIdleDuration(),
+                            "Next round starting in " + countdownIdle + " seconds."
+                    );
                     countdownIdle--;
                 } else {
                     if (countdownRound <= 0) {
                         GAME.onRoundEnded();
-
-                        if (roundCount == 0) {
-                            endGame(null);
-                        } else {
-                            roundCount--;
-                        }
+                        handleRoundEnd();
                     }
 
-                    BAR.setColor(BarColor.GREEN);
-                    BAR.setProgress((float) countdownRound / GAME.getOptions().getRoundDuration());
-                    BAR.setTitle(ChatColor.GREEN + "Round duration, " + countdownRound + " seconds.");
+                    WinCondition<?> condition =  GAME.getWinConditions().stream()
+                            .filter(c -> c.check(GAME)).findAny().orElse(null);
+
+                    if (condition != null) {
+                        GAME.onRoundWon(condition);
+                        handleRoundEnd();
+                    }
+
+                    updateProgressBar(
+                            BarColor.GREEN,
+                            countdownRound,
+                            GAME.getOptions().getRoundDuration(),
+                            ChatColor.GREEN + "Round duration, " + countdownRound + " seconds."
+                    );
                     countdownRound--;
                 }
+            }
+
+            private void updateProgressBar(BarColor color, int currentTick, int totalTick, String title) {
+                BAR.setColor(color);
+                BAR.setProgress((float) currentTick / totalTick);
+                BAR.setTitle(title);
+            }
+
+            private void handleRoundEnd() {
+                countdownIdle = GAME.getOptions().getIdleDuration();
+                countdownRound = GAME.getOptions().getRoundDuration();
+                roundCount--;
             }
         };
     }

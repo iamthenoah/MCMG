@@ -32,31 +32,31 @@ public class WinCondition<G> {
     }
 
     public boolean check(G game) {
-        return this.condition.test(game);
+        return condition.test(game);
     }
 
     public List<GameTeam> getWinners() {
-        return this.winners;
+        return winners;
     }
 
     public String getTitleFor(GameTeam team) {
-        if (this.cancellationReason != null) {
+        if (cancellationReason != null) {
             return ChatColor.GOLD + "" + ChatColor.BOLD + "Game Cancelled.";
         }
-        ChatColor color = this.winners.contains(team) ? ChatColor.DARK_GREEN : ChatColor.DARK_RED;
-        return color + "" + ChatColor.BOLD + (this.winners.contains(team) ? "Game won!" : "Game lost.");
+        ChatColor color = winners.contains(team) ? ChatColor.DARK_GREEN : ChatColor.DARK_RED;
+        return color + "" + ChatColor.BOLD + (winners.contains(team) ? "You won!" : "Game lost.");
     }
 
     public String getSubTitleFor(GameTeam team) {
-        if (this.cancellationReason != null) {
-            return this.cancellationReason;
+        if (cancellationReason != null) {
+            return cancellationReason;
         }
-        String reason = this.winners.contains(team) ? this.winReason : this.loseReason;
-        return Optional.ofNullable(reason).orElse(this.getDefaultSubTitle());
+        String reason = winners.contains(team) ? winReason : loseReason;
+        return Optional.ofNullable(reason).orElse(getDefaultSubTitle());
     }
 
     private String getDefaultSubTitle() {
-        List<String> winningTeams = this.winners.stream()
+        List<String> winningTeams = winners.stream()
                 .map(GameTeam::getDisplayName)
                 .collect(Collectors.toList());
         String winningTeam = String.join(", ", winningTeams);
@@ -66,49 +66,49 @@ public class WinCondition<G> {
 
     public static class Builder<G> {
 
-        private Predicate<G> condition;
+        private Predicate<G> winCondition;
         private final List<GameTeam> winners;
         private String winReason;
         private String loseReason;
         private String cancellationReason;
 
         public Builder() {
-            this.condition = game -> true;
-            this.winners = new ArrayList<>();
+            winCondition = game -> true;
+            winners = new ArrayList<>();
         }
 
         public Builder<G> setCondition(Predicate<G> condition) {
-            this.condition = condition;
+            winCondition = condition;
             return this;
         }
 
         public Builder<G> setWinReason(String title) {
-            this.winReason = title;
+            winReason = title;
             return this;
         }
 
         public Builder<G> setLoseReason(String title) {
-            this.loseReason = title;
+            loseReason = title;
             return this;
         }
 
         public Builder<G> setWinners(GameTeam... role) {
-            this.winners.addAll(List.of(role));
+            winners.addAll(List.of(role));
             return this;
         }
 
         public Builder<G> setCancellationReason(String reason) {
-            this.cancellationReason = reason;
+            cancellationReason = reason;
             return this;
         }
 
         public WinCondition<G> build() {
             return new WinCondition<>(
-                    this.condition,
-                    this.winners,
-                    this.winReason,
-                    this.loseReason,
-                    this.cancellationReason
+                    winCondition,
+                    winners,
+                    winReason,
+                    loseReason,
+                    cancellationReason
             );
         }
     }
