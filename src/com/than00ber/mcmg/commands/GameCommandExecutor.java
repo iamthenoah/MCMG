@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.games.MiniGame;
+import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.init.MiniGames;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;

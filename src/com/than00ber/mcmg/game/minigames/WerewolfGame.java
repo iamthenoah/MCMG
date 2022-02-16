@@ -1,6 +1,6 @@
-package com.than00ber.mcmg.games.playables;
+package com.than00ber.mcmg.game.minigames;
 
-import com.than00ber.mcmg.games.MiniGame;
+import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;

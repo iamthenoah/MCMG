@@ -1,4 +1,4 @@
-package com.than00ber.mcmg.games;
+package com.than00ber.mcmg.game;
 
 import org.bukkit.World;
 import org.bukkit.boss.BossBar;
