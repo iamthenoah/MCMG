@@ -53,7 +53,9 @@ public class GameCommandExecutor extends CommandExecutor {
         if (supplier != null) {
             MiniGame game = supplier.get();
             ConfigUtil.loadConfigs(instance, game);
-            Main.GAME_ENGINE.mount(game);
+
+            ActionResult result = Main.GAME_ENGINE.mount(game);
+            if (!result.isSuccessful()) return result;
 
             String name = game.getGameName();
             int total = Bukkit.getOnlinePlayers().size();
@@ -62,14 +64,13 @@ public class GameCommandExecutor extends CommandExecutor {
             ReadyCommandExecutor.TOTAL_COUNT = total;
             ReadyCommandExecutor.CURRENT_COUNT = 0;
 
-            String info = "Next game: " + ChatColor.BLUE + ChatColor.ITALIC + name;
+            String info = "Next game: " + ChatColor.BLUE + name;
             String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
             String status = "Current vote count: " + ChatColor.YELLOW + "0/" + total;
             ChatUtil.toAll(info, vote, status);
 
             return ActionResult.success();
         }
-
         return ActionResult.failure("Game '" + args[1] + "' not found.");
     }
 

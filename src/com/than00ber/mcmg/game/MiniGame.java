@@ -21,17 +21,18 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("duration.round", 10).validate(i -> i > 0 && i < 84600);
     protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getCurrentPlayers().size());
 
-    private final List<GameProperty<?>> PROPERTIES;
+    private final List<GameProperty<?>> properties;
+    private MiniGameEventListener<?> listener;
     private final World world;
 
     public MiniGame(World world) {
-        PROPERTIES = new ArrayList<>();
-        PROPERTIES.add(playgroundSpawn);
-        PROPERTIES.add(playgroundRadius);
-        PROPERTIES.add(durationIdle);
-        PROPERTIES.add(playerMinimum);
-        PROPERTIES.add(durationRound);
-        getGameTeams().forEach(t -> PROPERTIES.addAll(t.getProperties()));
+        properties = new ArrayList<>();
+        properties.add(playgroundSpawn);
+        properties.add(playgroundRadius);
+        properties.add(durationIdle);
+        properties.add(playerMinimum);
+        properties.add(durationRound);
+        getGameTeams().forEach(t -> properties.addAll(t.getProperties()));
         this.world = world;
     }
 
@@ -39,8 +40,16 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         return world;
     }
 
-    protected void addProperties(GameProperty<?>... properties) {
-        PROPERTIES.addAll(List.of(properties));
+    public MiniGameEventListener<?> getEventListener() {
+        return listener;
+    }
+
+    protected final void setEventListener(MiniGameEventListener<?> listener) {
+        this.listener = listener;
+    }
+
+    protected final void addProperties(GameProperty<?>... properties) {
+        this.properties.addAll(List.of(properties));
     }
 
     @Override
@@ -50,7 +59,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     @Override
     public final List<? extends ConfigProperty<?>> getProperties() {
-        return PROPERTIES;
+        return properties;
     }
 
     public GameEngine.Options getOptions() {

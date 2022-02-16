@@ -22,12 +22,18 @@ public class GameEngine<G extends MiniGame> {
     private Supplier<GameHandler> HANDLER_SUPPLIER;
     private GameHandler CURRENT_HANDLER;
     private Integer HANDLER_ID;
+    private GameState GAME_STATE;
 
     public GameEngine(Main instance) {
         INSTANCE = instance;
+        GAME_STATE = GameState.EMPTY;
     }
 
-    public void mount(G game) {
+    public ActionResult mount(G game) {
+        if (hasRunningGame()) {
+            return ActionResult.failure("Cannot mount a game while game is running");
+        }
+
         GAME = game;
         HANDLER_SUPPLIER = () -> new GameHandler() {
 
@@ -89,6 +95,9 @@ public class GameEngine<G extends MiniGame> {
                 }
             }
         };
+
+        GAME_STATE = GameState.IDLE;
+        return ActionResult.success();
     }
 
     public ActionResult startGame(@Nullable String message) {
@@ -99,12 +108,14 @@ public class GameEngine<G extends MiniGame> {
             return ActionResult.warn("A game of " + GAME.getGameName() + " is already running.");
         }
 
+        Bukkit.getPluginManager().registerEvents(GAME.getEventListener(), INSTANCE); // register new game listener
         GAME.onGameStarted();
 
         CURRENT_HANDLER = HANDLER_SUPPLIER.get();
         CURRENT_HANDLER.activate();
         HANDLER_ID = Bukkit.getScheduler().scheduleSyncRepeatingTask(INSTANCE, CURRENT_HANDLER, 0, 20);
 
+        GAME_STATE = GameState.ONGOING;
         return ActionResult.success(message);
     }
 
@@ -113,6 +124,7 @@ public class GameEngine<G extends MiniGame> {
             return ActionResult.warn("No game is currently running.");
         }
 
+        GAME.getEventListener().unregister();
         GAME.onGameEnded();
 
         CURRENT_HANDLER.deactivate();
@@ -120,6 +132,7 @@ public class GameEngine<G extends MiniGame> {
         CURRENT_HANDLER = null;
         HANDLER_ID = null;
 
+        GAME_STATE = GameState.IDLE;
         return ActionResult.success(reason);
     }
 
@@ -136,7 +149,7 @@ public class GameEngine<G extends MiniGame> {
     }
 
     public boolean hasRunningGame() {
-        return GAME != null;
+        return GAME_STATE.equals(GameState.ONGOING);
     }
 
     public interface Options {
@@ -157,5 +170,9 @@ public class GameEngine<G extends MiniGame> {
         void activate();
 
         void deactivate();
+    }
+
+    public enum GameState {
+        IDLE, ONGOING, EMPTY
     }
 }

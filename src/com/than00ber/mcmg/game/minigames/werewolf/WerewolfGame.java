@@ -1,4 +1,4 @@
-package com.than00ber.mcmg.game.minigames;
+package com.than00ber.mcmg.game.minigames.werewolf;
 
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.game.MiniGameEvent;
@@ -21,12 +21,13 @@ public class WerewolfGame extends MiniGame {
 
     public final HashMap<Player, GameTeam> PLAYERS_ALIVE;
     public final HashMap<Player, GameTeam> PLAYERS_DEAD;
-    public boolean isDaytime;
+    private boolean isDaytime;
 
     public WerewolfGame(World world) {
         super(world);
-        this.PLAYERS_ALIVE = new HashMap<>();
-        this.PLAYERS_DEAD = new HashMap<>();
+        setEventListener(new WerewolfEventListener(this));
+        PLAYERS_ALIVE = new HashMap<>();
+        PLAYERS_DEAD = new HashMap<>();
     }
 
     @Override
@@ -118,7 +119,6 @@ public class WerewolfGame extends MiniGame {
         ChatUtil.toAll("Werewolf#onRoundCycled");
         if (isDaytime) setNight(event.getBossBar()); else setDay(event.getBossBar());
         isDaytime = !isDaytime;
-        event.setGameEnded();
     }
 
     @Override

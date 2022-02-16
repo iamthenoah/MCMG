@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.game.MiniGame;
-import com.than00ber.mcmg.game.minigames.WerewolfGame;
+import com.than00ber.mcmg.game.minigames.werewolf.WerewolfGame;
 import com.than00ber.mcmg.objects.WinCondition;
 
 public class WinConditions {

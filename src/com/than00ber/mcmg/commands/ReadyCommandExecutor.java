@@ -28,10 +28,10 @@ public class ReadyCommandExecutor extends CommandExecutor {
         }
 
         CURRENT_COUNT++;
-        if (CURRENT_COUNT.equals(TOTAL_COUNT)) {
-            String status = CURRENT_COUNT + "/" + TOTAL_COUNT;
-            ChatUtil.toAll("Current vote count: " + ChatColor.YELLOW + status);
+        String status = CURRENT_COUNT + "/" + TOTAL_COUNT;
+        ChatUtil.toAll("Current vote count: " + ChatColor.YELLOW + status);
 
+        if (CURRENT_COUNT.equals(TOTAL_COUNT)) {
             Main.GAME_ENGINE.startGame(null);
             CURRENT_COUNT = null;
             TOTAL_COUNT = null;
