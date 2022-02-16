@@ -1,6 +1,7 @@
 package com.than00ber.mcmg.game.minigames;
 
 import com.than00ber.mcmg.game.MiniGame;
+import com.than00ber.mcmg.game.MiniGameEvent;
 import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
@@ -106,17 +107,18 @@ public class WerewolfGame extends MiniGame {
     }
 
     @Override
-    public void onRoundStarted(BossBar bar) {
+    public void onRoundStarted(MiniGameEvent event) {
         ChatUtil.toAll("Werewolf#onRoundStarted");
         isDaytime = true;
-        setDay(bar);
+        setDay(event.getBossBar());
     }
 
     @Override
-    public void onRoundCycled(BossBar bar) {
+    public void onRoundCycled(MiniGameEvent event) {
         ChatUtil.toAll("Werewolf#onRoundCycled");
-        if (isDaytime) setNight(bar); else setDay(bar);
+        if (isDaytime) setNight(event.getBossBar()); else setDay(event.getBossBar());
         isDaytime = !isDaytime;
+        event.setGameEnded();
     }
 
     @Override

@@ -31,7 +31,7 @@ public class GameEngine<G extends MiniGame> {
         GAME = game;
         HANDLER_SUPPLIER = () -> new GameHandler() {
 
-            private BossBar BAR;
+            private MiniGameEvent event;
             private int countdownIdle;
             private int countdownRound;
 
@@ -39,13 +39,14 @@ public class GameEngine<G extends MiniGame> {
             public void activate() {
                 countdownIdle = GAME.getOptions().getDurationIdle();
                 countdownRound = GAME.getOptions().getDurationRound();
-                BAR = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
-                GAME.getCurrentPlayers().forEach((p, r) -> BAR.addPlayer(p));
+                BossBar bar = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
+                GAME.getCurrentPlayers().forEach((p, r) -> bar.addPlayer(p));
+                event = new MiniGameEvent(bar);
             }
 
             @Override
             public void deactivate() {
-                BAR.removeAll();
+                event.getBossBar().removeAll();
             }
 
             @Override
@@ -57,13 +58,13 @@ public class GameEngine<G extends MiniGame> {
                     }
 
                     countdownIdle--;
-                    BAR.setProgress((float) countdownIdle / GAME.getOptions().getDurationIdle());
-                    BAR.setTitle("Game starting in " + countdownIdle + " seconds.");
+                    event.getBossBar().setProgress((float) countdownIdle / GAME.getOptions().getDurationIdle());
+                    event.getBossBar().setTitle("Game starting in " + countdownIdle + " seconds.");
 
                     if (countdownIdle == 0) {
-                        BAR.setTitle("");
-                        BAR.setProgress(1);
-                        GAME.onRoundStarted(BAR);
+                        event.getBossBar().setTitle("");
+                        event.getBossBar().setProgress(1);
+                        GAME.onRoundStarted(event);
                     }
                 } else {
                     WinCondition<?> condition =  GAME.getWinConditions().stream()
@@ -76,11 +77,15 @@ public class GameEngine<G extends MiniGame> {
 
                     if (countdownRound == 0) {
                         countdownRound = GAME.getOptions().getDurationRound();
-                        GAME.onRoundCycled(BAR);
+                        GAME.onRoundCycled(event);
+
+                        if (event.hasEnded()) {
+                            endGame(null);
+                        }
                     }
 
                     countdownRound--;
-                    BAR.setProgress((float) countdownRound / GAME.getOptions().getDurationRound());
+                    event.getBossBar().setProgress((float) countdownRound / GAME.getOptions().getDurationRound());
                 }
             }
         };

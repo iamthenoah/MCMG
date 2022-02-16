@@ -1,53 +1,25 @@
 package com.than00ber.mcmg.game;
 
-import org.bukkit.World;
 import org.bukkit.boss.BossBar;
 
 public class MiniGameEvent {
 
+    private boolean hasEnded;
     private final BossBar bossBar;
-    private final World world;
 
-    public MiniGameEvent(BossBar bossBar, World world) {
+    public MiniGameEvent(BossBar bossBar) {
         this.bossBar = bossBar;
-        this.world = world;
     }
 
     public BossBar getBossBar() {
         return bossBar;
     }
 
-    public World getWorld() {
-        return world;
+    public boolean hasEnded() {
+        return hasEnded;
     }
 
-    /**
-     * RoundStarted
-     */
-    public static class RoundStarted extends MiniGameEvent {
-
-        public RoundStarted(BossBar bossBar, World world) {
-            super(bossBar, world);
-        }
-    }
-
-    /**
-     * RoundCycled
-     */
-    public static class RoundCycled extends MiniGameEvent {
-
-        private boolean hasEnded;
-
-        public RoundCycled(BossBar bossBar, World world) {
-            super(bossBar, world);
-        }
-
-        public boolean hasEnded() {
-            return hasEnded;
-        }
-
-        public void setEnded(boolean ended) {
-            hasEnded = ended;
-        }
+    public void setGameEnded() {
+        hasEnded = true;
     }
 }
