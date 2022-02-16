@@ -76,9 +76,8 @@ public class ConfigsCommandExecutor extends CommandExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
         if (args.length == 0 && Main.GAME_ENGINE.hasRunningGame()) {
-            String[] options = new String[] {option};
             List<? extends ConfigProperty<?>> properties = Main.GAME_ENGINE.getCurrentGame().getProperties();
-            return TextUtil.getMatching(options, properties, ConfigProperty::getPath);
+            return TextUtil.getMatching(new String[] {option}, properties, ConfigProperty::getPath);
         }
         return List.of();
     }

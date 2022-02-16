@@ -7,6 +7,8 @@ import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.util.ChatUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -17,7 +19,8 @@ public class WerewolfGame extends MiniGame {
     public final HashMap<Player, GameTeam> PLAYERS_ALIVE;
     public final HashMap<Player, GameTeam> PLAYERS_DEAD;
 
-    public WerewolfGame() {
+    public WerewolfGame(World world) {
+        super(world);
         this.PLAYERS_ALIVE = new HashMap<>();
         this.PLAYERS_DEAD = new HashMap<>();
     }
@@ -57,27 +60,49 @@ public class WerewolfGame extends MiniGame {
 
     @Override
     public void onGameStarted() {
-        ChatUtil.toAll("ExampleGame#onGameStarted");
+        ChatUtil.toAll("Werewolf#onGameStarted");
+        getWorld().getWorldBorder().reset();
+        getWorld().setThundering(false);
+        getWorld().setStorm(false);
+        getWorld().setTime(6000);
+        getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        getWorld().setGameRule(GameRule.MOB_GRIEFING, false);
+        getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+        getWorld().setGameRule(GameRule.DO_ENTITY_DROPS, false);
+        getWorld().setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
+        getWorld().setGameRule(GameRule.LOG_ADMIN_COMMANDS, false);
+        getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
+        getWorld().setGameRule(GameRule.KEEP_INVENTORY, true);
     }
 
     @Override
     public void onGameEnded() {
-        ChatUtil.toAll("ExampleGame#onGameEnded");
+        ChatUtil.toAll("Werewolf#onGameEnded");
+        getWorld().getWorldBorder().reset();
+        getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+        getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, true);
+        getWorld().setGameRule(GameRule.MOB_GRIEFING, true);
+        getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
+        getWorld().setGameRule(GameRule.DO_ENTITY_DROPS, true);
+        getWorld().setGameRule(GameRule.SHOW_DEATH_MESSAGES, true);
+        getWorld().setGameRule(GameRule.LOG_ADMIN_COMMANDS, true);
+        getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
+        getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
     }
 
     @Override
     public void onRoundStarted() {
-        ChatUtil.toAll("ExampleGame#onRoundStarted");
+        ChatUtil.toAll("Werewolf#onRoundStarted");
     }
 
     @Override
     public void onRoundEnded() {
-        ChatUtil.toAll("ExampleGame#onRoundEnded");
+        ChatUtil.toAll("Werewolf#onRoundEnded");
     }
 
     @Override
     public void onRoundWon(WinCondition<?> condition) {
-        ChatUtil.toAll("ExampleGame#onRoundWon");
-        ChatUtil.toAll(condition.getSubTitleFor(GameTeams.WEREWOLF));
+        ChatUtil.toAll("Werewolf#onRoundWon");
     }
 }

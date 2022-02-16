@@ -4,6 +4,7 @@ import com.than00ber.mcmg.util.config.ConfigProperty;
 import com.than00ber.mcmg.util.config.Configurable;
 import com.than00ber.mcmg.util.config.GameProperty;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -17,24 +18,39 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     protected final GameProperty.IntegerProperty idleDuration = new GameProperty.IntegerProperty("idle.duration", 5).validate(i -> i > 0 && i < 86400);
     protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getCurrentPlayers().size());
     protected final GameProperty.IntegerProperty roundDuration = new GameProperty.IntegerProperty("round.duration", 10).validate(i -> i > 0 && i < 84600);
-    protected final GameProperty.IntegerProperty roundCount = new GameProperty.IntegerProperty("round.count", 1).validate(i -> i > 0);
+    protected final GameProperty.IntegerProperty roundCount = new GameProperty.IntegerProperty("round.count", 3).validate(i -> i > 0);
+
+    private final List<GameProperty<?>> PROPERTIES;
+    private final World world;
+
+    public MiniGame(World world) {
+        PROPERTIES = new ArrayList<>();
+        PROPERTIES.add(playgroundSpawn);
+        PROPERTIES.add(playgroundRadius);
+        PROPERTIES.add(idleDuration);
+        PROPERTIES.add(playerMinimum);
+        PROPERTIES.add(roundDuration);
+        PROPERTIES.add(roundCount);
+        getGameTeams().forEach(t -> PROPERTIES.addAll(t.getProperties()));
+        this.world = world;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    protected void addProperties(GameProperty<?>... properties) {
+        PROPERTIES.addAll(List.of(properties));
+    }
 
     @Override
-    public String getConfigName() {
+    public final String getConfigName() {
         return getGameName().toLowerCase() + "-latest.lock";
     }
 
     @Override
-    public List<? extends ConfigProperty<?>> getProperties() {
-        List<ConfigProperty<?>> properties = new ArrayList<>();
-        getGameTeams().forEach(t -> properties.addAll(t.getProperties()));
-        properties.add(playgroundSpawn);
-        properties.add(playgroundRadius);
-        properties.add(idleDuration);
-        properties.add(playerMinimum);
-        properties.add(roundDuration);
-        properties.add(roundCount);
-        return properties;
+    public final List<? extends ConfigProperty<?>> getProperties() {
+        return PROPERTIES;
     }
 
     public GameEngine.Options getOptions() {
