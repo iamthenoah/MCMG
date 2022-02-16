@@ -1,14 +1,16 @@
 package com.than00ber.mcmg.games.playables;
 
-import com.than00ber.mcmg.games.GameTeam;
 import com.than00ber.mcmg.games.MiniGame;
-import com.than00ber.mcmg.games.WinCondition;
 import com.than00ber.mcmg.init.GameTeams;
-import com.than00ber.mcmg.init.WinConditions;
+import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ChatUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.World;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -18,6 +20,7 @@ public class WerewolfGame extends MiniGame {
 
     public final HashMap<Player, GameTeam> PLAYERS_ALIVE;
     public final HashMap<Player, GameTeam> PLAYERS_DEAD;
+    public boolean isDaytime;
 
     public WerewolfGame(World world) {
         super(world);
@@ -51,10 +54,10 @@ public class WerewolfGame extends MiniGame {
     @Override
     public List<WinCondition> getWinConditions() {
         return List.of(
-                WinConditions.VAMPIRE_VICTORY,
-                WinConditions.ALL_VILLAGERS_DEAD,
-                WinConditions.ALL_WEREWOLVES_DEAD,
-                WinConditions.EVERYONE_DEAD
+//                WinConditions.VAMPIRE_VICTORY,
+//                WinConditions.ALL_VILLAGERS_DEAD,
+//                WinConditions.ALL_WEREWOLVES_DEAD,
+//                WinConditions.EVERYONE_DEAD
         );
     }
 
@@ -64,7 +67,6 @@ public class WerewolfGame extends MiniGame {
         getWorld().getWorldBorder().reset();
         getWorld().setThundering(false);
         getWorld().setStorm(false);
-        getWorld().setTime(6000);
         getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         getWorld().setGameRule(GameRule.MOB_GRIEFING, false);
@@ -91,14 +93,30 @@ public class WerewolfGame extends MiniGame {
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
     }
 
-    @Override
-    public void onRoundStarted() {
-        ChatUtil.toAll("Werewolf#onRoundStarted");
+    private void setDay(BossBar bar) {
+        bar.setTitle(ChatColor.YELLOW + "It's midday in the village.");
+        bar.setColor(BarColor.YELLOW);
+        getWorld().setTime(6000);
+    }
+
+    private void setNight(BossBar bar) {
+        bar.setTitle(ChatColor.LIGHT_PURPLE + "It's midnight in the village.");
+        bar.setColor(BarColor.PURPLE);
+        getWorld().setTime(18000);
     }
 
     @Override
-    public void onRoundEnded() {
-        ChatUtil.toAll("Werewolf#onRoundEnded");
+    public void onRoundStarted(BossBar bar) {
+        ChatUtil.toAll("Werewolf#onRoundStarted");
+        isDaytime = true;
+        setDay(bar);
+    }
+
+    @Override
+    public void onRoundCycled(BossBar bar) {
+        ChatUtil.toAll("Werewolf#onRoundCycled");
+        if (isDaytime) setNight(bar); else setDay(bar);
+        isDaytime = !isDaytime;
     }
 
     @Override

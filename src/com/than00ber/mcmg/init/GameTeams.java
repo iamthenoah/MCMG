@@ -1,6 +1,6 @@
 package com.than00ber.mcmg.init;
 
-import com.than00ber.mcmg.games.GameTeam;
+import com.than00ber.mcmg.objects.GameTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.scoreboard.Team;

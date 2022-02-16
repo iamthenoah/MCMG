@@ -1,5 +1,8 @@
 package com.than00ber.mcmg.games;
 
+import com.than00ber.mcmg.objects.WinCondition;
+import org.bukkit.boss.BossBar;
+
 public interface GameLifeCycle {
     /**
      * Called when the game has started.
@@ -16,13 +19,15 @@ public interface GameLifeCycle {
     /**
      * Called when a round begins.
      * Usually to assign player roles.
+     * @param bar Progress bar object.
      */
-    void onRoundStarted();
+    void onRoundStarted(BossBar bar);
 
     /**
-     * Called when a round finishes.
+     * Called when a round has cycled.
+     * @param bar Progress bar object.
      */
-    void onRoundEnded();
+    void onRoundCycled(BossBar bar);
 
     /**
      * Called when a round finishes along with the winning reason.

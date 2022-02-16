@@ -1,5 +1,7 @@
 package com.than00ber.mcmg.games;
 
+import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.config.ConfigProperty;
 import com.than00ber.mcmg.util.config.Configurable;
 import com.than00ber.mcmg.util.config.GameProperty;
@@ -15,10 +17,9 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     protected final GameProperty.LocationProperty playgroundSpawn = new GameProperty.LocationProperty("playground.spawn");
     protected final GameProperty.IntegerProperty playgroundRadius = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
-    protected final GameProperty.IntegerProperty idleDuration = new GameProperty.IntegerProperty("idle.duration", 5).validate(i -> i > 0 && i < 86400);
+    protected final GameProperty.IntegerProperty durationIdle = new GameProperty.IntegerProperty("duration.idle", 5).validate(i -> i > 0 && i < 86400);
+    protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("duration.round", 10).validate(i -> i > 0 && i < 84600);
     protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getCurrentPlayers().size());
-    protected final GameProperty.IntegerProperty roundDuration = new GameProperty.IntegerProperty("round.duration", 10).validate(i -> i > 0 && i < 84600);
-    protected final GameProperty.IntegerProperty roundCount = new GameProperty.IntegerProperty("round.count", 3).validate(i -> i > 0);
 
     private final List<GameProperty<?>> PROPERTIES;
     private final World world;
@@ -27,10 +28,9 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         PROPERTIES = new ArrayList<>();
         PROPERTIES.add(playgroundSpawn);
         PROPERTIES.add(playgroundRadius);
-        PROPERTIES.add(idleDuration);
+        PROPERTIES.add(durationIdle);
         PROPERTIES.add(playerMinimum);
-        PROPERTIES.add(roundDuration);
-        PROPERTIES.add(roundCount);
+        PROPERTIES.add(durationRound);
         getGameTeams().forEach(t -> PROPERTIES.addAll(t.getProperties()));
         this.world = world;
     }
@@ -56,11 +56,6 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     public GameEngine.Options getOptions() {
         return new GameEngine.Options() {
             @Override
-            public Integer getIdleDuration() {
-                return idleDuration.get();
-            }
-
-            @Override
             public Integer getMinimumPlayer() {
                 return playerMinimum.get();
             }
@@ -76,13 +71,13 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             }
 
             @Override
-            public Integer getRoundDuration() {
-                return roundDuration.get();
+            public Integer getDurationIdle() {
+                return durationIdle.get();
             }
 
             @Override
-            public Integer getRoundCount() {
-                return roundCount.get();
+            public Integer getDurationRound() {
+                return durationRound.get();
             }
         };
     }

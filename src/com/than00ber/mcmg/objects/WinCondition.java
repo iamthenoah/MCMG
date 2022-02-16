@@ -1,4 +1,4 @@
-package com.than00ber.mcmg.games;
+package com.than00ber.mcmg.objects;
 
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Nullable;
