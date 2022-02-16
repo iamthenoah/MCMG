@@ -1,11 +1,11 @@
 package com.than00ber.mcmg.game.minigames.werewolf;
 
-import com.than00ber.mcmg.game.MiniGameEventListener;
+import com.than00ber.mcmg.game.EventListener;
 import com.than00ber.mcmg.util.ChatUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class WerewolfEventListener extends MiniGameEventListener<WerewolfGame> {
+public class WerewolfEventListener extends EventListener<WerewolfGame> {
 
     protected WerewolfEventListener(WerewolfGame game) {
         super(game);

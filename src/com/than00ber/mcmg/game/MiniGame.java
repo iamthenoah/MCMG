@@ -22,7 +22,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getCurrentPlayers().size());
 
     private final List<GameProperty<?>> properties;
-    private MiniGameEventListener<?> listener;
+    private EventListener<?> listener;
     private final World world;
 
     public MiniGame(World world) {
@@ -40,11 +40,11 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         return world;
     }
 
-    public MiniGameEventListener<?> getEventListener() {
+    public EventListener<?> getEventListener() {
         return listener;
     }
 
-    protected final void setEventListener(MiniGameEventListener<?> listener) {
+    protected final void setEventListener(EventListener<?> listener) {
         this.listener = listener;
     }
 
