@@ -148,6 +148,10 @@ public class GameEngine<G extends MiniGame> {
         return GAME;
     }
 
+    public boolean hasIdleGame() {
+        return GAME_STATE.equals(GameState.IDLE);
+    }
+
     public boolean hasRunningGame() {
         return GAME_STATE.equals(GameState.ONGOING);
     }

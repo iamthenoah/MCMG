@@ -23,7 +23,7 @@ public class ConfigsCommandExecutor extends CommandExecutor {
 
     @Override
     public ActionResult execute(@NotNull CommandSender sender, String[] args) {
-        if (!Main.GAME_ENGINE.hasRunningGame()) {
+        if (!Main.GAME_ENGINE.hasIdleGame()) {
             return ActionResult.warn("No game set.");
         }
 
@@ -75,7 +75,7 @@ public class ConfigsCommandExecutor extends CommandExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
-        if (args.length == 0 && Main.GAME_ENGINE.hasRunningGame()) {
+        if (args.length == 0 && Main.GAME_ENGINE.hasIdleGame()) {
             List<? extends ConfigProperty<?>> properties = Main.GAME_ENGINE.getCurrentGame().getProperties();
             return TextUtil.getMatching(new String[] {option}, properties, ConfigProperty::getPath);
         }
