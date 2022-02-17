@@ -1,0 +1,26 @@
+# Auto-generated plugin.yml, generated at 2022/02/17 20:16:28 by org.bukkit.plugin.java.annotation.PluginAnnotationProcessor
+
+main: com.than00ber.mcmg.Main
+name: MCMG
+version: 1.0.0
+author: Than00ber
+commands:
+  game:
+    description: Allows to start, end and restart games
+    permission: admin
+    usage: /game [start | end | restart | play] <Option?>
+  configs:
+    description: Allows editing of all current game properties
+    permission: admin
+    usage: /configs <Property> <Option?>
+  ready:
+    description: Players can vote when they are ready to start a new game
+    permission: none
+    usage: /ready
+permissions:
+  none:
+    description: Lowest permission level, gives no access to commands
+    default: 'true'
+  admin:
+    description: Highest permission level, gives access to all commands
+    default: op
