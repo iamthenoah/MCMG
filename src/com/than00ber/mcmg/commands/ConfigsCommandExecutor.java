@@ -24,7 +24,7 @@ public class ConfigsCommandExecutor extends CommandExecutor {
     @Override
     public ActionResult execute(@NotNull CommandSender sender, String[] args) {
         if (!Main.GAME_ENGINE.hasIdleGame()) {
-            return ActionResult.warn("No game set.");
+            return ActionResult.warn("Cannot update config ATM.");
         }
 
         if (sender instanceof Player player) {

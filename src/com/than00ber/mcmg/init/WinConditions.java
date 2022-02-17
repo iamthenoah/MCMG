@@ -8,7 +8,7 @@ public class WinConditions {
 
     public static final WinCondition<MiniGame> EVERYONE_DEAD = new WinCondition.Builder<MiniGame>()
             .setLoseReason("Nobody managed to survive.")
-            .setCondition(state -> state.getCurrentPlayers().isEmpty())
+            .setCondition(state -> state.getPlayers().isEmpty())
             .build();
     public static final WinCondition<WerewolfGame> VAMPIRE_VICTORY = new WinCondition.Builder<WerewolfGame>()
             .setWinReason("All villagers or werewolves have died.")

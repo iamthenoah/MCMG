@@ -9,9 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public abstract class MiniGame implements GameLifeCycle, Configurable {
 
@@ -19,8 +17,9 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     protected final GameProperty.IntegerProperty playgroundRadius = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
     protected final GameProperty.IntegerProperty durationIdle = new GameProperty.IntegerProperty("duration.idle", 5).validate(i -> i > 0 && i < 86400);
     protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("duration.round", 10).validate(i -> i > 0 && i < 84600);
-    protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getCurrentPlayers().size());
+    protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getPlayers().size());
 
+    private final HashMap<Player, GameTeam> players;
     private final List<GameProperty<?>> properties;
     private EventListener<?> listener;
     private final World world;
@@ -33,11 +32,16 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         properties.add(playerMinimum);
         properties.add(durationRound);
         getGameTeams().forEach(t -> properties.addAll(t.getProperties()));
+        players = new HashMap<>();
         this.world = world;
     }
 
     public World getWorld() {
         return world;
+    }
+
+    public HashMap<Player, GameTeam> getPlayers() {
+        return players;
     }
 
     public EventListener<?> getEventListener() {
@@ -91,9 +95,31 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         };
     }
 
-    public abstract String getGameName();
+    protected void assignRandomRoles() {
+        Random random = new Random();
 
-    public abstract HashMap<Player, GameTeam> getCurrentPlayers();
+        // TODO - add queuing system
+        List<Player> queued = world.getPlayers();
+        int total = queued.size();
+        players.clear();
+
+        do {
+            int i = random.nextInt(getGameTeams().size());
+            GameTeam team = getGameTeams().get(i);
+
+            if (!team.isSpectator() && total >= team.getThreshold()) {
+                int frequency = Collections.frequency(getPlayers().values(), team);
+
+                if (frequency / (float) total <= team.getWeight()) {
+                    Player player = queued.get(0);
+                    players.put(player, team);
+                    queued.remove(player);
+                }
+            }
+        } while (!queued.isEmpty());
+    }
+
+    public abstract String getGameName();
 
     public abstract List<GameTeam> getGameTeams();
 

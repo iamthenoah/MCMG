@@ -46,7 +46,7 @@ public class GameEngine<G extends MiniGame> {
                 countdownIdle = GAME.getOptions().getDurationIdle();
                 countdownRound = GAME.getOptions().getDurationRound();
                 BossBar bar = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
-                GAME.getCurrentPlayers().forEach((p, r) -> bar.addPlayer(p));
+                GAME.getWorld().getPlayers().forEach(bar::addPlayer);
                 event = new MiniGameEvent(bar);
             }
 
@@ -60,7 +60,7 @@ public class GameEngine<G extends MiniGame> {
 
                 if (countdownIdle > 0) {
                     if (countdownIdle < 3) {
-                        GAME.getCurrentPlayers().forEach((p, r) -> p.playNote(p.getLocation(), Instrument.XYLOPHONE, Note.natural(1, Note.Tone.A)));
+                        GAME.getWorld().getPlayers().forEach(p -> p.playNote(p.getLocation(), Instrument.XYLOPHONE, Note.natural(1, Note.Tone.A)));
                     }
 
                     countdownIdle--;

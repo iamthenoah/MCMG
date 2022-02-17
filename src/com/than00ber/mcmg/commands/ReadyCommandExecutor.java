@@ -14,8 +14,8 @@ import java.util.List;
 public class ReadyCommandExecutor extends CommandExecutor {
 
     public static String GAME_NAME = null;
-    public static Integer CURRENT_COUNT = null;
-    public static Integer TOTAL_COUNT = null;
+    public static int CURRENT_COUNT;
+    public static int TOTAL_COUNT;
 
     public ReadyCommandExecutor(Main instance, World world) {
         super("ready", instance, world);
@@ -31,10 +31,10 @@ public class ReadyCommandExecutor extends CommandExecutor {
         String status = CURRENT_COUNT + "/" + TOTAL_COUNT;
         ChatUtil.toAll("Current vote count: " + ChatColor.YELLOW + status);
 
-        if (CURRENT_COUNT.equals(TOTAL_COUNT)) {
+        if (CURRENT_COUNT == TOTAL_COUNT) {
             Main.GAME_ENGINE.startGame(null);
-            CURRENT_COUNT = null;
-            TOTAL_COUNT = null;
+            CURRENT_COUNT = 0;
+            TOTAL_COUNT = 0;
             GAME_NAME = null;
         }
 
