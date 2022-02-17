@@ -53,7 +53,8 @@ public class ChatUtil {
                             .map(Player::getDisplayName)
                             .collect(Collectors.joining(", "));
 
-                    ChatUtil.toSelf(player, "> In the " + TextUtil.formatRole(team).toUpperCase() + " team was...");
+                    String s = "> In the " + TextUtil.formatRole(team).toUpperCase() + ChatColor.RESET + " team was...";
+                    ChatUtil.toSelf(player, s);
                     ChatUtil.toSelf(player, String.join(", ", names));
                 }
             }
