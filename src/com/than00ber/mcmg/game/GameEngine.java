@@ -34,6 +34,10 @@ public class GameEngine<G extends MiniGame> {
             return ActionResult.failure("Cannot mount a game while game is running");
         }
 
+        if (GAME != null && GAME.getEventListener() != null) {
+            GAME.getEventListener().unregister();
+        }
+
         GAME = game;
         HANDLER_SUPPLIER = () -> new GameHandler() {
 
@@ -108,8 +112,11 @@ public class GameEngine<G extends MiniGame> {
             return ActionResult.warn("A game of " + GAME.getGameName() + " is already running.");
         }
 
-        Bukkit.getPluginManager().registerEvents(GAME.getEventListener(), INSTANCE); // register new game listener
         GAME.onGameStarted();
+        if (GAME.getEventListener() != null) {
+            // register game listener
+            Bukkit.getPluginManager().registerEvents(GAME.getEventListener(), INSTANCE);
+        }
 
         CURRENT_HANDLER = HANDLER_SUPPLIER.get();
         CURRENT_HANDLER.activate();
@@ -124,8 +131,11 @@ public class GameEngine<G extends MiniGame> {
             return ActionResult.warn("No game is currently running.");
         }
 
-        GAME.getEventListener().unregister();
         GAME.onGameEnded();
+        if (GAME.getEventListener() != null) {
+            // register game listener
+            GAME.getEventListener().unregister();
+        }
 
         CURRENT_HANDLER.deactivate();
         Bukkit.getScheduler().cancelTask(HANDLER_ID);

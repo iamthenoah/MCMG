@@ -2,9 +2,11 @@ package com.than00ber.mcmg.game;
 
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
+import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.config.ConfigProperty;
 import com.than00ber.mcmg.util.config.Configurable;
 import com.than00ber.mcmg.util.config.GameProperty;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -17,7 +19,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     protected final GameProperty.IntegerProperty playgroundRadius = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
     protected final GameProperty.IntegerProperty durationGrace = new GameProperty.IntegerProperty("duration.grace", 5).validate(i -> i > 0 && i < 86400);
     protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("duration.round", 10).validate(i -> i > 0 && i < 84600);
-    protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getPlayers().size());
+    protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getParticipants().size());
 
     private final HashMap<Player, GameTeam> players;
     private final List<GameProperty<?>> properties;
@@ -40,7 +42,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         return world;
     }
 
-    public HashMap<Player, GameTeam> getPlayers() {
+    public HashMap<Player, GameTeam> getParticipants() {
         return players;
     }
 
@@ -95,6 +97,41 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         };
     }
 
+    @Override
+    public void onGameStarted() {
+        getWorld().getWorldBorder().reset();
+        getWorld().setThundering(false);
+        getWorld().setStorm(false);
+        getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        getWorld().setGameRule(GameRule.MOB_GRIEFING, false);
+        getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+        getWorld().setGameRule(GameRule.DO_ENTITY_DROPS, false);
+        getWorld().setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
+        getWorld().setGameRule(GameRule.LOG_ADMIN_COMMANDS, false);
+        getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
+        getWorld().setGameRule(GameRule.KEEP_INVENTORY, true);
+    }
+
+    @Override
+    public void onGameEnded() {
+        getWorld().getWorldBorder().reset();
+        getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+        getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, true);
+        getWorld().setGameRule(GameRule.MOB_GRIEFING, true);
+        getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
+        getWorld().setGameRule(GameRule.DO_ENTITY_DROPS, true);
+        getWorld().setGameRule(GameRule.SHOW_DEATH_MESSAGES, true);
+        getWorld().setGameRule(GameRule.LOG_ADMIN_COMMANDS, true);
+        getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
+        getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
+    }
+
+    @Override
+    public void onRoundWon(WinCondition<?> condition) {
+        ChatUtil.showRoundEndScreen(getParticipants(), getGameTeams(), condition);
+    }
+
     protected void assignRandomRoles() {
         Random random = new Random();
 
@@ -108,7 +145,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             GameTeam team = getGameTeams().get(i);
 
             if (!team.isSpectator() && total >= team.getThreshold()) {
-                int frequency = Collections.frequency(getPlayers().values(), team);
+                int frequency = Collections.frequency(getParticipants().values(), team);
 
                 if (frequency / (float) total <= team.getWeight()) {
                     Player player = queued.get(0);

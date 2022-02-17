@@ -7,11 +7,18 @@ import org.bukkit.scoreboard.Team;
 
 public class GameTeams {
 
+    /**
+     * Common Teams
+     */
     public static final GameTeam SPECTATOR = new GameTeam.Builder("spectators")
             .setDisplayName("Spectator")
             .setColor(ChatColor.BLUE)
             .setSpectator()
             .build();
+
+    /**
+     * Werewolf Teams
+     */
     public static final GameTeam VILLAGER = new GameTeam.Builder("villagers")
             .setDisplayName("Villager")
             .setWeight(0.75)
@@ -61,5 +68,27 @@ public class GameTeams {
             .setObjective("Simple, eliminate all werewolves.")
             .setCatchPhrase("Get rid of all Werewolves.")
             .setSound(Sound.ENTITY_VILLAGER_AMBIENT)
+            .build();
+
+    /**
+     * HideNSeek Teams
+     */
+    public static final GameTeam HIDERS = new GameTeam.Builder("hiders")
+            .setDisplayName("Hider")
+            .setWeight(0.5)
+            .setColor(ChatColor.GREEN)
+            .setVisibility(Team.OptionStatus.FOR_OWN_TEAM)
+            .setObjective("Hide and survive for as long as possible.")
+            .setCatchPhrase("I've always wanted to be a pot.")
+            .setSound(Sound.ENTITY_ARMOR_STAND_PLACE)
+            .build();
+    public static final GameTeam SEEKERS = new GameTeam.Builder("seekers")
+            .setDisplayName("Seeker")
+            .setWeight(0.5)
+            .setColor(ChatColor.RED)
+            .setVisibility(Team.OptionStatus.FOR_OWN_TEAM)
+            .setObjective("Find and eliminate all hiders.")
+            .setCatchPhrase("Something's not right. I can feel it.")
+            .setSound(Sound.BLOCK_ANVIL_LAND)
             .build();
 }

@@ -1,15 +1,23 @@
 package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.game.MiniGame;
+import com.than00ber.mcmg.game.minigames.hidenseek.HideNSeekGame;
 import com.than00ber.mcmg.game.minigames.werewolf.WerewolfGame;
 import com.than00ber.mcmg.objects.WinCondition;
 
 public class WinConditions {
 
+    /**
+     * Common Win Conditions
+     */
     public static final WinCondition<MiniGame> EVERYONE_DEAD = new WinCondition.Builder<MiniGame>()
             .setLoseReason("Nobody managed to survive.")
-            .setCondition(state -> state.getPlayers().isEmpty())
+            .setCondition(state -> state.getParticipants().isEmpty())
             .build();
+
+    /**
+     * Werewolf Win Conditions
+     */
     public static final WinCondition<WerewolfGame> VAMPIRE_VICTORY = new WinCondition.Builder<WerewolfGame>()
             .setWinReason("All villagers or werewolves have died.")
             .setLoseReason("The vampire has survived long enough to stealing the victory.")
@@ -31,5 +39,15 @@ public class WinConditions {
             .setWinReason("Villagers have survived the terror of the werewolves.")
             .setWinners(GameTeams.VILLAGER, GameTeams.POSSESSED)
             .setCondition(state -> !state.PLAYERS_ALIVE.containsValue(GameTeams.WEREWOLF))
+            .build();
+
+    /**
+     * HideNSeek Win Conditions
+     */
+    public static final WinCondition<HideNSeekGame> NO_HIDERS = new WinCondition.Builder<HideNSeekGame>()
+            .setLoseReason("All hiders have been eliminated.")
+            .setWinReason("You have spotted all hiders")
+            .setWinners(GameTeams.SEEKERS)
+            .setCondition(state -> state.HIDERS.isEmpty())
             .build();
 }
