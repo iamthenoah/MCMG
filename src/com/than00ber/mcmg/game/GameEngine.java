@@ -3,6 +3,7 @@ package com.than00ber.mcmg.game;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ActionResult;
+import net.minecraft.server.level.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
@@ -37,9 +38,8 @@ public class GameEngine<G extends MiniGame> {
         if (GAME != null && GAME.getEventListener() != null) {
             GAME.getEventListener().unregister();
         }
-
         GAME = game;
-        HANDLER_SUPPLIER = () -> new GameHandler() {
+        HANDLER_SUPPLIER = () -> new GameHandler() { // TODO - checkout BukkitRunnable impl.
 
             private MiniGameEvent event;
             private int countdownGrace;
@@ -180,14 +180,14 @@ public class GameEngine<G extends MiniGame> {
         Integer getDurationRound();
     }
 
+    public enum GameState {
+        IDLE, ONGOING, EMPTY
+    }
+
     private interface GameHandler extends Runnable {
 
         void activate();
 
         void deactivate();
-    }
-
-    public enum GameState {
-        IDLE, ONGOING, EMPTY
     }
 }
