@@ -75,8 +75,8 @@ public class GameTeams {
      */
     public static final GameTeam HIDERS = new GameTeam.Builder("hiders")
             .setDisplayName("Hider")
-            .setWeight(0.5)
-            .setColor(ChatColor.GREEN)
+            .setWeight(0.75)
+            .setColor(ChatColor.YELLOW)
             .setVisibility(Team.OptionStatus.FOR_OWN_TEAM)
             .setObjective("Hide and survive for as long as possible.")
             .setCatchPhrase("I've always wanted to be a pot.")
@@ -84,8 +84,8 @@ public class GameTeams {
             .build();
     public static final GameTeam SEEKERS = new GameTeam.Builder("seekers")
             .setDisplayName("Seeker")
-            .setWeight(0.5)
-            .setColor(ChatColor.RED)
+            .setWeight(0.25)
+            .setColor(ChatColor.BLUE)
             .setVisibility(Team.OptionStatus.FOR_OWN_TEAM)
             .setObjective("Find and eliminate all hiders.")
             .setCatchPhrase("Something's not right. I can feel it.")

@@ -69,7 +69,7 @@ public class GameEngine<G extends MiniGame> {
 
                     countdownGrace--;
                     event.getBossBar().setProgress((float) countdownGrace / GAME.getOptions().getDurationGrace());
-                    event.getBossBar().setTitle("Game starting in " + countdownGrace + " seconds.");
+                    event.getBossBar().setTitle("Game starting in " + countdownGrace + " seconds");
 
                     if (countdownGrace == 0) {
                         event.getBossBar().setTitle("");
@@ -90,6 +90,7 @@ public class GameEngine<G extends MiniGame> {
                         GAME.onRoundCycled(event);
 
                         if (event.hasEnded()) {
+                            GAME.onRoundWon(event.getWinCondition());
                             endGame(null);
                         }
                     }

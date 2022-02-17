@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.game.minigames.werewolf;
 
 import com.than00ber.mcmg.game.EventListener;
-import com.than00ber.mcmg.util.ChatUtil;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -13,6 +13,7 @@ public class WerewolfEventListener extends EventListener<WerewolfGame> {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        ChatUtil.toAll("DED " + event.getEntity().getDisplayName());
+        Player player = event.getEntity();
+        GAME.PLAYERS_DEAD.put(player, GAME.PLAYERS_ALIVE.get(player));
     }
 }

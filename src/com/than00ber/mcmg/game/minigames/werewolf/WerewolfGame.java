@@ -64,16 +64,19 @@ public class WerewolfGame extends MiniGame {
         } while (!getParticipants().containsValue(GameTeams.WEREWOLF));
 
         ChatUtil.showRoundStartScreen(getParticipants());
+
+        PLAYERS_ALIVE.putAll(getParticipants());
+        PLAYERS_DEAD.clear();
     }
 
     private void setDay(BossBar bar) {
-        bar.setTitle(ChatColor.YELLOW + "It's midday in the village.");
+        bar.setTitle(ChatColor.YELLOW + "It's midday in the village");
         bar.setColor(BarColor.YELLOW);
         getWorld().setTime(6000);
     }
 
     private void setNight(BossBar bar) {
-        bar.setTitle(ChatColor.LIGHT_PURPLE + "It's midnight in the village.");
+        bar.setTitle(ChatColor.LIGHT_PURPLE + "It's midnight in the village");
         bar.setColor(BarColor.PURPLE);
         getWorld().setTime(18000);
     }

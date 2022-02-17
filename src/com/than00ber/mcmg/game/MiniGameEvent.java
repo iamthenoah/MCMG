@@ -1,10 +1,11 @@
 package com.than00ber.mcmg.game;
 
+import com.than00ber.mcmg.objects.WinCondition;
 import org.bukkit.boss.BossBar;
 
 public class MiniGameEvent {
 
-    private boolean hasEnded;
+    private WinCondition<?> winCondition;
     private final BossBar bossBar;
 
     public MiniGameEvent(BossBar bossBar) {
@@ -16,10 +17,14 @@ public class MiniGameEvent {
     }
 
     public boolean hasEnded() {
-        return hasEnded;
+        return winCondition != null;
     }
 
-    public void setGameEnded() {
-        hasEnded = true;
+    public WinCondition<?> getWinCondition() {
+        return winCondition;
+    }
+
+    public void setWinCondition(WinCondition<?> condition) {
+        winCondition = condition;
     }
 }

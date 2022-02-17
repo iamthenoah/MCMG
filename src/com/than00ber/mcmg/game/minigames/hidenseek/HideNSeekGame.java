@@ -50,15 +50,23 @@ public class HideNSeekGame extends MiniGame {
 
         assignRandomRoles();
         ChatUtil.showRoundStartScreen(getParticipants());
+
+        getParticipants().forEach((p, r) -> {
+            if (r.equals(GameTeams.HIDERS)) {
+                HIDERS.put(p, r);
+            } else {
+                SEEKERS.put(p, r);
+            }
+        });
     }
 
     @Override
     public void onRoundStarted(MiniGameEvent event) {
-
+        event.getBossBar().setTitle("Time Remaining");
     }
 
     @Override
     public void onRoundCycled(MiniGameEvent event) {
-
+        event.setWinCondition(WinConditions.HIDERS_SURVIVED);
     }
 }
