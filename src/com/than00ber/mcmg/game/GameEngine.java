@@ -63,7 +63,7 @@ public class GameEngine<G extends MiniGame> {
             public void run() {
 
                 if (countdownGrace > 0) {
-                    if (countdownGrace < 3) {
+                    if (countdownGrace <= 3) {
                         GAME.getWorld().getPlayers().forEach(p -> p.playNote(p.getLocation(), Instrument.XYLOPHONE, Note.natural(1, Note.Tone.A)));
                     }
 
