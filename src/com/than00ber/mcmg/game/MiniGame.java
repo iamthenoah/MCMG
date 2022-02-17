@@ -15,7 +15,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     protected final GameProperty.LocationProperty playgroundSpawn = new GameProperty.LocationProperty("playground.spawn");
     protected final GameProperty.IntegerProperty playgroundRadius = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
-    protected final GameProperty.IntegerProperty durationIdle = new GameProperty.IntegerProperty("duration.idle", 5).validate(i -> i > 0 && i < 86400);
+    protected final GameProperty.IntegerProperty durationGrace = new GameProperty.IntegerProperty("duration.grace", 5).validate(i -> i > 0 && i < 86400);
     protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("duration.round", 10).validate(i -> i > 0 && i < 84600);
     protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getPlayers().size());
 
@@ -28,7 +28,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         properties = new ArrayList<>();
         properties.add(playgroundSpawn);
         properties.add(playgroundRadius);
-        properties.add(durationIdle);
+        properties.add(durationGrace);
         properties.add(playerMinimum);
         properties.add(durationRound);
         getGameTeams().forEach(t -> properties.addAll(t.getProperties()));
@@ -84,8 +84,8 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             }
 
             @Override
-            public Integer getDurationIdle() {
-                return durationIdle.get();
+            public Integer getDurationGrace() {
+                return durationGrace.get();
             }
 
             @Override

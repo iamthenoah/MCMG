@@ -38,12 +38,12 @@ public class GameEngine<G extends MiniGame> {
         HANDLER_SUPPLIER = () -> new GameHandler() {
 
             private MiniGameEvent event;
-            private int countdownIdle;
+            private int countdownGrace;
             private int countdownRound;
 
             @Override
             public void activate() {
-                countdownIdle = GAME.getOptions().getDurationIdle();
+                countdownGrace = GAME.getOptions().getDurationGrace();
                 countdownRound = GAME.getOptions().getDurationRound();
                 BossBar bar = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
                 GAME.getWorld().getPlayers().forEach(bar::addPlayer);
@@ -58,16 +58,16 @@ public class GameEngine<G extends MiniGame> {
             @Override
             public void run() {
 
-                if (countdownIdle > 0) {
-                    if (countdownIdle < 3) {
+                if (countdownGrace > 0) {
+                    if (countdownGrace < 3) {
                         GAME.getWorld().getPlayers().forEach(p -> p.playNote(p.getLocation(), Instrument.XYLOPHONE, Note.natural(1, Note.Tone.A)));
                     }
 
-                    countdownIdle--;
-                    event.getBossBar().setProgress((float) countdownIdle / GAME.getOptions().getDurationIdle());
-                    event.getBossBar().setTitle("Game starting in " + countdownIdle + " seconds.");
+                    countdownGrace--;
+                    event.getBossBar().setProgress((float) countdownGrace / GAME.getOptions().getDurationGrace());
+                    event.getBossBar().setTitle("Game starting in " + countdownGrace + " seconds.");
 
-                    if (countdownIdle == 0) {
+                    if (countdownGrace == 0) {
                         event.getBossBar().setTitle("");
                         event.getBossBar().setProgress(1);
                         GAME.onRoundStarted(event);
@@ -164,7 +164,7 @@ public class GameEngine<G extends MiniGame> {
 
         Integer getPlaygroundRadius();
 
-        Integer getDurationIdle();
+        Integer getDurationGrace();
 
         Integer getDurationRound();
     }

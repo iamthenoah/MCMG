@@ -74,6 +74,19 @@ public class WerewolfGame extends MiniGame {
         getWorld().setGameRule(GameRule.LOG_ADMIN_COMMANDS, false);
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, true);
+
+        do { // set random roles ensuring there is at least on werewolf
+            assignRandomRoles();
+        } while (!getPlayers().containsValue(GameTeams.WEREWOLF));
+
+        getPlayers().forEach((player, team) -> {
+            ChatUtil.toSelf(player, "");
+            ChatUtil.toSelf(player, TextUtil.formatObjective(team));
+            ChatUtil.toSelf(player, "");
+            String comment = ChatColor.ITALIC + team.getCatchPhrase();
+            player.sendTitle(TextUtil.formatRole(team), comment, 5, 50, 15);
+            player.playSound(player.getLocation(), team.getSound(), 100, 1);
+        });
     }
 
     @Override
@@ -106,19 +119,6 @@ public class WerewolfGame extends MiniGame {
     public void onRoundStarted(MiniGameEvent event) {
         isDaytime = true;
         setDay(event.getBossBar());
-
-        do { // set random roles ensuring there is at least on werewolf
-            assignRandomRoles();
-        } while (!getPlayers().containsValue(GameTeams.WEREWOLF));
-
-        getPlayers().forEach((player, team) -> {
-            ChatUtil.toSelf(player, "");
-            ChatUtil.toSelf(player, TextUtil.formatObjective(team));
-            ChatUtil.toSelf(player, "");
-            String comment = ChatColor.ITALIC + team.getCatchPhrase();
-            player.sendTitle(TextUtil.formatRole(team), comment, 5, 50, 15);
-            player.playSound(player.getLocation(), team.getSound(), 100, 1);
-        });
     }
 
     @Override
@@ -133,7 +133,6 @@ public class WerewolfGame extends MiniGame {
             // scoreboard
             ChatUtil.toSelf(player, ChatColor.YELLOW + " ---------- Scoreboard ----------");
             ChatUtil.toSelf(player, "");
-
             for (GameTeam team : getGameTeams()) {
                 Map<Player, GameTeam> filtered = getPlayers().entrySet().stream()
                         .filter(entry -> entry.getValue().equals(team))
@@ -148,7 +147,6 @@ public class WerewolfGame extends MiniGame {
                     ChatUtil.toSelf(player, String.join(", ", names));
                 }
             }
-
             ChatUtil.toSelf(player, "");
 
             // title
