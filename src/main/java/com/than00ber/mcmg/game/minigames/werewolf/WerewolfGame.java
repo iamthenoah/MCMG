@@ -76,7 +76,7 @@ public class WerewolfGame extends MiniGame {
     }
 
     private void setNight(BossBar bar) {
-        bar.setTitle(ChatColor.LIGHT_PURPLE + "It's midnight in the village");
+        bar.setTitle(ChatColor.DARK_PURPLE + "It's midnight in the village");
         bar.setColor(BarColor.PURPLE);
         getWorld().setTime(18000);
     }

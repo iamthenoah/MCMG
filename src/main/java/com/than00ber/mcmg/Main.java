@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.Plugin;
 import org.bukkit.plugin.java.annotation.plugin.author.Author;
 
-@Plugin(name = "MCMG", version = "1.0.0")
+@Plugin(name = Main.PLUGIN_ID, version = "1.0.0")
 @Author(name = "Than00ber")
 @Command(
         name = "game",

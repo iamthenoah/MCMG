@@ -3,6 +3,7 @@ package com.than00ber.mcmg.commands;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
+import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import com.than00ber.mcmg.util.config.ConfigProperty;
 import com.than00ber.mcmg.util.config.GameProperty;
@@ -60,12 +61,13 @@ public class ConfigsCommandExecutor extends CommandExecutor {
                         }
                     }
                 } catch (Exception e) {
-                    return ActionResult.failure(
+                    Console.error(
                             "Failed to update '" + propertyName + "'.",
                             "- Error:     " + e.getMessage(),
                             "- Property:  " + propertyName,
                             "- Arguments: " + arguments
                     );
+                    return CommandExecutor.INVALID_COMMAND;
                 }
             }
             return ActionResult.failure("Property '" + propertyName + "' does not exist.");
