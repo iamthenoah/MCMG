@@ -3,6 +3,7 @@ package com.than00ber.mcmg.commands;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
+import com.than00ber.mcmg.util.ConfigUtil;
 import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import com.than00ber.mcmg.util.config.ConfigProperty;
@@ -53,6 +54,8 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
                         if (property.isValidValue(obj)) {
                             String s = "Property '" + propertyName + "' updated";
                             if (options.length > 0) s += " " + arguments;
+
+                            ConfigUtil.saveConfigs(instance, game); // persist data on change
 
                             return ActionResult.success(s + ".");
                         } else {
