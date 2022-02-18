@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ConfigsCommandExecutor extends CommandExecutor {
+public class ConfigsCommandExecutor extends PluginCommandExecutor {
 
     public ConfigsCommandExecutor(Main instance, World world) {
         super("configs", instance, world);
@@ -67,12 +67,12 @@ public class ConfigsCommandExecutor extends CommandExecutor {
                             "- Property:  " + propertyName,
                             "- Arguments: " + arguments
                     );
-                    return CommandExecutor.INVALID_COMMAND;
+                    return PluginCommandExecutor.INVALID_COMMAND;
                 }
             }
             return ActionResult.failure("Property '" + propertyName + "' does not exist.");
         }
-        return CommandExecutor.INVALID_COMMAND;
+        return PluginCommandExecutor.INVALID_COMMAND;
     }
 
     @Override

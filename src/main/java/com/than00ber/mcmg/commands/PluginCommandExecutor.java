@@ -7,6 +7,7 @@ import com.than00ber.mcmg.util.Console;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
@@ -15,14 +16,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class CommandExecutor implements org.bukkit.command.CommandExecutor, TabCompleter {
+public abstract class PluginCommandExecutor implements CommandExecutor, TabCompleter {
 
     protected static final ActionResult INVALID_COMMAND = ActionResult.failure("Invalid command format.");
+    protected static final ActionResult NOT_A_PLAYER = ActionResult.failure("This command can only be run by a player.");
 
     protected final Main instance;
     protected final World world;
 
-    protected CommandExecutor(String name, Main instance, World world) {
+    protected PluginCommandExecutor(String name, Main instance, World world) {
         instance.getCommand(name).setExecutor(this);
         instance.getCommand(name).setTabCompleter(this);
 

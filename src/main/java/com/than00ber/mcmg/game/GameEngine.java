@@ -32,6 +32,10 @@ public class GameEngine<G extends MiniGame> {
         return GAME;
     }
 
+    public boolean hasGame() {
+        return GAME != null;
+    }
+
     public boolean hasIdleGame() {
         return GAME_STATE.equals(GameState.IDLE);
     }

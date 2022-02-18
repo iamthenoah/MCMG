@@ -34,7 +34,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot:1.18.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot:remapped-mojang:1.18.1-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:guava:31.0.1-jre" level="project" />
@@ -92,8 +92,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-codec:commons-codec:1.11" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.httpcomponents:httpcore:4.4.14" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:jcl-over-slf4j:1.7.30" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:plugin-annotations:1.1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:22.0.0" level="project" />
   </component>
 </module>

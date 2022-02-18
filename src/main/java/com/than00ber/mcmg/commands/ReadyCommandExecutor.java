@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ReadyCommandExecutor extends CommandExecutor {
+public class ReadyCommandExecutor extends PluginCommandExecutor {
 
     public static String GAME_NAME = null;
     public static int CURRENT_COUNT;

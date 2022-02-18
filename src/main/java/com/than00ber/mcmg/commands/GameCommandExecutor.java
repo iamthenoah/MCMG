@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class GameCommandExecutor extends CommandExecutor {
+public class GameCommandExecutor extends PluginCommandExecutor {
 
     public GameCommandExecutor(Main instance, World world) {
         super("game", instance, world);
@@ -31,7 +31,7 @@ public class GameCommandExecutor extends CommandExecutor {
             case "start"    -> Main.GAME_ENGINE.startGame(getReason(sender, args, "started"));
             case "end"      -> Main.GAME_ENGINE.endGame(getReason(sender, args, "ended"));
             case "restart"  -> Main.GAME_ENGINE.restartGame(getReason(sender, args, "restarted"));
-            default         -> CommandExecutor.INVALID_COMMAND;
+            default         -> PluginCommandExecutor.INVALID_COMMAND;
         };
     }
 
@@ -45,7 +45,7 @@ public class GameCommandExecutor extends CommandExecutor {
 
     private ActionResult handleGameMount(String[] args) {
         if (args.length == 0) {
-            return CommandExecutor.INVALID_COMMAND;
+            return PluginCommandExecutor.INVALID_COMMAND;
         }
 
         Supplier<? extends MiniGame> supplier = MiniGames.MINI_GAMES.getOrDefault(args[1].toLowerCase(), null);
