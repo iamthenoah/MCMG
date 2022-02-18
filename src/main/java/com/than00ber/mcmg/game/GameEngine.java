@@ -21,12 +21,23 @@ public class GameEngine<G extends MiniGame> {
     private G GAME;
     private Supplier<GameHandler> HANDLER_SUPPLIER;
     private GameHandler CURRENT_HANDLER;
-    private Integer HANDLER_ID;
     private GameState GAME_STATE;
 
     public GameEngine(Main instance) {
         INSTANCE = instance;
         GAME_STATE = GameState.EMPTY;
+    }
+
+    public G getCurrentGame() {
+        return GAME;
+    }
+
+    public boolean hasIdleGame() {
+        return GAME_STATE.equals(GameState.IDLE);
+    }
+
+    public boolean hasRunningGame() {
+        return GAME_STATE.equals(GameState.ONGOING);
     }
 
     public ActionResult mount(G game) {
@@ -38,14 +49,14 @@ public class GameEngine<G extends MiniGame> {
             GAME.getEventListener().unregister();
         }
         GAME = game;
-        HANDLER_SUPPLIER = () -> new GameHandler() { // TODO - checkout BukkitRunnable impl.
+        HANDLER_SUPPLIER = () -> new GameHandler(INSTANCE) {
 
             private MiniGameEvent event;
             private int countdownGrace;
             private int countdownRound;
 
             @Override
-            public void activate() {
+            public void onActivate() {
                 countdownGrace = GAME.getOptions().getDurationGrace();
                 countdownRound = GAME.getOptions().getDurationRound();
                 BossBar bar = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
@@ -54,7 +65,7 @@ public class GameEngine<G extends MiniGame> {
             }
 
             @Override
-            public void deactivate() {
+            public void onDeactivate() {
                 event.getBossBar().removeAll();
             }
 
@@ -114,13 +125,12 @@ public class GameEngine<G extends MiniGame> {
 
         GAME.onGameStarted();
         if (GAME.getEventListener() != null) {
-            // register game listener
+            // register game listeners
             Bukkit.getPluginManager().registerEvents(GAME.getEventListener(), INSTANCE);
         }
 
         CURRENT_HANDLER = HANDLER_SUPPLIER.get();
         CURRENT_HANDLER.activate();
-        HANDLER_ID = Bukkit.getScheduler().scheduleSyncRepeatingTask(INSTANCE, CURRENT_HANDLER, 0, 20);
 
         GAME_STATE = GameState.ONGOING;
         return ActionResult.success(message);
@@ -133,14 +143,12 @@ public class GameEngine<G extends MiniGame> {
 
         GAME.onGameEnded();
         if (GAME.getEventListener() != null) {
-            // register game listener
+            // unregister game listeners
             GAME.getEventListener().unregister();
         }
 
         CURRENT_HANDLER.deactivate();
-        Bukkit.getScheduler().cancelTask(HANDLER_ID);
         CURRENT_HANDLER = null;
-        HANDLER_ID = null;
 
         GAME_STATE = GameState.IDLE;
         return ActionResult.success(reason);
@@ -154,16 +162,8 @@ public class GameEngine<G extends MiniGame> {
                 : ActionResult.success(reason);
     }
 
-    public G getCurrentGame() {
-        return GAME;
-    }
-
-    public boolean hasIdleGame() {
-        return GAME_STATE.equals(GameState.IDLE);
-    }
-
-    public boolean hasRunningGame() {
-        return GAME_STATE.equals(GameState.ONGOING);
+    public enum GameState {
+        IDLE, ONGOING, EMPTY
     }
 
     public interface Options {
@@ -177,16 +177,5 @@ public class GameEngine<G extends MiniGame> {
         Integer getDurationGrace();
 
         Integer getDurationRound();
-    }
-
-    public enum GameState {
-        IDLE, ONGOING, EMPTY
-    }
-
-    private interface GameHandler extends Runnable {
-
-        void activate();
-
-        void deactivate();
     }
 }
