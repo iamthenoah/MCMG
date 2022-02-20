@@ -32,25 +32,8 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
         ChatUtil.toAll("Current vote count: " + ChatColor.YELLOW + status);
 
         if (CURRENT_COUNT == TOTAL_COUNT) {
-            Main.GAME_ENGINE.startGame(null);
-            CURRENT_COUNT = 0;
-            TOTAL_COUNT = 0;
-            GAME_NAME = null;
+            voteSucceeded();
         }
-
-//        Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, () -> {
-//            if (CURRENT_COUNT >= TOTAL_COUNT / 2) {
-//                Main.GAME_ENGINE.startGame(null);
-//            } else {
-//                String failed = ChatColor.GOLD + "Voting failed.";
-//                String name = ChatColor.BLUE + GAME_NAME;
-//                String info = ChatColor.GOLD + "Not enough players ready to play " + name;
-//                ChatUtil.toAll(failed, info);
-//            }
-//            CURRENT_COUNT = 0;
-//            TOTAL_COUNT = 0;
-//            GAME_NAME = null;
-//        }, 0, 20);
 
         return ActionResult.success();
     }
@@ -58,5 +41,36 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
         return null;
+    }
+
+    public static void setVote(String name, int total) {
+        String info = "Next game: " + ChatColor.BLUE + name;
+        String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
+        String status = "Current vote count: " + ChatColor.YELLOW + "0/" + total;
+        ChatUtil.toAll(info, vote, status);
+
+        GAME_NAME = name;
+        TOTAL_COUNT = total;
+        CURRENT_COUNT = 0;
+    }
+
+    public static void voteFailed() {
+        if (GAME_NAME != null) {
+            String info = ChatColor.RED + "Vote failed for game " + ChatColor.BLUE + GAME_NAME;
+            String status = ChatColor.RED + "Not enough players were ready to play.";
+            ChatUtil.toAll(info, status);
+
+            GAME_NAME = null;
+            TOTAL_COUNT = 0;
+            CURRENT_COUNT = 0;
+        }
+    }
+
+    public static void voteSucceeded() {
+        Main.GAME_ENGINE.startGame(null);
+
+        GAME_NAME = null;
+        TOTAL_COUNT = 0;
+        CURRENT_COUNT = 0;
     }
 }

@@ -4,11 +4,9 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.init.MiniGames;
 import com.than00ber.mcmg.util.ActionResult;
-import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ConfigUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -57,17 +55,8 @@ public class GameCommandExecutor extends PluginCommandExecutor {
             ActionResult result = Main.GAME_ENGINE.mount(game);
             if (!result.isSuccessful()) return result;
 
-            String name = game.getGameName();
-            int total = Bukkit.getOnlinePlayers().size();
-
-            ReadyCommandExecutor.GAME_NAME = name;
-            ReadyCommandExecutor.TOTAL_COUNT = total;
-            ReadyCommandExecutor.CURRENT_COUNT = 0;
-
-            String info = "Next game: " + ChatColor.BLUE + name;
-            String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
-            String status = "Current vote count: " + ChatColor.YELLOW + "0/" + total;
-            ChatUtil.toAll(info, vote, status);
+            ReadyCommandExecutor.setVote(game.getGameName(), Bukkit.getOnlinePlayers().size());
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, ReadyCommandExecutor::voteFailed, 60);
 
             return ActionResult.success();
         }
