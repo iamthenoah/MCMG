@@ -10,9 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="renamed HideNSeek to PropsHunt">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mcmg.iml" beforeDir="false" afterPath="$PROJECT_DIR$/mcmg.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeek.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/MiniGames.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/MiniGames.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/WinConditions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/WinConditions.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,7 +207,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645376566624</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="renamed HideNSeek to PropsHunt">
+      <created>1645400057179</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1645400057179</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -230,6 +238,7 @@
     <MESSAGE value="updated voting system" />
     <MESSAGE value="updated vote failed timeout" />
     <MESSAGE value="ADDED MISSING FILES FOR HNS MVP" />
-    <option name="LAST_COMMIT_MESSAGE" value="ADDED MISSING FILES FOR HNS MVP" />
+    <MESSAGE value="renamed HideNSeek to PropsHunt" />
+    <option name="LAST_COMMIT_MESSAGE" value="renamed HideNSeek to PropsHunt" />
   </component>
 </project>

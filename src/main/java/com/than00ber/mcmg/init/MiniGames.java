@@ -2,6 +2,7 @@ package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
+import com.than00ber.mcmg.game.minigames.hidenseek.HideNSeek;
 import com.than00ber.mcmg.game.minigames.propshunt.PropsHuntGame;
 import com.than00ber.mcmg.game.minigames.werewolf.WerewolfGame;
 
@@ -15,6 +16,7 @@ public class MiniGames {
     static {
         register(() -> new WerewolfGame(Main.WORLD));
         register(() -> new PropsHuntGame(Main.WORLD));
+        register(() -> new HideNSeek(Main.WORLD));
     }
 
     private static void register(Supplier<? extends MiniGame> game) {

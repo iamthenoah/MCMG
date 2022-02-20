@@ -42,7 +42,7 @@ public class WinConditions {
             .build();
 
     /**
-     * HideNSeek Win Conditions
+     * Propshunt Win Conditions
      */
     public static final WinCondition<PropsHuntGame> NO_PROPS = new WinCondition.Builder<PropsHuntGame>()
             .setLoseReason("All props have been eliminated.")
@@ -52,6 +52,21 @@ public class WinConditions {
             .build();
     public static final WinCondition<PropsHuntGame> PROPS_SURVIVED = new WinCondition.Builder<PropsHuntGame>()
             .setLoseReason("Some props have survived.")
+            .setWinReason("You managed to stay alive.")
+            .setWinners(GameTeams.PROPS)
+            .build();
+
+    /**
+     * HideNSeek Win Conditions
+     */
+    public static final WinCondition<PropsHuntGame> NO_HIDERS = new WinCondition.Builder<PropsHuntGame>()
+            .setLoseReason("All hiders have been eliminated.")
+            .setWinReason("You have spotted all hiders.")
+            .setWinners(GameTeams.HUNTERS)
+            .setCondition(state -> state.PROPS.isEmpty())
+            .build();
+    public static final WinCondition<PropsHuntGame> HIDERS_SURVIVED = new WinCondition.Builder<PropsHuntGame>()
+            .setLoseReason("Some hiders have survived.")
             .setWinReason("You managed to stay alive.")
             .setWinners(GameTeams.PROPS)
             .build();

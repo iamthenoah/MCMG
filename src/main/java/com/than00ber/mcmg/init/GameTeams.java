@@ -71,7 +71,7 @@ public class GameTeams {
             .build();
 
     /**
-     * HideNSeek Teams
+     * Propshunt Teams
      */
     public static final GameTeam PROPS = new GameTeam.Builder("props")
             .setDisplayName("Prop")
@@ -88,6 +88,28 @@ public class GameTeams {
             .setColor(ChatColor.BLUE)
             .setVisibility(Team.OptionStatus.FOR_OWN_TEAM)
             .setObjective("Find and eliminate all props.")
+            .setCatchPhrase("Something's not right. I can feel it.")
+            .setSound(Sound.BLOCK_ANVIL_LAND)
+            .build();
+
+    /**
+     * HideNSeek Teams
+     */
+    public static final GameTeam HIDERS = new GameTeam.Builder("hiders")
+            .setDisplayName("Hider")
+            .setWeight(0.75)
+            .setColor(ChatColor.YELLOW)
+            .setVisibility(Team.OptionStatus.FOR_OWN_TEAM)
+            .setObjective("Hide and survive for as long as possible.")
+            .setCatchPhrase("I've always wanted to be a pot.")
+            .setSound(Sound.ENTITY_ARMOR_STAND_PLACE)
+            .build();
+    public static final GameTeam SEEKERS = new GameTeam.Builder("seekers")
+            .setDisplayName("Seeker")
+            .setWeight(0.25)
+            .setColor(ChatColor.BLUE)
+            .setVisibility(Team.OptionStatus.FOR_OWN_TEAM)
+            .setObjective("Find and eliminate all hiders.")
             .setCatchPhrase("Something's not right. I can feel it.")
             .setSound(Sound.BLOCK_ANVIL_LAND)
             .build();
