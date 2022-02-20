@@ -2,7 +2,7 @@ package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
-import com.than00ber.mcmg.game.minigames.hidenseek.HideNSeekGame;
+import com.than00ber.mcmg.game.minigames.propshunt.PropsHuntGame;
 import com.than00ber.mcmg.game.minigames.werewolf.WerewolfGame;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class MiniGames {
 
     static {
         register(() -> new WerewolfGame(Main.WORLD));
-        register(() -> new HideNSeekGame(Main.WORLD));
+        register(() -> new PropsHuntGame(Main.WORLD));
     }
 
     private static void register(Supplier<? extends MiniGame> game) {

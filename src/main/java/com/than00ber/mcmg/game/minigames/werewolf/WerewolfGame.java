@@ -37,6 +37,7 @@ public class WerewolfGame extends MiniGame {
     @Override
     public List<GameTeam> getGameTeams() {
         return List.of(
+                GameTeams.SPECTATOR,
                 GameTeams.VILLAGER,
                 GameTeams.WEREWOLF,
                 GameTeams.TRAITOR,
