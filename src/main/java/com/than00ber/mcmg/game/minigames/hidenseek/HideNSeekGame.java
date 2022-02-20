@@ -15,11 +15,12 @@ import java.util.List;
 
 public class HideNSeekGame extends MiniGame {
 
-    public final HashMap<Player, GameTeam> HIDERS;
+    public final HashMap<Hider, GameTeam> HIDERS;
     public final HashMap<Player, GameTeam> SEEKERS;
 
     public HideNSeekGame(World world) {
         super(world);
+        setEventListener(new HideNSeekGameEventListener(this));
         HIDERS = new HashMap<>();
         SEEKERS = new HashMap<>();
     }
@@ -53,7 +54,7 @@ public class HideNSeekGame extends MiniGame {
 
         getParticipants().forEach((p, r) -> {
             if (r.equals(GameTeams.HIDERS)) {
-                HIDERS.put(p, r);
+                HIDERS.put(new Hider(p), r);
             } else {
                 SEEKERS.put(p, r);
             }

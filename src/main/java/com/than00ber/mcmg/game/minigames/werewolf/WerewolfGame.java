@@ -24,7 +24,7 @@ public class WerewolfGame extends MiniGame {
 
     public WerewolfGame(World world) {
         super(world);
-        setEventListener(new WerewolfEventListener(this));
+        setEventListener(new WerewolfGameEventListener(this));
         PLAYERS_ALIVE = new HashMap<>();
         PLAYERS_DEAD = new HashMap<>();
     }

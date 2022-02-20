@@ -9,17 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="removed error from configs command">
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="persist data on config change">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mcmg.iml" beforeDir="false" afterPath="$PROJECT_DIR$/mcmg.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/CommandExecutor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/ConfigsCommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/ConfigsCommandExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/GameCommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/GameCommandExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/FakePlayerCommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/FakePlayerCommandExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/ReadyCommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/ReadyCommandExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/GameEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/GameEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfEventListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +27,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" show_ignored="true" />
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -45,6 +48,17 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="25IH8jAUDRn8IkYVYZXXP4Cj4xo" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -52,17 +66,24 @@
     <option name="sortByType" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Confirmation" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.import" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/target/classes" />
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
   </component>
   <component name="RunManager" selected="Maven.mcmg [package]">
@@ -127,6 +148,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task id="LOCAL-00001" summary="added GameHandler as a class">
       <created>1645179404089</created>
@@ -142,7 +164,28 @@
       <option name="project" value="LOCAL" />
       <updated>1645186740642</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="FIXED COMPILATION REMAPPING (With FakePlayerCommandExecutor)">
+      <created>1645197539270</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1645197539270</updated>
+    </task>
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="FIXED COMPILATION REMAPPING (With FakePlayerCommandExecutor)" />
+      <created>1645207527445</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1645207527445</updated>
+    </task>
+    <task id="LOCAL-00004" summary="persist data on config change">
+      <created>1645208757697</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1645208757697</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -160,6 +203,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="added GameHandler as a class" />
     <MESSAGE value="removed error from configs command" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed error from configs command" />
+    <MESSAGE value="FIXED COMPILATION REMAPPING (With FakePlayerCommandExecutor)" />
+    <MESSAGE value="persist data on config change" />
+    <option name="LAST_COMMIT_MESSAGE" value="persist data on config change" />
   </component>
 </project>

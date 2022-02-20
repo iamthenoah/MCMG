@@ -38,6 +38,20 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
             GAME_NAME = null;
         }
 
+//        Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, () -> {
+//            if (CURRENT_COUNT >= TOTAL_COUNT / 2) {
+//                Main.GAME_ENGINE.startGame(null);
+//            } else {
+//                String failed = ChatColor.GOLD + "Voting failed.";
+//                String name = ChatColor.BLUE + GAME_NAME;
+//                String info = ChatColor.GOLD + "Not enough players ready to play " + name;
+//                ChatUtil.toAll(failed, info);
+//            }
+//            CURRENT_COUNT = 0;
+//            TOTAL_COUNT = 0;
+//            GAME_NAME = null;
+//        }, 0, 20);
+
         return ActionResult.success();
     }
 

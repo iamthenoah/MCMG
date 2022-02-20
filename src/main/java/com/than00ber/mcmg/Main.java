@@ -1,7 +1,6 @@
 package com.than00ber.mcmg;
 
 import com.than00ber.mcmg.commands.ConfigsCommandExecutor;
-import com.than00ber.mcmg.commands.FakePlayerCommandExecutor;
 import com.than00ber.mcmg.commands.GameCommandExecutor;
 import com.than00ber.mcmg.commands.ReadyCommandExecutor;
 import com.than00ber.mcmg.game.GameEngine;
@@ -16,15 +15,16 @@ public class Main extends JavaPlugin {
     public static final String PLUGIN_ID = "MCMG";
     public static final World WORLD = Bukkit.getWorld("world");
     public static GameEngine<MiniGame> GAME_ENGINE;
+    public static Main INSTANCE;
 
     @Override
     public void onEnable() {
+        INSTANCE = this;
         GAME_ENGINE = new GameEngine<>(this);
 
         new GameCommandExecutor(this, WORLD);
         new ConfigsCommandExecutor(this, WORLD);
         new ReadyCommandExecutor(this, WORLD);
-        new FakePlayerCommandExecutor(this, WORLD);
     }
 
     @Override

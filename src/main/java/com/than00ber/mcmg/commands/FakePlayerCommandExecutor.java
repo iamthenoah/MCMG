@@ -29,7 +29,6 @@ public class FakePlayerCommandExecutor extends PluginCommandExecutor {
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
         if (sender instanceof Player player) {
-
             String name = args.length > 0 ? args[0] : "UNKNOWN";
             CraftPlayer craftPlayer = (CraftPlayer) player;
 
@@ -76,4 +75,22 @@ public class FakePlayerCommandExecutor extends PluginCommandExecutor {
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
         return List.of();
     }
+
+//    public void createNPC(Player player, String npcName) {
+//        Location location = player.getLocation();
+//        MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
+//        ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
+//        GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "§a§l" + npcName);
+//
+//        EntityPlayer npc = new EntityPlayer(nmsServer, serverPlayer.getServer(), gameProfile);
+//        Player npcPlayer = npc.getBukkitEntity().getPlayer();
+//        npcPlayer.setPlayerListName(npcName);
+//
+//        npc.setPos(location.getX(), location.getY(), location.getZ());
+//
+//        ServerGamePacketListenerImpl connection = ((CraftPlayer) player).getHandle().connection;
+//        connection.send(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.a, npc));
+//        connection.send(new PacketPlayOutNamedEntitySpawn(npc));
+//        connection.send(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.e, npc));
+//    }
 }
