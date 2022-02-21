@@ -78,7 +78,10 @@ public class GameEngine<G extends MiniGame> {
 
                 if (countdownGrace > 0) {
                     if (countdownGrace <= 3) {
-                        GAME.getWorld().getPlayers().forEach(p -> p.playNote(p.getLocation(), Instrument.XYLOPHONE, Note.natural(1, Note.Tone.A)));
+                        GAME.getWorld().getPlayers().forEach(p -> {
+                            Note note = Note.natural(1, Note.Tone.A);
+                            p.playNote(p.getLocation(), Instrument.XYLOPHONE, note);
+                        });
                     }
 
                     countdownGrace--;
@@ -89,6 +92,10 @@ public class GameEngine<G extends MiniGame> {
                         event.getBossBar().setTitle("");
                         event.getBossBar().setProgress(1);
                         GAME.onRoundStarted(event);
+
+                        if (event.getBossBar().getTitle().isEmpty()) {
+                            event.getBossBar().setTitle("Time Remaining");
+                        }
                     }
                 } else {
                     WinCondition<?> condition =  GAME.getWinConditions().stream()
@@ -102,6 +109,10 @@ public class GameEngine<G extends MiniGame> {
                     if (countdownRound == 0) {
                         countdownRound = GAME.getOptions().getDurationRound();
                         GAME.onRoundCycled(event);
+
+                        if (event.getBossBar().getTitle().isEmpty()) {
+                            event.getBossBar().setTitle("Time Remaining");
+                        }
 
                         if (event.hasEnded()) {
                             GAME.onRoundWon(event.getWinCondition());

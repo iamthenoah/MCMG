@@ -188,9 +188,7 @@ public class GameTeams {
     private static void setHiderPlayer(Player player) {
         resetPlayer(player);
         Random random = new Random();
-        int i = random.nextInt(Material.values().length - 1);
-        DisguiseType disguiseType = DisguiseType.values()[i];
-        MobDisguise disguise = new MobDisguise(disguiseType);
+        MobDisguise disguise = new MobDisguise(DisguiseType.VILLAGER);
         DisguiseAPI.disguiseToAll(player, disguise);
     }
 

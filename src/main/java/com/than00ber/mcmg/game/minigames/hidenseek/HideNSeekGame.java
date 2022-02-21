@@ -34,18 +34,15 @@ public class HideNSeekGame extends MiniGame {
     @Override
     public List<WinCondition> getWinConditions() {
         return List.of(
-                WinConditions.NO_HIDERS,
-                WinConditions.HIDERS_SURVIVED
+                WinConditions.NO_HIDERS
         );
     }
 
     @Override
-    public void onRoundStarted(MiniGameEvent event) {
-
-    }
+    public void onRoundStarted(MiniGameEvent event) { }
 
     @Override
     public void onRoundCycled(MiniGameEvent event) {
-
+        event.setWinCondition(WinConditions.HIDERS_SURVIVED);
     }
 }

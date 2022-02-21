@@ -44,9 +44,7 @@ public class PropHuntGame extends MiniGame {
     }
 
     @Override
-    public void onRoundStarted(MiniGameEvent event) {
-        event.getBossBar().setTitle("Time Remaining");
-    }
+    public void onRoundStarted(MiniGameEvent event) { }
 
     @Override
     public void onRoundCycled(MiniGameEvent event) {

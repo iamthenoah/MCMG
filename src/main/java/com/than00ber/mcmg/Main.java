@@ -17,6 +17,8 @@ public class Main extends JavaPlugin {
     public static GameEngine<MiniGame> GAME_ENGINE;
     public static Main INSTANCE;
 
+    // username: Gaojinglu80!
+
     @Override
     public void onEnable() {
         INSTANCE = this;
