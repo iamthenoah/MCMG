@@ -81,6 +81,7 @@ public class GameTeams {
             .setObjective("Hide and survive for as long as possible.")
             .setCatchPhrase("I've always wanted to be a pot.")
             .setSound(Sound.ENTITY_ARMOR_STAND_PLACE)
+            .setRequired()
             .build();
     public static final GameTeam HUNTERS = new GameTeam.Builder("hunters")
             .setDisplayName("Hunter")

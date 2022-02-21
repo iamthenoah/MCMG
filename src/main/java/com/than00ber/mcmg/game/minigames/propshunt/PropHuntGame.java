@@ -62,16 +62,14 @@ public class PropHuntGame extends MiniGame {
     public void onGameStarted() {
         super.onGameStarted();
 
-//        do { // set random roles ensuring there is at least one hunter
-            assignRandomRoles();
-//        } while (!getParticipants().containsValue(GameTeams.HUNTERS));
-
+        assignRandomRoles();
         ChatUtil.showRoundStartScreen(getParticipants());
 
         Random random = new Random();
         getParticipants().forEach((p, r) -> {
             if (r.equals(GameTeams.PROPS)) {
                 PROPS.put(p, r);
+                p.setInvisible(true);
 
                 Material randomMaterial;
                 do {

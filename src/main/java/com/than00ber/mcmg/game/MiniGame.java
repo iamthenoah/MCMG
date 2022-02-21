@@ -154,6 +154,13 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
                 }
             }
         } while (!queued.isEmpty());
+
+        // ensure required roles are present
+        for (GameTeam team : getGameTeams()) {
+            if (team.isRequired() && !getParticipants().containsValue(team)) {
+                assignRandomRoles();
+            }
+        }
     }
 
     public abstract String getGameName();

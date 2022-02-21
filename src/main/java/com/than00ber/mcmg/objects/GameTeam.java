@@ -22,6 +22,7 @@ public class GameTeam implements Configurable {
     private final GameProperty.StringProperty objective;
     private final GameProperty.EnumProperty<Sound> sound;
     private final GameProperty.BooleanProperty isSpectator;
+    private final GameProperty.BooleanProperty isRequired;
 
     public GameTeam(
             String teamId,
@@ -33,7 +34,8 @@ public class GameTeam implements Configurable {
             String catchPhrase,
             String objective,
             Sound sound,
-            boolean isSpectator
+            boolean isSpectator,
+            boolean isRequired
     ) {
         this.teamId = new GameProperty.StringProperty(teamId + ".id", teamId);
         this.displayName = new GameProperty.StringProperty(teamId + ".name", displayName);
@@ -45,6 +47,7 @@ public class GameTeam implements Configurable {
         this.objective = new GameProperty.StringProperty(teamId + ".objective", objective);
         this.sound = new GameProperty.EnumProperty<>(teamId + ".sound", Sound.class, sound);
         this.isSpectator = new GameProperty.BooleanProperty(teamId + ".spectator", isSpectator);
+        this.isRequired = new GameProperty.BooleanProperty(teamId + ".required", isRequired);
     }
 
     public String getTeamId() {
@@ -87,6 +90,10 @@ public class GameTeam implements Configurable {
         return isSpectator.get();
     }
 
+    public boolean isRequired() {
+        return isRequired.get();
+    }
+
     @Override
     public String getConfigName() {
         return getTeamId();
@@ -120,6 +127,7 @@ public class GameTeam implements Configurable {
         private String objective;
         private Sound sound;
         private boolean isSpectator;
+        private boolean isRequired;
 
         public Builder(String id) {
             teamId = id;
@@ -129,6 +137,7 @@ public class GameTeam implements Configurable {
             color = ChatColor.WHITE;
             visibility = OptionStatus.FOR_OWN_TEAM;
             isSpectator = false;
+            isRequired = false;
         }
 
         public Builder setDisplayName(String name) {
@@ -176,6 +185,11 @@ public class GameTeam implements Configurable {
             return this;
         }
 
+        public Builder setRequired() {
+            isRequired = true;
+            return this;
+        }
+
         public GameTeam build() {
             return new GameTeam(
                     teamId,
@@ -187,7 +201,8 @@ public class GameTeam implements Configurable {
                     catchPhrase,
                     objective,
                     sound,
-                    isSpectator
+                    isSpectator,
+                    isRequired
             );
         }
     }
