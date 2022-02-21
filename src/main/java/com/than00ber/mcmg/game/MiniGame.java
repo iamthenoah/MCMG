@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.game;
 
+import com.google.common.collect.ImmutableMap;
 import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
@@ -22,13 +23,16 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("duration.round", 10).validate(i -> i > 0 && i < 84600);
     protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getParticipants().size());
 
-    private final HashMap<Player, GameTeam> players;
+    protected final HashMap<Player, GameTeam> players;
     private final List<GameProperty<?>> properties;
     private EventListener<?> listener;
     private final World world;
 
     public MiniGame(World world) {
+        this.world = world;
+        players = new HashMap<>();
         properties = new ArrayList<>();
+        getGameTeams().forEach(t -> properties.addAll(t.getProperties()));
         addProperties(
                 playgroundSpawn,
                 playgroundRadius,
@@ -36,17 +40,14 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
                 playerMinimum,
                 durationRound
         );
-        getGameTeams().forEach(t -> properties.addAll(t.getProperties()));
-        players = new HashMap<>();
-        this.world = world;
     }
 
     public World getWorld() {
         return world;
     }
 
-    public HashMap<Player, GameTeam> getParticipants() {
-        return players;
+    public ImmutableMap<Player, GameTeam> getParticipants() {
+        return ImmutableMap.copyOf(players);
     }
 
     public EventListener<?> getEventListener() {
@@ -76,7 +77,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     }
 
     public final void switchTeam(Player player, GameTeam newTeam) {
-        getParticipants().replace(player, newTeam);
+        players.replace(player, newTeam);
         newTeam.prepare(player);
     }
 
@@ -143,7 +144,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
 
         // reset players
-        getParticipants().forEach((p, r) -> GameTeams.resetPlayer(p));
+        players.forEach((p, r) -> GameTeams.resetPlayer(p));
     }
 
     @Override
@@ -164,7 +165,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             GameTeam team = getGameTeams().get(i);
 
             if (!team.isSpectator() && total >= team.getThreshold()) {
-                int frequency = Collections.frequency(getParticipants().values(), team);
+                int frequency = Collections.frequency(players.values(), team);
 
                 if (frequency / (float) total <= team.getWeight()) {
                     Player player = queued.get(0);
@@ -176,14 +177,14 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
         // ensure required roles are present
         for (GameTeam team : getGameTeams()) {
-            if (team.isRequired() && !getParticipants().containsValue(team)) {
+            if (team.isRequired() && !players.containsValue(team)) {
                 assignRandomRoles();
                 break;
             }
         }
 
         // prepares every player per given role
-        getParticipants().forEach((p, r) -> r.prepare(p));
+        players.forEach((p, r) -> r.prepare(p));
     }
 
     public abstract String getGameName();

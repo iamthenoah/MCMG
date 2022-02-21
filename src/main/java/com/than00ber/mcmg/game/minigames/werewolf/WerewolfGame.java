@@ -11,22 +11,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Player;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class WerewolfGame extends MiniGame {
 
-    public final HashMap<Player, GameTeam> PLAYERS_ALIVE;
-    public final HashMap<Player, GameTeam> PLAYERS_DEAD;
     private boolean isDaytime;
 
     public WerewolfGame(Main instance, World world) {
         super(world);
         setEventListener(new WerewolfGameEventListener(instance, this));
-        PLAYERS_ALIVE = new HashMap<>();
-        PLAYERS_DEAD = new HashMap<>();
     }
 
     @Override
@@ -37,7 +31,6 @@ public class WerewolfGame extends MiniGame {
     @Override
     public List<GameTeam> getGameTeams() {
         return List.of(
-                GameTeams.SPECTATORS,
                 GameTeams.VILLAGERS,
                 GameTeams.WEREWOLVES,
                 GameTeams.TRAITORS,
@@ -54,13 +47,6 @@ public class WerewolfGame extends MiniGame {
                 WinConditions.ALL_WEREWOLVES_DEAD,
                 WinConditions.EVERYONE_DEAD
         );
-    }
-
-    @Override
-    public void onGameStarted() {
-        super.onGameStarted();
-        PLAYERS_ALIVE.putAll(getParticipants());
-        PLAYERS_DEAD.clear();
     }
 
     private void setDay(BossBar bar) {

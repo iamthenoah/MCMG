@@ -2,7 +2,7 @@ package com.than00ber.mcmg.game.minigames.werewolf;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.EventListener;
-import org.bukkit.entity.Player;
+import com.than00ber.mcmg.init.GameTeams;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -14,7 +14,6 @@ public class WerewolfGameEventListener extends EventListener<WerewolfGame> {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        game.PLAYERS_DEAD.put(player, game.PLAYERS_ALIVE.get(player));
+        game.switchTeam(event.getEntity(), GameTeams.SPECTATORS);
     }
 }

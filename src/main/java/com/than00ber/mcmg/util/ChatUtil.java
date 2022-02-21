@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.util;
 
+import com.google.common.collect.ImmutableMap;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import org.bukkit.Bukkit;
@@ -8,7 +9,6 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class ChatUtil {
         }
     }
 
-    public static void showRoundStartScreen(HashMap<Player, GameTeam> players) {
+    public static void showRoundStartScreen(ImmutableMap<Player, GameTeam> players) {
         players.forEach((player, team) -> {
             ChatUtil.toSelf(player, "");
             ChatUtil.toSelf(player, TextUtil.formatObjective(team));
@@ -38,7 +38,7 @@ public class ChatUtil {
         });
     }
 
-    public static void showRoundEndScreen(HashMap<Player, GameTeam> players, List<GameTeam> teams, WinCondition<?> condition) {
+    public static void showRoundEndScreen(ImmutableMap<Player, GameTeam> players, List<GameTeam> teams, WinCondition<?> condition) {
         players.forEach((player, role) -> {
             // scoreboard
             ChatUtil.toSelf(player, ChatColor.YELLOW + " ---------- Scoreboard ----------");

@@ -9,22 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="added GameTeam required property">
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="removed FakePlayerCommandExecutor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/ConfigsCommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/ConfigsCommandExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/EventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/EventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/GameEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/GameEngine.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGameEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGameEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/propshunt/PropHuntGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/propshunt/PropHuntGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/propshunt/PropHuntGameEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/propshunt/PropHuntGameEventListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGameEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGameEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/MiniGames.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/MiniGames.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/WinConditions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/WinConditions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/objects/GameTeam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/objects/GameTeam.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/util/ChatUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/util/ChatUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,7 +238,28 @@
       <option name="project" value="LOCAL" />
       <updated>1645470914283</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="changed win title message">
+      <created>1645482215344</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1645482215344</updated>
+    </task>
+    <task id="LOCAL-00014" summary="added working game start/end player set/reset">
+      <created>1645482479897</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1645482479897</updated>
+    </task>
+    <task id="LOCAL-00015" summary="removed FakePlayerCommandExecutor">
+      <created>1645482511690</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1645482511690</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -274,6 +287,9 @@
     <MESSAGE value="added HideNSeek game" />
     <MESSAGE value="cleaned up hns and ph" />
     <MESSAGE value="added GameTeam required property" />
-    <option name="LAST_COMMIT_MESSAGE" value="added GameTeam required property" />
+    <MESSAGE value="changed win title message" />
+    <MESSAGE value="added working game start/end player set/reset" />
+    <MESSAGE value="removed FakePlayerCommandExecutor" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed FakePlayerCommandExecutor" />
   </component>
 </project>

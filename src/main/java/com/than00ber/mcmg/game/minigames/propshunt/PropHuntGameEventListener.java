@@ -21,9 +21,7 @@ public class PropHuntGameEventListener extends EventListener<PropHuntGame> {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        DisguiseAPI.undisguiseToAll(player);
-        game.switchTeam(player, GameTeams.HUNTERS);
+        game.switchTeam(event.getEntity(), GameTeams.HUNTERS);
     }
 
     @EventHandler
