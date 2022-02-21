@@ -44,7 +44,7 @@ public class WinCondition<G> {
             return ChatColor.GOLD + "" + ChatColor.BOLD + "Game Cancelled.";
         }
         ChatColor color = winners.contains(team) ? ChatColor.DARK_GREEN : ChatColor.DARK_RED;
-        return color + "" + ChatColor.BOLD + (winners.contains(team) ? "You won!" : "Game lost.");
+        return color + "" + ChatColor.BOLD + (winners.contains(team) ? "Game won!" : "Game lost.");
     }
 
     public String getSubTitleFor(GameTeam team) {
