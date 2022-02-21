@@ -9,14 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="removed FakePlayerCommandExecutor">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGameEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/hidenseek/HideNSeekGameEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGameEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/werewolf/WerewolfGameEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/util/ChatUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/util/ChatUtil.java" afterDir="false" />
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="removed unnecessary lists in minigames">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/WinConditions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/WinConditions.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -259,7 +253,21 @@
       <option name="project" value="LOCAL" />
       <updated>1645482511690</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="removed unnecessary lists in minigames">
+      <created>1645483284199</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1645483284199</updated>
+    </task>
+    <task id="LOCAL-00017" summary="removed unnecessary lists in minigames">
+      <created>1645483460659</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1645483460659</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -290,6 +298,7 @@
     <MESSAGE value="changed win title message" />
     <MESSAGE value="added working game start/end player set/reset" />
     <MESSAGE value="removed FakePlayerCommandExecutor" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed FakePlayerCommandExecutor" />
+    <MESSAGE value="removed unnecessary lists in minigames" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed unnecessary lists in minigames" />
   </component>
 </project>

@@ -64,7 +64,7 @@ public class WinConditions {
             .setLoseReason("All hiders have been eliminated.")
             .setWinReason("You have spotted all hiders.")
             .setWinners(GameTeams.SEEKERS)
-            .setCondition(state -> state.getParticipants().containsValue(GameTeams.HIDERS))
+            .setCondition(state -> !state.getParticipants().containsValue(GameTeams.HIDERS))
             .build();
     public static final WinCondition<HideNSeekGame> HIDERS_SURVIVED = new WinCondition.Builder<HideNSeekGame>()
             .setLoseReason("Some hiders have survived.")
