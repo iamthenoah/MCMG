@@ -1,12 +1,12 @@
 package com.than00ber.mcmg.game.minigames.hidenseek;
 
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.game.MiniGameEvent;
 import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
-import com.than00ber.mcmg.util.ChatUtil;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -18,9 +18,9 @@ public class HideNSeekGame extends MiniGame {
     public final HashMap<Player, GameTeam> HIDERS;
     public final HashMap<Player, GameTeam> SEEKERS;
 
-    public HideNSeekGame(World world) {
+    public HideNSeekGame(Main instance, World world) {
         super(world);
-        setEventListener(new HideNSeekGameEventListener(this));
+        setEventListener(new HideNSeekGameEventListener(instance, this));
         HIDERS = new HashMap<>();
         SEEKERS = new HashMap<>();
     }
@@ -49,11 +49,6 @@ public class HideNSeekGame extends MiniGame {
     @Override
     public void onGameStarted() {
         super.onGameStarted();
-
-        assignRandomRoles();
-
-        ChatUtil.showRoundStartScreen(getParticipants());
-
         getParticipants().forEach((p, r) -> {
             if (r.equals(GameTeams.HIDERS)) {
                 HIDERS.put(p, r);
@@ -62,7 +57,6 @@ public class HideNSeekGame extends MiniGame {
             }
         });
     }
-
 
     @Override
     public void onRoundStarted(MiniGameEvent event) {

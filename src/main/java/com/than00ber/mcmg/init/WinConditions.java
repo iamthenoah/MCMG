@@ -22,24 +22,24 @@ public class WinConditions {
     public static final WinCondition<WerewolfGame> VAMPIRE_VICTORY = new WinCondition.Builder<WerewolfGame>()
             .setWinReason("All villagers or werewolves have died.")
             .setLoseReason("The vampire has survived long enough to stealing the victory.")
-            .setWinners(GameTeams.VAMPIRE)
+            .setWinners(GameTeams.VAMPIRES)
             .setCondition(state -> {
-                boolean hasVampire = state.PLAYERS_ALIVE.containsValue(GameTeams.VAMPIRE);
-                boolean noVillagers = !state.PLAYERS_ALIVE.containsValue(GameTeams.VILLAGER);
-                boolean noWerewolves = !state.PLAYERS_ALIVE.containsValue(GameTeams.WEREWOLF);
+                boolean hasVampire = state.PLAYERS_ALIVE.containsValue(GameTeams.VAMPIRES);
+                boolean noVillagers = !state.PLAYERS_ALIVE.containsValue(GameTeams.VILLAGERS);
+                boolean noWerewolves = !state.PLAYERS_ALIVE.containsValue(GameTeams.WEREWOLVES);
                 return hasVampire && (noVillagers || noWerewolves);
             }).build();
     public static final WinCondition<WerewolfGame> ALL_VILLAGERS_DEAD = new WinCondition.Builder<WerewolfGame>()
             .setLoseReason("All villagers got killed.")
             .setWinReason("Werewolves have killed all villagers.")
-            .setWinners(GameTeams.WEREWOLF, GameTeams.TRAITOR)
-            .setCondition(state -> !state.PLAYERS_ALIVE.containsValue(GameTeams.VILLAGER))
+            .setWinners(GameTeams.WEREWOLVES, GameTeams.TRAITORS)
+            .setCondition(state -> !state.PLAYERS_ALIVE.containsValue(GameTeams.VILLAGERS))
             .build();
     public static final WinCondition<WerewolfGame> ALL_WEREWOLVES_DEAD = new WinCondition.Builder<WerewolfGame>()
             .setLoseReason("Villagers managed to kill all werewolves.")
             .setWinReason("Villagers have survived the terror of the werewolves.")
-            .setWinners(GameTeams.VILLAGER, GameTeams.POSSESSED)
-            .setCondition(state -> !state.PLAYERS_ALIVE.containsValue(GameTeams.WEREWOLF))
+            .setWinners(GameTeams.VILLAGERS, GameTeams.POSSESSED)
+            .setCondition(state -> !state.PLAYERS_ALIVE.containsValue(GameTeams.WEREWOLVES))
             .build();
 
     /**
@@ -49,7 +49,7 @@ public class WinConditions {
             .setLoseReason("All props have been eliminated.")
             .setWinReason("You have spotted all props.")
             .setWinners(GameTeams.HUNTERS)
-            .setCondition(state -> state.PROPS.isEmpty())
+            .setCondition(state -> !state.getParticipants().containsValue(GameTeams.PROPS))
             .build();
     public static final WinCondition<PropHuntGame> PROPS_SURVIVED = new WinCondition.Builder<PropHuntGame>()
             .setLoseReason("Some props have survived.")

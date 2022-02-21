@@ -26,7 +26,7 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
     @Override
     public ActionResult execute(@NotNull CommandSender sender, String[] args) {
         if (!Main.GAME_ENGINE.hasIdleGame()) {
-            return ActionResult.warn("Cannot update config ATM.");
+            return ActionResult.warn("Cannot update config at the moment.");
         }
 
         if (sender instanceof Player player) {

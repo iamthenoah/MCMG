@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.game.minigames.hidenseek;
 
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.EventListener;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -11,8 +12,8 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class HideNSeekGameEventListener extends EventListener<HideNSeekGame> {
 
-    public HideNSeekGameEventListener(HideNSeekGame game) {
-        super(game);
+    public HideNSeekGameEventListener(Main instance, HideNSeekGame game) {
+        super(instance, game);
     }
 
     @EventHandler

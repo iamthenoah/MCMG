@@ -1,12 +1,12 @@
 package com.than00ber.mcmg.game.minigames.werewolf;
 
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.game.MiniGameEvent;
 import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
-import com.than00ber.mcmg.util.ChatUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
@@ -22,9 +22,9 @@ public class WerewolfGame extends MiniGame {
     public final HashMap<Player, GameTeam> PLAYERS_DEAD;
     private boolean isDaytime;
 
-    public WerewolfGame(World world) {
+    public WerewolfGame(Main instance, World world) {
         super(world);
-        setEventListener(new WerewolfGameEventListener(this));
+        setEventListener(new WerewolfGameEventListener(instance, this));
         PLAYERS_ALIVE = new HashMap<>();
         PLAYERS_DEAD = new HashMap<>();
     }
@@ -37,11 +37,11 @@ public class WerewolfGame extends MiniGame {
     @Override
     public List<GameTeam> getGameTeams() {
         return List.of(
-                GameTeams.SPECTATOR,
-                GameTeams.VILLAGER,
-                GameTeams.WEREWOLF,
-                GameTeams.TRAITOR,
-                GameTeams.VAMPIRE,
+                GameTeams.SPECTATORS,
+                GameTeams.VILLAGERS,
+                GameTeams.WEREWOLVES,
+                GameTeams.TRAITORS,
+                GameTeams.VAMPIRES,
                 GameTeams.POSSESSED
         );
     }
@@ -59,13 +59,6 @@ public class WerewolfGame extends MiniGame {
     @Override
     public void onGameStarted() {
         super.onGameStarted();
-
-        do { // set random roles ensuring there is at least one werewolf
-            assignRandomRoles();
-        } while (!getParticipants().containsValue(GameTeams.WEREWOLF));
-
-        ChatUtil.showRoundStartScreen(getParticipants());
-
         PLAYERS_ALIVE.putAll(getParticipants());
         PLAYERS_DEAD.clear();
     }
@@ -90,7 +83,11 @@ public class WerewolfGame extends MiniGame {
 
     @Override
     public void onRoundCycled(MiniGameEvent event) {
-        if (isDaytime) setNight(event.getBossBar()); else setDay(event.getBossBar());
+        if (isDaytime) {
+            setNight(event.getBossBar());
+        } else {
+            setDay(event.getBossBar());
+        }
         isDaytime = !isDaytime;
     }
 }

@@ -4,9 +4,11 @@ import com.than00ber.mcmg.util.config.Configurable;
 import com.than00ber.mcmg.util.config.GameProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.bukkit.scoreboard.Team.OptionStatus;
 
@@ -23,6 +25,7 @@ public class GameTeam implements Configurable {
     private final GameProperty.EnumProperty<Sound> sound;
     private final GameProperty.BooleanProperty isSpectator;
     private final GameProperty.BooleanProperty isRequired;
+    private final Consumer<Player> preparePlayer;
 
     public GameTeam(
             String teamId,
@@ -35,7 +38,8 @@ public class GameTeam implements Configurable {
             String objective,
             Sound sound,
             boolean isSpectator,
-            boolean isRequired
+            boolean isRequired,
+            Consumer<Player> preparePlayer
     ) {
         this.teamId = new GameProperty.StringProperty(teamId + ".id", teamId);
         this.displayName = new GameProperty.StringProperty(teamId + ".name", displayName);
@@ -48,6 +52,7 @@ public class GameTeam implements Configurable {
         this.sound = new GameProperty.EnumProperty<>(teamId + ".sound", Sound.class, sound);
         this.isSpectator = new GameProperty.BooleanProperty(teamId + ".spectator", isSpectator);
         this.isRequired = new GameProperty.BooleanProperty(teamId + ".required", isRequired);
+        this.preparePlayer = preparePlayer;
     }
 
     public String getTeamId() {
@@ -94,6 +99,10 @@ public class GameTeam implements Configurable {
         return isRequired.get();
     }
 
+    public void prepare(Player player) {
+        preparePlayer.accept(player);
+    }
+
     @Override
     public String getConfigName() {
         return getTeamId();
@@ -128,6 +137,7 @@ public class GameTeam implements Configurable {
         private Sound sound;
         private boolean isSpectator;
         private boolean isRequired;
+        Consumer<Player> preparePlayer;
 
         public Builder(String id) {
             teamId = id;
@@ -138,6 +148,7 @@ public class GameTeam implements Configurable {
             visibility = OptionStatus.FOR_OWN_TEAM;
             isSpectator = false;
             isRequired = false;
+            preparePlayer = p -> {};
         }
 
         public Builder setDisplayName(String name) {
@@ -190,6 +201,11 @@ public class GameTeam implements Configurable {
             return this;
         }
 
+        public Builder prepare(Consumer<Player> consumer) {
+            preparePlayer = consumer;
+            return this;
+        }
+
         public GameTeam build() {
             return new GameTeam(
                     teamId,
@@ -202,7 +218,8 @@ public class GameTeam implements Configurable {
                     objective,
                     sound,
                     isSpectator,
-                    isRequired
+                    isRequired,
+                    preparePlayer
             );
         }
     }

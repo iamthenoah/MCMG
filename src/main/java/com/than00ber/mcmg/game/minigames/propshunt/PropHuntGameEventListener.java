@@ -1,6 +1,8 @@
 package com.than00ber.mcmg.game.minigames.propshunt;
 
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.EventListener;
+import com.than00ber.mcmg.init.GameTeams;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
@@ -13,18 +15,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PropHuntGameEventListener extends EventListener<PropHuntGame> {
 
-    public PropHuntGameEventListener(PropHuntGame game) {
-        super(game);
+    public PropHuntGameEventListener(Main instance, PropHuntGame game) {
+        super(instance, game);
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-
-        if (GAME.PROPS.containsKey(player)) {
-            DisguiseAPI.undisguiseToAll(player);
-            GAME.HUNTERS.put(player, GAME.PROPS.remove(player));
-        }
+        DisguiseAPI.undisguiseToAll(player);
+        game.switchTeam(player, GameTeams.HUNTERS);
     }
 
     @EventHandler
@@ -33,8 +32,6 @@ public class PropHuntGameEventListener extends EventListener<PropHuntGame> {
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Material material = event.getClickedBlock().getType();
-            if (!material.isBlock() && GAME.solidsOnly()) return;
-
             MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
             DisguiseAPI.disguiseToAll(player, disguise);
         }

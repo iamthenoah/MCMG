@@ -46,7 +46,7 @@ public class GameEngine<G extends MiniGame> {
 
     public ActionResult mount(G game) {
         if (hasRunningGame()) {
-            return ActionResult.failure("Cannot mount a game while game is running");
+            return ActionResult.failure("Cannot mount a game while a game is running");
         }
 
         if (GAME != null && GAME.getEventListener() != null) {
@@ -128,9 +128,8 @@ public class GameEngine<G extends MiniGame> {
         }
 
         GAME.onGameStarted();
-        if (GAME.getEventListener() != null) {
-            // register game listeners
-            Bukkit.getPluginManager().registerEvents(GAME.getEventListener(), INSTANCE);
+        if (GAME.hasEventListener()) {
+            GAME.getEventListener().register();
         }
 
         CURRENT_HANDLER = HANDLER_SUPPLIER.get();

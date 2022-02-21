@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.game;
 
+import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ChatUtil;
@@ -28,11 +29,13 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     public MiniGame(World world) {
         properties = new ArrayList<>();
-        properties.add(playgroundSpawn);
-        properties.add(playgroundRadius);
-        properties.add(durationGrace);
-        properties.add(playerMinimum);
-        properties.add(durationRound);
+        addProperties(
+                playgroundSpawn,
+                playgroundRadius,
+                durationGrace,
+                playerMinimum,
+                durationRound
+        );
         getGameTeams().forEach(t -> properties.addAll(t.getProperties()));
         players = new HashMap<>();
         this.world = world;
@@ -54,6 +57,10 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         this.listener = listener;
     }
 
+    public boolean hasEventListener() {
+        return listener != null;
+    }
+
     protected final void addProperties(GameProperty<?>... properties) {
         this.properties.addAll(List.of(properties));
     }
@@ -66,6 +73,11 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     @Override
     public final List<? extends ConfigProperty<?>> getProperties() {
         return properties;
+    }
+
+    public final void switchTeam(Player player, GameTeam newTeam) {
+        getParticipants().replace(player, newTeam);
+        newTeam.prepare(player);
     }
 
     public GameEngine.Options getOptions() {
@@ -111,6 +123,10 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.LOG_ADMIN_COMMANDS, false);
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, true);
+
+        // assigns random player roles
+        assignRandomRoles();
+        ChatUtil.showRoundStartScreen(getParticipants());
     }
 
     @Override
@@ -125,6 +141,9 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.LOG_ADMIN_COMMANDS, true);
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
+
+        // reset players
+        getParticipants().forEach((p, r) -> GameTeams.resetPlayer(p));
     }
 
     @Override
@@ -132,7 +151,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         ChatUtil.showRoundEndScreen(getParticipants(), getGameTeams(), condition);
     }
 
-    protected void assignRandomRoles() {
+    private void assignRandomRoles() {
         Random random = new Random();
 
         // TODO - add queuing system
@@ -159,8 +178,12 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         for (GameTeam team : getGameTeams()) {
             if (team.isRequired() && !getParticipants().containsValue(team)) {
                 assignRandomRoles();
+                break;
             }
         }
+
+        // prepares every player per given role
+        getParticipants().forEach((p, r) -> r.prepare(p));
     }
 
     public abstract String getGameName();
