@@ -60,7 +60,7 @@ public class WerewolfGame extends MiniGame {
     public void onGameStarted() {
         super.onGameStarted();
 
-        do { // set random roles ensuring there is at least on werewolf
+        do { // set random roles ensuring there is at least one werewolf
             assignRandomRoles();
         } while (!getParticipants().containsValue(GameTeams.WEREWOLF));
 

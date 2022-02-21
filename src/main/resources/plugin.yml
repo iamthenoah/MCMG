@@ -4,7 +4,7 @@ author: Than00ber
 main: com.than00ber.mcmg.Main
 api-version: 1.18
 
-depend: [ProtocolLib]
+softdepend: [ProtocolLib, LibsDisguises]
 
 commands:
   game:

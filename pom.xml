@@ -13,12 +13,21 @@
     <artifactId>mcmg</artifactId>
     <version>latest</version>
 
-    <repositories>
-        <repository>
-            <id>dmulloy2-repo</id>
-            <url>https://repo.dmulloy2.net/repository/public/</url>
-        </repository>
-    </repositories>
+<!--    PROLIB REPO -->
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>dmulloy2-repo</id>-->
+<!--            <url>https://repo.dmulloy2.net/repository/public/</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+<!-- PROTOCOLLIB -->
+<!--        <dependency>-->
+<!--            <groupId>com.comphenix.protocol</groupId>-->
+<!--            <artifactId>ProtocolLib</artifactId>-->
+<!--            <version>4.7.0</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
 
     <dependencies>
         <!-- SPIGOT REMAPPED -->
@@ -29,24 +38,32 @@
             <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
         </dependency>
+
         <!-- BUKKIT -->
 <!--        <dependency>-->
 <!--            <groupId>org.bukkit</groupId>-->
-<!--            <artifactId>bukkit</artifactId>-->
+<!--            <artifactId>craftbukkit</artifactId>-->
 <!--            <version>1.18.1-R0.1-SNAPSHOT</version>-->
 <!--        </dependency>-->
+
+        <!-- LIBSDISGUISES -->
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.18.1-R0.1-SNAPSHOT</version>
+            <groupId>org.Libs</groupId>
+            <artifactId>LibsDisguises</artifactId>
+            <version>#211</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/LibsDisguises.jar</systemPath>
         </dependency>
+
         <!-- PROTOCOLLIB -->
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.7.0</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/ProtocolLib.jar</systemPath>
         </dependency>
+
         <!-- ANNOTATIONS -->
         <dependency>
             <groupId>org.jetbrains</groupId>
