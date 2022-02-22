@@ -21,7 +21,14 @@ public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGam
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        game.switchTeam(event.getEntity(), GameTeams.SEEKERS);
+        Player player = event.getEntity();
+
+        if (game.isInTeam(player, GameTeams.SEEKERS)) {
+            game.switchTeam(player, GameTeams.SPECTATORS);
+        } else {
+            game.switchTeam(player, GameTeams.SEEKERS);
+            game.sendToGameSpawn(player);
+        }
     }
 
     @EventHandler

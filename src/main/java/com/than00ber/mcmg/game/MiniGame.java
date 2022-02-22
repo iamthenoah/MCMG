@@ -93,6 +93,10 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         }
     }
 
+    public final void sendToGameSpawn(Player player) {
+        player.teleport(playgroundSpawn.get());
+    }
+
     public GameEngine.Options getOptions() {
         return new GameEngine.Options() {
             @Override
@@ -140,7 +144,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
         assignRandomRoles();
         ChatUtil.showRoundStartScreen(getParticipants());
-        players.keySet().forEach(p -> p.teleport(playgroundSpawn.get().add(0, 1, 0)));
+        players.keySet().forEach(this::sendToGameSpawn);
     }
 
     @Override

@@ -9,8 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="fixed ready command vote failed while game running">
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="added villager spawning within playground for hns">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/HideNSeekGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/HideNSeekGame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -388,7 +389,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645556186147</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="added villager spawning within playground for hns">
+      <created>1645559254654</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1645559254654</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -404,7 +412,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated vote failed timeout" />
     <MESSAGE value="ADDED MISSING FILES FOR HNS MVP" />
     <MESSAGE value="renamed HideNSeek to PropsHunt" />
     <MESSAGE value="added HideNSeek game" />
@@ -429,6 +436,7 @@
     <MESSAGE value="renamed default game config file suffix" />
     <MESSAGE value="fixed missing hunters gameteam" />
     <MESSAGE value="fixed ready command vote failed while game running" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed ready command vote failed while game running" />
+    <MESSAGE value="added villager spawning within playground for hns" />
+    <option name="LAST_COMMIT_MESSAGE" value="added villager spawning within playground for hns" />
   </component>
 </project>

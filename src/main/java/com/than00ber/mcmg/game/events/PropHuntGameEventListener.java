@@ -24,7 +24,14 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        game.switchTeam(event.getEntity(), GameTeams.HUNTERS);
+        Player player = event.getEntity();
+
+        if (game.isInTeam(player, GameTeams.HUNTERS)) {
+            game.switchTeam(player, GameTeams.SPECTATORS);
+        } else {
+            game.switchTeam(player, GameTeams.HUNTERS);
+            game.sendToGameSpawn(player);
+        }
     }
 
     @EventHandler
