@@ -18,11 +18,16 @@ public class PropHuntGame extends MiniGame {
 
     private final GameProperty.BooleanProperty blocksOnly = new GameProperty.BooleanProperty("blocks.solid", false);
     private final GameProperty.BooleanProperty nonBlocksOnly = new GameProperty.BooleanProperty("blocks.nonsolid", false);
+    private final GameProperty.BooleanProperty propsInWater = new GameProperty.BooleanProperty("blocks.inWater", false);
 
     public PropHuntGame(Main instance, World world) {
         super(world);
         setEventListener(new PropHuntGameEventListener(instance, this));
-        addProperties(blocksOnly, nonBlocksOnly);
+        addProperties(blocksOnly, nonBlocksOnly, propsInWater);
+    }
+
+    public boolean canHideInWater() {
+        return propsInWater.get();
     }
 
     @Override
@@ -33,8 +38,8 @@ public class PropHuntGame extends MiniGame {
     @Override
     public List<GameTeam> getGameTeams() {
         return List.of(
-                GameTeams.PROPS,
-                GameTeams.HUNTERS
+                GameTeams.PROPS
+//                GameTeams.HUNTERS
         );
     }
 

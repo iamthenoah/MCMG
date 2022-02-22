@@ -3,6 +3,7 @@ package com.than00ber.mcmg.game.minigames.propshunt;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.EventListener;
 import com.than00ber.mcmg.init.GameTeams;
+import com.than00ber.mcmg.objects.GameTeam;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
@@ -12,6 +13,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class PropHuntGameEventListener extends EventListener<PropHuntGame> {
 
@@ -32,6 +36,18 @@ public class PropHuntGameEventListener extends EventListener<PropHuntGame> {
             Material material = event.getClickedBlock().getType();
             MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
             DisguiseAPI.disguiseToAll(player, disguise);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (!game.canHideInWater()) {
+            Player player = event.getPlayer();
+            GameTeam team = game.getParticipants().get(player);
+
+            if (team != null && team.equals(GameTeams.PROPS) && player.isInWater()) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10, 10));
+            }
         }
     }
 }
