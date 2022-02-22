@@ -114,9 +114,6 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     @Override
     public void onGameStarted() {
-        getWorld().setThundering(false);
-        getWorld().setStorm(false);
-        getWorld().setTime(6000);
         getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         getWorld().setGameRule(GameRule.MOB_GRIEFING, false);
@@ -127,6 +124,10 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, true);
 
+        getWorld().setThundering(false);
+        getWorld().setStorm(false);
+        getWorld().setTime(6000);
+
         assignRandomRoles();
         ChatUtil.showRoundStartScreen(getParticipants());
         players.keySet().forEach(p -> p.teleport(playgroundSpawn.get().add(0, 1, 0)));
@@ -134,7 +135,6 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     @Override
     public void onGameEnded() {
-        getWorld().getWorldBorder().reset();
         getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
         getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, true);
         getWorld().setGameRule(GameRule.MOB_GRIEFING, true);
