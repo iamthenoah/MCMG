@@ -13,15 +13,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin {
 
     public static final String PLUGIN_ID = "MCMG";
-    public static final World WORLD = Bukkit.getWorld("world");
     public static GameEngine<MiniGame> GAME_ENGINE;
     public static Main INSTANCE;
+    public static World WORLD;
 
     // username: Gaojinglu80!
 
     @Override
     public void onEnable() {
         INSTANCE = this;
+        WORLD = Bukkit.getWorld("world");
         GAME_ENGINE = new GameEngine<>(this);
 
         new GameCommandExecutor(this, WORLD);
