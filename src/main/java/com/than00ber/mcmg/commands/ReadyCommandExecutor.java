@@ -55,7 +55,7 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
     }
 
     public static void voteFailed() {
-        if (GAME_NAME != null) {
+        if (GAME_NAME != null && !Main.GAME_ENGINE.hasIdleGame() && !Main.GAME_ENGINE.hasRunningGame()) {
             String info = ChatColor.RED + "Vote failed for game " + ChatColor.BLUE + GAME_NAME;
             String status = ChatColor.RED + "Not enough players were ready to play.";
             ChatUtil.toAll(info, status);
