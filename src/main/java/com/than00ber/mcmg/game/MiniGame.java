@@ -70,7 +70,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     @Override
     public final String getConfigName() {
-        return getGameName().toLowerCase() + "-latest.lock";
+        return getGameName().toLowerCase() + "-latest";
     }
 
     @Override
@@ -155,8 +155,10 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
 
-        players.keySet().forEach(GameTeams::resetPlayer);
-        players.keySet().forEach(p -> p.teleport(playgroundSpawn.get()));
+        players.keySet().forEach(player -> {
+            GameTeams.resetPlayer(player);
+            player.teleport(playgroundSpawn.get());
+        });
     }
 
     @Override
