@@ -25,8 +25,8 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     protected final HashMap<Player, GameTeam> players;
     private final List<GameProperty<?>> properties;
-    private EventListener<?> listener;
     private final World world;
+    private EventListener<?> listener;
 
     public MiniGame(World world) {
         this.world = world;
@@ -115,6 +115,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().getWorldBorder().reset();
         getWorld().setThundering(false);
         getWorld().setStorm(false);
+        getWorld().setTime(6000);
         getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         getWorld().setGameRule(GameRule.MOB_GRIEFING, false);

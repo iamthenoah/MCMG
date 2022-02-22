@@ -8,6 +8,8 @@ import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import org.bukkit.World;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 
@@ -36,6 +38,19 @@ public class HideNSeekGame extends MiniGame {
         return List.of(
                 WinConditions.NO_HIDERS
         );
+    }
+
+    @Override
+    public void onGameStarted() {
+        super.onGameStarted();
+        players.forEach((p, r) -> {
+            if (r.equals(GameTeams.SEEKERS)) {
+                int duration = durationGrace.get() * 20;
+                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 10));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 10));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, duration, 10));
+            }
+        });
     }
 
     @Override

@@ -55,6 +55,7 @@ public class GameTeams {
             .setCatchPhrase("Shh, they shouldn't suspect a thing...")
             .setSound(Sound.ENTITY_WOLF_GROWL)
             .prepare(GameTeams::setWerewolfPlayer)
+            .setRequired()
             .build();
     public static final GameTeam TRAITORS = new GameTeam.Builder("traitors")
             .setDisplayName("Traitor")
@@ -101,7 +102,6 @@ public class GameTeams {
             .setObjective("Hide and survive for as long as possible.")
             .setCatchPhrase("I've always wanted to be a pot.")
             .setSound(Sound.ENTITY_ARMOR_STAND_PLACE)
-            .setRequired()
             .prepare(GameTeams::setPropPlayer)
             .build();
     public static final GameTeam HUNTERS = new GameTeam.Builder("hunters")
@@ -113,6 +113,7 @@ public class GameTeams {
             .setCatchPhrase("Something's not right. I can feel it.")
             .setSound(Sound.BLOCK_ANVIL_LAND)
             .prepare(GameTeams::setHunterPlayer)
+            .setRequired()
             .build();
 
     /**
@@ -137,6 +138,7 @@ public class GameTeams {
             .setCatchPhrase("Something's not right. I can feel it.")
             .setSound(Sound.BLOCK_ANVIL_LAND)
             .prepare(GameTeams::setSeekerPlayer)
+            .setRequired()
             .build();
 
     /**
@@ -187,7 +189,7 @@ public class GameTeams {
 
     private static void setHiderPlayer(Player player) {
         resetPlayer(player);
-        Random random = new Random();
+        player.setInvisible(true);
         MobDisguise disguise = new MobDisguise(DisguiseType.VILLAGER);
         DisguiseAPI.disguiseToAll(player, disguise);
     }
