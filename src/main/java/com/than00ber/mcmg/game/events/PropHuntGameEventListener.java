@@ -1,7 +1,7 @@
-package com.than00ber.mcmg.game.minigames.propshunt;
+package com.than00ber.mcmg.game.events;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.EventListener;
+import com.than00ber.mcmg.game.minigames.PropHuntGame;
 import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.objects.GameTeam;
 import me.libraryaddict.disguise.DisguiseAPI;

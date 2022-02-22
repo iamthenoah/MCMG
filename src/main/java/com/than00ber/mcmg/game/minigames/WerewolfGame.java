@@ -1,8 +1,9 @@
-package com.than00ber.mcmg.game.minigames.werewolf;
+package com.than00ber.mcmg.game.minigames;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.game.MiniGameEvent;
+import com.than00ber.mcmg.game.events.WerewolfGameEventListener;
 import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.GameTeam;

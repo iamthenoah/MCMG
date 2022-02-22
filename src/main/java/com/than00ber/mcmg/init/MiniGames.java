@@ -2,9 +2,9 @@ package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
-import com.than00ber.mcmg.game.minigames.hidenseek.HideNSeekGame;
-import com.than00ber.mcmg.game.minigames.propshunt.PropHuntGame;
-import com.than00ber.mcmg.game.minigames.werewolf.WerewolfGame;
+import com.than00ber.mcmg.game.minigames.HideNSeekGame;
+import com.than00ber.mcmg.game.minigames.PropHuntGame;
+import com.than00ber.mcmg.game.minigames.WerewolfGame;
 
 import java.util.HashMap;
 import java.util.Locale;

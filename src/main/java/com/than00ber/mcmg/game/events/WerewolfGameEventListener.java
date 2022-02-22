@@ -1,14 +1,14 @@
-package com.than00ber.mcmg.game.minigames.werewolf;
+package com.than00ber.mcmg.game.events;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.EventListener;
+import com.than00ber.mcmg.game.minigames.WerewolfGame;
 import com.than00ber.mcmg.init.GameTeams;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class WerewolfGameEventListener extends EventListener<WerewolfGame> {
 
-    protected WerewolfGameEventListener(Main instance, WerewolfGame game) {
+    public WerewolfGameEventListener(Main instance, WerewolfGame game) {
         super(instance, game);
     }
 
