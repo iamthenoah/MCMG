@@ -3,6 +3,7 @@ package com.than00ber.mcmg.commands;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ReadyCommandExecutor extends PluginCommandExecutor {
 
     public static String GAME_NAME = null;
+    public static Integer VOTING_POOL_ID;
     public static int CURRENT_COUNT;
     public static int TOTAL_COUNT;
 
@@ -48,6 +50,14 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
         String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
         String status = "Current vote count: " + ChatColor.YELLOW + "0/" + total;
         ChatUtil.toAll(info, vote, status);
+
+        if (VOTING_POOL_ID != null) {
+            Bukkit.getScheduler().cancelTask(VOTING_POOL_ID);
+        }
+
+        VOTING_POOL_ID = Bukkit.getScheduler().scheduleSyncDelayedTask(
+                Main.INSTANCE, ReadyCommandExecutor::voteFailed, 20 * 30
+        );
 
         GAME_NAME = name;
         TOTAL_COUNT = total;

@@ -56,7 +56,6 @@ public class GameCommandExecutor extends PluginCommandExecutor {
             if (!result.isSuccessful()) return result;
 
             ReadyCommandExecutor.setVote(game.getGameName(), Bukkit.getOnlinePlayers().size());
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, ReadyCommandExecutor::voteFailed, 20 * 30);
 
             return ActionResult.success();
         }
