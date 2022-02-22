@@ -53,7 +53,7 @@ public abstract class PluginCommandExecutor implements CommandExecutor, TabCompl
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return this.onTabComplete(sender, args[0], Arrays.copyOfRange(args, 1, args.length));
+        return onTabComplete(sender, args[0], Arrays.copyOfRange(args, 1, args.length));
     }
 
     protected abstract ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args);

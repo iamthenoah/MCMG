@@ -24,7 +24,7 @@ public interface Configurable {
      */
     default YamlConfiguration getConfig() {
         YamlConfiguration configs = new YamlConfiguration();
-        for (ConfigProperty<?> property : this.getProperties()) {
+        for (ConfigProperty<?> property : getProperties()) {
             property.save(configs);
         }
         return configs;
@@ -36,7 +36,7 @@ public interface Configurable {
      * @default Configures of properties.
      */
     default void setConfig(YamlConfiguration configs) {
-        for (ConfigProperty<?> property : this.getProperties()) {
+        for (ConfigProperty<?> property : getProperties()) {
             property.load(configs);
         }
     }

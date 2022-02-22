@@ -56,16 +56,16 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         return listener;
     }
 
-    protected final void setEventListener(PluginEventListener<?> listener) {
-        this.listener = listener;
+    protected final void setEventListener(PluginEventListener<?> eventListener) {
+        listener = eventListener;
     }
 
     public boolean hasEventListener() {
         return listener != null;
     }
 
-    protected final void addProperties(GameProperty<?>... properties) {
-        this.properties.addAll(List.of(properties));
+    protected final void addProperties(GameProperty<?>... props) {
+        properties.addAll(List.of(props));
     }
 
     @Override

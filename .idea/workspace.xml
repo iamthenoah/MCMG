@@ -9,10 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="added villager spawning within playground for hns">
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="fixed player respawn on death">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/PluginCommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/PluginCommandExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/HideNSeekGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/HideNSeekGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/util/config/Configurable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/util/config/Configurable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -396,7 +397,21 @@
       <option name="project" value="LOCAL" />
       <updated>1645559254654</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="fixed health regen in hns">
+      <created>1645567002872</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1645567002872</updated>
+    </task>
+    <task id="LOCAL-00037" summary="fixed player respawn on death">
+      <created>1645567035947</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1645567035947</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -412,8 +427,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="ADDED MISSING FILES FOR HNS MVP" />
-    <MESSAGE value="renamed HideNSeek to PropsHunt" />
     <MESSAGE value="added HideNSeek game" />
     <MESSAGE value="cleaned up hns and ph" />
     <MESSAGE value="added GameTeam required property" />
@@ -437,6 +450,8 @@
     <MESSAGE value="fixed missing hunters gameteam" />
     <MESSAGE value="fixed ready command vote failed while game running" />
     <MESSAGE value="added villager spawning within playground for hns" />
-    <option name="LAST_COMMIT_MESSAGE" value="added villager spawning within playground for hns" />
+    <MESSAGE value="fixed health regen in hns" />
+    <MESSAGE value="fixed player respawn on death" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed player respawn on death" />
   </component>
 </project>
