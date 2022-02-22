@@ -38,7 +38,7 @@ public class PropHuntGame extends MiniGame {
     @Override
     public ImmutableList<GameTeam> getGameTeams() {
         return ImmutableList.of(
-                GameTeams.HUNTERS,
+//                GameTeams.HUNTERS,
                 GameTeams.PROPS
         );
     }
@@ -56,9 +56,9 @@ public class PropHuntGame extends MiniGame {
         players.forEach((p, r) -> {
             if (r.equals(GameTeams.HUNTERS)) {
                 int duration = durationGrace.get() * 20;
-                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 10));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 100));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 10));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, duration, 10));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, duration, 250));
             }
         });
     }

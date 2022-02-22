@@ -46,9 +46,9 @@ public class HideNSeekGame extends MiniGame {
         players.forEach((p, r) -> {
             if (r.equals(GameTeams.SEEKERS)) {
                 int duration = durationGrace.get() * 20;
-                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 10));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 100));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 10));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, duration, 10));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, duration, 250));
             }
         });
     }

@@ -78,9 +78,19 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         return ImmutableList.copyOf(properties);
     }
 
+    public final boolean isParticipant(Player player) {
+        return players.containsKey(player);
+    }
+
+    public final boolean isInTeam(Player player, GameTeam team) {
+        return isParticipant(player) && players.get(player).equals(team);
+    }
+
     public final void switchTeam(Player player, GameTeam newTeam) {
-        players.replace(player, newTeam);
-        newTeam.prepare(player);
+        if (isParticipant(player)) {
+            players.replace(player, newTeam);
+            newTeam.prepare(player);
+        }
     }
 
     public GameEngine.Options getOptions() {
@@ -155,11 +165,10 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     }
 
     private void assignRandomRoles() {
-        Random random = new Random();
-
+        players.clear();
         List<Player> queued = world.getPlayers(); // TODO - add queuing system
         int total = queued.size();
-        players.clear();
+        Random random = new Random();
 
         do {
             int i = random.nextInt(getGameTeams().size());

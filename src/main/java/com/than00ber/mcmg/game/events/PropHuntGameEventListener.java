@@ -31,9 +31,8 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         boolean rightClicked = event.getAction().equals(Action.RIGHT_CLICK_BLOCK);
-        boolean isProp = game.getParticipants().get(player).equals(GameTeams.PROPS);
 
-        if (rightClicked && isProp) {
+        if (rightClicked && game.isInTeam(player, GameTeams.PROPS)) {
             Material material = event.getClickedBlock().getType();
             MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
             DisguiseAPI.disguiseToAll(player, disguise);
@@ -44,9 +43,8 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
     public void onPlayerMove(PlayerMoveEvent event) {
         if (!game.canHideInWater()) {
             Player player = event.getPlayer();
-            boolean isProp = game.getParticipants().get(player).equals(GameTeams.PROPS);
 
-            if (isProp && player.isInWater()) {
+            if (game.isInTeam(player, GameTeams.PROPS) && player.isInWater()) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10, 10));
             }
         }
