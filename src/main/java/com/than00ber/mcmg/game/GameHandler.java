@@ -5,21 +5,21 @@ import org.bukkit.Bukkit;
 
 public abstract class GameHandler implements Runnable {
 
-    private final Main INSTANCE;
-    private int ID;
+    private final Main instance;
+    private int id;
 
     protected GameHandler(Main instance) {
-        INSTANCE = instance;
+        this.instance = instance;
     }
 
     public void activate() {
         onActivate();
-        ID = Bukkit.getScheduler().scheduleSyncRepeatingTask(INSTANCE, this, 0, 20);
+        id = Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, this, 0, 20);
     }
 
     public void deactivate() {
         onDeactivate();
-        Bukkit.getScheduler().cancelTask(ID);
+        Bukkit.getScheduler().cancelTask(id);
     }
 
     @Override

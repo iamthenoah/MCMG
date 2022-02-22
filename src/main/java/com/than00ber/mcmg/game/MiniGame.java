@@ -91,8 +91,8 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             }
 
             @Override
-            public List<Location> getSpawnLocations() {
-                return List.of(playgroundSpawn.get());
+            public Location getPlaygroundSpawn() {
+                return playgroundSpawn.get();
             }
 
             @Override
@@ -114,7 +114,6 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     @Override
     public void onGameStarted() {
-        getWorld().getWorldBorder().reset();
         getWorld().setThundering(false);
         getWorld().setStorm(false);
         getWorld().setTime(6000);
@@ -128,9 +127,9 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, true);
 
-        // assigns random player roles
         assignRandomRoles();
         ChatUtil.showRoundStartScreen(getParticipants());
+        players.keySet().forEach(p -> p.teleport(playgroundSpawn.get().add(0, 1, 0)));
     }
 
     @Override
@@ -146,8 +145,8 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
 
-        // reset players
-        players.forEach((p, r) -> GameTeams.resetPlayer(p));
+        players.keySet().forEach(GameTeams::resetPlayer);
+        players.keySet().forEach(p -> p.teleport(playgroundSpawn.get()));
     }
 
     @Override
@@ -158,8 +157,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     private void assignRandomRoles() {
         Random random = new Random();
 
-        // TODO - add queuing system
-        List<Player> queued = world.getPlayers();
+        List<Player> queued = world.getPlayers(); // TODO - add queuing system
         int total = queued.size();
         players.clear();
 
@@ -178,7 +176,6 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             }
         } while (!queued.isEmpty());
 
-        // ensure required roles are present
         for (GameTeam team : getGameTeams()) {
             if (team.isRequired() && !players.containsValue(team)) {
                 assignRandomRoles();
@@ -186,7 +183,6 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             }
         }
 
-        // prepares every player per given role
         players.forEach((p, r) -> r.prepare(p));
     }
 

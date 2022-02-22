@@ -10,50 +10,53 @@ import org.bukkit.Note;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class GameEngine<G extends MiniGame> {
 
-    private final Main INSTANCE;
-    private G GAME;
-    private Supplier<GameHandler> HANDLER_SUPPLIER;
-    private GameHandler CURRENT_HANDLER;
-    private GameState GAME_STATE;
+    private final Main instance;
+    private G game;
+    private Supplier<GameHandler> handlerSupplier;
+    private GameHandler currentHandler;
+    private GameState gameState;
 
     public GameEngine(Main instance) {
-        INSTANCE = instance;
-        GAME_STATE = GameState.EMPTY;
+        this.instance = instance;
+        gameState = GameState.EMPTY;
     }
 
     public G getCurrentGame() {
-        return GAME;
+        return game;
     }
 
     public boolean hasGame() {
-        return GAME != null;
+        return game != null;
     }
 
     public boolean hasIdleGame() {
-        return GAME_STATE.equals(GameState.IDLE);
+        return gameState.equals(GameState.IDLE);
     }
 
     public boolean hasRunningGame() {
-        return GAME_STATE.equals(GameState.ONGOING);
+        return gameState.equals(GameState.ONGOING);
     }
 
-    public ActionResult mount(G game) {
+    public ActionResult mount(G nextGame) {
         if (hasRunningGame()) {
             return ActionResult.failure("Cannot mount a game while a game is running");
         }
 
-        if (GAME != null && GAME.getEventListener() != null) {
-            GAME.getEventListener().unregister();
+        if (game != null && game.hasEventListener()) {
+            game.getEventListener().unregister();
         }
-        GAME = game;
-        HANDLER_SUPPLIER = () -> new GameHandler(INSTANCE) {
+
+        game = nextGame;
+
+        handlerSupplier = () -> new GameHandler(instance) {
 
             private MiniGameEvent event;
             private int countdownGrace;
@@ -61,10 +64,10 @@ public class GameEngine<G extends MiniGame> {
 
             @Override
             public void onActivate() {
-                countdownGrace = GAME.getOptions().getDurationGrace();
-                countdownRound = GAME.getOptions().getDurationRound();
+                countdownGrace = game.getOptions().getDurationGrace();
+                countdownRound = game.getOptions().getDurationRound();
                 BossBar bar = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
-                GAME.getWorld().getPlayers().forEach(bar::addPlayer);
+                game.getWorld().getPlayers().forEach(bar::addPlayer);
                 event = new MiniGameEvent(bar);
             }
 
@@ -78,93 +81,103 @@ public class GameEngine<G extends MiniGame> {
 
                 if (countdownGrace > 0) {
                     if (countdownGrace <= 3) {
-                        GAME.getWorld().getPlayers().forEach(p -> {
+                        game.getWorld().getPlayers().forEach(p -> {
                             Note note = Note.natural(1, Note.Tone.A);
                             p.playNote(p.getLocation(), Instrument.XYLOPHONE, note);
                         });
                     }
 
                     countdownGrace--;
-                    event.getBossBar().setProgress((float) countdownGrace / GAME.getOptions().getDurationGrace());
+                    event.getBossBar().setProgress((float) countdownGrace / game.getOptions().getDurationGrace());
                     event.getBossBar().setTitle("Game starting in " + countdownGrace + " seconds");
 
                     if (countdownGrace == 0) {
                         event.getBossBar().setTitle("");
                         event.getBossBar().setProgress(1);
-                        GAME.onRoundStarted(event);
+                        game.onRoundStarted(event);
 
                         if (event.getBossBar().getTitle().isEmpty()) {
                             event.getBossBar().setTitle("Time Remaining");
                         }
                     }
                 } else {
-                    WinCondition<?> condition =  GAME.getWinConditions().stream()
-                            .filter(c -> c.check(GAME)).findAny().orElse(null);
+                    WinCondition<?> condition =  game.getWinConditions().stream()
+                            .filter(c -> c.check(game)).findAny().orElse(null);
 
                     if (condition != null) {
-                        GAME.onRoundWon(condition);
+                        game.onRoundWon(condition);
                         endGame(null);
                     }
 
                     if (countdownRound == 0) {
-                        countdownRound = GAME.getOptions().getDurationRound();
-                        GAME.onRoundCycled(event);
+                        countdownRound = game.getOptions().getDurationRound();
+                        game.onRoundCycled(event);
 
                         if (event.getBossBar().getTitle().isEmpty()) {
                             event.getBossBar().setTitle("Time Remaining");
                         }
 
                         if (event.hasEnded()) {
-                            GAME.onRoundWon(event.getWinCondition());
+                            game.onRoundWon(event.getWinCondition());
                             endGame(null);
                         }
                     }
 
                     countdownRound--;
-                    event.getBossBar().setProgress((float) countdownRound / GAME.getOptions().getDurationRound());
+                    event.getBossBar().setProgress((float) countdownRound / game.getOptions().getDurationRound());
                 }
             }
         };
 
-        GAME_STATE = GameState.IDLE;
+        gameState = GameState.IDLE;
         return ActionResult.success();
     }
 
     public ActionResult startGame(@Nullable String message) {
-        if (GAME == null) {
+        if (game == null) {
             return ActionResult.warn("No game is set.");
         }
-        if (CURRENT_HANDLER != null) {
-            return ActionResult.warn("A game of " + GAME.getGameName() + " is already running.");
+        if (currentHandler != null) {
+            return ActionResult.warn("A game of " + game.getGameName() + " is already running.");
+        }
+        if (game.getOptions().getPlaygroundSpawn() == null) {
+            return ActionResult.warn("No playground spawn set for game " + game.getGameName());
+        }
+        if (game.getOptions().getPlaygroundRadius() == null) {
+            return ActionResult.warn("No playground radius set for game " + game.getGameName());
         }
 
-        GAME.onGameStarted();
-        if (GAME.hasEventListener()) {
-            GAME.getEventListener().register();
+        game.getWorld().getWorldBorder().setSize(game.getOptions().getPlaygroundRadius());
+        game.getWorld().getWorldBorder().setCenter(game.getOptions().getPlaygroundSpawn());
+
+        game.onGameStarted();
+        if (game.hasEventListener()) {
+            game.getEventListener().register();
         }
 
-        CURRENT_HANDLER = HANDLER_SUPPLIER.get();
-        CURRENT_HANDLER.activate();
+        currentHandler = handlerSupplier.get();
+        currentHandler.activate();
 
-        GAME_STATE = GameState.ONGOING;
+        gameState = GameState.ONGOING;
         return ActionResult.success(message);
     }
 
     public ActionResult endGame(@Nullable String reason) {
-        if (CURRENT_HANDLER == null || GAME == null) {
+        if (currentHandler == null || game == null) {
             return ActionResult.warn("No game is currently running.");
         }
 
-        GAME.onGameEnded();
-        if (GAME.getEventListener() != null) {
-            // unregister game listeners
-            GAME.getEventListener().unregister();
+        game.getWorld().getWorldBorder().reset();
+
+        game.onGameEnded();
+        if (game.hasEventListener()) {
+            game.getEventListener().unregister();
         }
 
-        CURRENT_HANDLER.deactivate();
-        CURRENT_HANDLER = null;
+        currentHandler.deactivate();
+        currentHandler = null;
 
-        GAME_STATE = GameState.IDLE;
+        gameState = GameState.IDLE;
         return ActionResult.success(reason);
     }
 
@@ -176,20 +189,51 @@ public class GameEngine<G extends MiniGame> {
                 : ActionResult.success(reason);
     }
 
+    private Options sanitizeOptions(G game) {
+        Options options = game.getOptions();
+
+        return new Options() {
+            @Override
+            public @NotNull Integer getMinimumPlayer() {
+                return Optional.ofNullable(options.getMinimumPlayer()).orElse(2);
+            }
+
+            @Override
+            public @NotNull Location getPlaygroundSpawn() {
+                return Optional.ofNullable(options.getPlaygroundSpawn()).orElse(game.getWorld().getSpawnLocation());
+            }
+
+            @Override
+            public @NotNull Integer getPlaygroundRadius() {
+                return Optional.ofNullable(options.getPlaygroundRadius()).orElse(100);
+            }
+
+            @Override
+            public @NotNull Integer getDurationGrace() {
+                return Optional.ofNullable(options.getDurationGrace()).orElse(10);
+            }
+
+            @Override
+            public @NotNull Integer getDurationRound() {
+                return Optional.ofNullable(options.getDurationRound()).orElse(120);
+            }
+        };
+    }
+
     public enum GameState {
         IDLE, ONGOING, EMPTY
     }
 
     public interface Options {
 
-        Integer getMinimumPlayer();
+        @Nullable Integer getMinimumPlayer();
 
-        List<Location> getSpawnLocations();
+        @Nullable Location getPlaygroundSpawn();
 
-        Integer getPlaygroundRadius();
+        @Nullable Integer getPlaygroundRadius();
 
-        Integer getDurationGrace();
+        @Nullable Integer getDurationGrace();
 
-        Integer getDurationRound();
+        @Nullable Integer getDurationRound();
     }
 }
