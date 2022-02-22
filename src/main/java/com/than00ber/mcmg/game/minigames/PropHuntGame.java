@@ -38,7 +38,7 @@ public class PropHuntGame extends MiniGame {
     @Override
     public ImmutableList<GameTeam> getGameTeams() {
         return ImmutableList.of(
-//                GameTeams.HUNTERS,
+                GameTeams.HUNTERS,
                 GameTeams.PROPS
         );
     }
