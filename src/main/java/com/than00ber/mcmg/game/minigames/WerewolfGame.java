@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.game.minigames;
 
+import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.game.MiniGameEvent;
@@ -12,8 +13,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
-
-import java.util.List;
 
 public class WerewolfGame extends MiniGame {
 
@@ -30,8 +29,8 @@ public class WerewolfGame extends MiniGame {
     }
 
     @Override
-    public List<GameTeam> getGameTeams() {
-        return List.of(
+    public ImmutableList<GameTeam> getGameTeams() {
+        return ImmutableList.of(
                 GameTeams.VILLAGERS,
                 GameTeams.WEREWOLVES,
                 GameTeams.TRAITORS,
@@ -41,8 +40,8 @@ public class WerewolfGame extends MiniGame {
     }
 
     @Override
-    public List<WinCondition> getWinConditions() {
-        return List.of(
+    public ImmutableList<WinCondition> getWinConditions() {
+        return ImmutableList.of(
                 WinConditions.VAMPIRE_VICTORY,
                 WinConditions.ALL_VILLAGERS_DEAD,
                 WinConditions.ALL_WEREWOLVES_DEAD,

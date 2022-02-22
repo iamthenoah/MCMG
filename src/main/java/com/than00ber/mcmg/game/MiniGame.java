@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.game;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.than00ber.mcmg.game.events.PluginEventListener;
 import com.than00ber.mcmg.init.GameTeams;
@@ -73,8 +74,8 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     }
 
     @Override
-    public final List<? extends ConfigProperty<?>> getProperties() {
-        return properties;
+    public final ImmutableList<? extends ConfigProperty<?>> getProperties() {
+        return ImmutableList.copyOf(properties);
     }
 
     public final void switchTeam(Player player, GameTeam newTeam) {
@@ -191,7 +192,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     public abstract String getGameName();
 
-    public abstract List<GameTeam> getGameTeams();
+    public abstract ImmutableList<GameTeam> getGameTeams();
 
-    public abstract List<WinCondition> getWinConditions();
+    public abstract ImmutableList<WinCondition> getWinConditions();
 }

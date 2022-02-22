@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.game.minigames;
 
+import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.game.MiniGameEvent;
@@ -11,8 +12,6 @@ import com.than00ber.mcmg.objects.WinCondition;
 import org.bukkit.World;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.List;
 
 public class HideNSeekGame extends MiniGame {
 
@@ -27,16 +26,16 @@ public class HideNSeekGame extends MiniGame {
     }
 
     @Override
-    public List<GameTeam> getGameTeams() {
-        return List.of(
+    public ImmutableList<GameTeam> getGameTeams() {
+        return ImmutableList.of(
                 GameTeams.HIDERS,
                 GameTeams.SEEKERS
         );
     }
 
     @Override
-    public List<WinCondition> getWinConditions() {
-        return List.of(
+    public ImmutableList<WinCondition> getWinConditions() {
+        return ImmutableList.of(
                 WinConditions.NO_HIDERS
         );
     }
