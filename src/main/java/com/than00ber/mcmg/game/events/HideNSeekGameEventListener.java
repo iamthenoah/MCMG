@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-public class HideNSeekGameEventListener extends EventListener<HideNSeekGame> {
+public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGame> {
 
     public HideNSeekGameEventListener(Main instance, HideNSeekGame game) {
         super(instance, game);

@@ -6,12 +6,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-public abstract class EventListener<G extends MiniGame> implements Listener {
+public abstract class PluginEventListener<G extends MiniGame> implements Listener {
 
     public final G game;
     private final Main instance;
 
-    protected EventListener(Main instance, G game) {
+    protected PluginEventListener(Main instance, G game) {
         this.instance = instance;
         this.game = game;
     }

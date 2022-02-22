@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.game;
 
 import com.google.common.collect.ImmutableMap;
-import com.than00ber.mcmg.game.events.EventListener;
+import com.than00ber.mcmg.game.events.PluginEventListener;
 import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
@@ -27,7 +27,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     protected final HashMap<Player, GameTeam> players;
     private final List<GameProperty<?>> properties;
     private final World world;
-    private com.than00ber.mcmg.game.events.EventListener<?> listener;
+    private PluginEventListener<?> listener;
 
     public MiniGame(World world) {
         this.world = world;
@@ -51,11 +51,11 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         return ImmutableMap.copyOf(players);
     }
 
-    public com.than00ber.mcmg.game.events.EventListener<?> getEventListener() {
+    public PluginEventListener<?> getEventListener() {
         return listener;
     }
 
-    protected final void setEventListener(EventListener<?> listener) {
+    protected final void setEventListener(PluginEventListener<?> listener) {
         this.listener = listener;
     }
 

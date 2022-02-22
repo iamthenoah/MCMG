@@ -6,7 +6,7 @@ import com.than00ber.mcmg.init.GameTeams;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class WerewolfGameEventListener extends EventListener<WerewolfGame> {
+public class WerewolfGameEventListener extends PluginEventListener<WerewolfGame> {
 
     public WerewolfGameEventListener(Main instance, WerewolfGame game) {
         super(instance, game);

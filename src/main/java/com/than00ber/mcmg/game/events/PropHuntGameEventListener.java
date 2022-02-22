@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PropHuntGameEventListener extends EventListener<PropHuntGame> {
+public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame> {
 
     public PropHuntGameEventListener(Main instance, PropHuntGame game) {
         super(instance, game);
