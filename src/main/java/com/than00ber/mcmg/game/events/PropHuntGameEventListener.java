@@ -3,7 +3,6 @@ package com.than00ber.mcmg.game.events;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.minigames.PropHuntGame;
 import com.than00ber.mcmg.init.GameTeams;
-import com.than00ber.mcmg.objects.GameTeam;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
@@ -31,8 +30,10 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        boolean rightClicked = event.getAction().equals(Action.RIGHT_CLICK_BLOCK);
+        boolean isProp = game.getParticipants().get(player).equals(GameTeams.PROPS);
 
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+        if (rightClicked && isProp) {
             Material material = event.getClickedBlock().getType();
             MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
             DisguiseAPI.disguiseToAll(player, disguise);
@@ -43,9 +44,9 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
     public void onPlayerMove(PlayerMoveEvent event) {
         if (!game.canHideInWater()) {
             Player player = event.getPlayer();
-            GameTeam team = game.getParticipants().get(player);
+            boolean isProp = game.getParticipants().get(player).equals(GameTeams.PROPS);
 
-            if (team != null && team.equals(GameTeams.PROPS) && player.isInWater()) {
+            if (isProp && player.isInWater()) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10, 10));
             }
         }
