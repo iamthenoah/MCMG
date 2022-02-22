@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused")
 public class GameProperty<V> extends ConfigProperty<V> {
 
     private final BiFunction<Player, String[], V> parser;
@@ -46,7 +47,7 @@ public class GameProperty<V> extends ConfigProperty<V> {
     public static class BooleanProperty extends GameProperty<Boolean> {
 
         public BooleanProperty(String name, Boolean defaultValue) {
-            super(name, defaultValue, (p, a) -> Boolean.getBoolean(a[0]), b -> true);
+            super(name, defaultValue, (p, a) -> Boolean.valueOf(a[0]), b -> true);
         }
 
         public BooleanProperty(String name) {
