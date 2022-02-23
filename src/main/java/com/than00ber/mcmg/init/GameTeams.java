@@ -145,7 +145,6 @@ public class GameTeams {
      * GameTeam Player Preparation Helper Methods
      */
     public static void resetPlayer(Player player) {
-        DisguiseAPI.undisguiseToAll(player);
         player.setInvisible(false);
         player.setLevel(0);
         player.setExp(0);
@@ -156,6 +155,7 @@ public class GameTeams {
         player.getInventory().clear();
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
         player.setHealth(20);
+        DisguiseAPI.undisguiseToAll(player);
     }
 
     private static void setWerewolfPlayer(Player player) {
@@ -174,7 +174,8 @@ public class GameTeams {
         Random random = new Random();
         int i = random.nextInt(Material.values().length - 1);
         Material randomMaterial = Material.values()[i];
-        MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, randomMaterial);
+        MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, randomMaterial)
+                .setModifyBoundingBox(true);
         DisguiseAPI.disguiseToAll(player, disguise);
     }
 
@@ -196,7 +197,7 @@ public class GameTeams {
 
     private static void setSeekerPlayer(Player player) {
         resetPlayer(player);
-        ItemStack axe = new ItemStack(Material.IRON_SWORD);
+        ItemStack axe = new ItemStack(Material.IRON_AXE);
         ItemStack bow = new ItemStack(Material.BOW);
         ItemStack food = new ItemStack(Material.BREAD);
         food.setAmount(16);

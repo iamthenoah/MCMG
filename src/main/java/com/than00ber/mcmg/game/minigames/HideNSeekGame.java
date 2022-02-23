@@ -9,11 +9,13 @@ import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
+import com.than00ber.mcmg.util.config.GameProperty;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Villager;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -23,12 +25,19 @@ import java.util.Random;
 
 public class HideNSeekGame extends MiniGame {
 
-    private final List<Entity> villagers;
+    private final GameProperty.DoubleProperty damagePenalty = new GameProperty.DoubleProperty("damage.penalty", .5).validate(d -> d <= 40);
+
+    private final List<Villager> villagers;
 
     public HideNSeekGame(Main instance, World world) {
         super(world);
         setEventListener(new HideNSeekGameEventListener(instance, this));
+        addProperties(damagePenalty);
         villagers = new ArrayList<>();
+    }
+
+    public double getDamagePenalty() {
+        return damagePenalty.get();
     }
 
     @Override
@@ -85,10 +94,17 @@ public class HideNSeekGame extends MiniGame {
 
     private void spawnRandomVillagers() {
         int count = (int) Math.round(Math.pow((float) playgroundRadius.get() / 2, 2));
+        Random random = new Random();
+
         for (int i = 0; i < count; i++) {
             Location location = getRandomLocation();
-            Entity entity = getWorld().spawnEntity(location, EntityType.VILLAGER);
-            villagers.add(entity);
+            Villager villager = (Villager) getWorld().spawnEntity(location, EntityType.VILLAGER);
+
+            int c = random.nextInt(Villager.Profession.values().length);
+            Villager.Profession profession = Villager.Profession.values()[c];
+            villager.setProfession(profession);
+
+            villagers.add(villager);
         }
     }
 

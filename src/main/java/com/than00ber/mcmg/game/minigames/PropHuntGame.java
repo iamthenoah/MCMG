@@ -16,8 +16,8 @@ import org.bukkit.potion.PotionEffectType;
 
 public class PropHuntGame extends MiniGame {
 
-    private final GameProperty.BooleanProperty blocksOnly = new GameProperty.BooleanProperty("blocks.solid", false);
-    private final GameProperty.BooleanProperty nonBlocksOnly = new GameProperty.BooleanProperty("blocks.nonsolid", false);
+    private final GameProperty.BooleanProperty blocksOnly = new GameProperty.BooleanProperty("_blocks.solid", false);
+    private final GameProperty.BooleanProperty nonBlocksOnly = new GameProperty.BooleanProperty("_blocks.nonsolid", false);
     private final GameProperty.BooleanProperty propsInWater = new GameProperty.BooleanProperty("blocks.inWater", false);
 
     public PropHuntGame(Main instance, World world) {

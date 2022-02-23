@@ -1,6 +1,7 @@
 package com.than00ber.mcmg.game;
 
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ActionResult;
 import org.bukkit.Bukkit;
@@ -10,10 +11,11 @@ import org.bukkit.Note;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class GameEngine<G extends MiniGame> {
@@ -155,6 +157,7 @@ public class GameEngine<G extends MiniGame> {
             game.getEventListener().register();
         }
 
+        registerTeams();
         currentHandler = handlerSupplier.get();
         currentHandler.activate();
 
@@ -174,6 +177,7 @@ public class GameEngine<G extends MiniGame> {
             game.getEventListener().unregister();
         }
 
+        unregisterTeams();
         currentHandler.deactivate();
         currentHandler = null;
 
@@ -189,35 +193,30 @@ public class GameEngine<G extends MiniGame> {
                 : ActionResult.success(reason);
     }
 
-    private Options sanitizeOptions(G game) {
-        Options options = game.getOptions();
+    private void registerTeams() {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
 
-        return new Options() {
-            @Override
-            public @NotNull Integer getMinimumPlayer() {
-                return Optional.ofNullable(options.getMinimumPlayer()).orElse(2);
-            }
+        if (manager != null) {
+            Scoreboard scoreboard = manager.getMainScoreboard();
 
-            @Override
-            public @NotNull Location getPlaygroundSpawn() {
-                return Optional.ofNullable(options.getPlaygroundSpawn()).orElse(game.getWorld().getSpawnLocation());
+            for (GameTeam gameTeam : game.getGameTeams()) {
+                Team team = scoreboard.registerNewTeam(gameTeam.getTeamId());
+                team.setOption(Team.Option.NAME_TAG_VISIBILITY, gameTeam.getVisibility());
             }
+        }
+    }
 
-            @Override
-            public @NotNull Integer getPlaygroundRadius() {
-                return Optional.ofNullable(options.getPlaygroundRadius()).orElse(100);
-            }
+    private void unregisterTeams() {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
 
-            @Override
-            public @NotNull Integer getDurationGrace() {
-                return Optional.ofNullable(options.getDurationGrace()).orElse(10);
-            }
+        if (manager != null) {
+            Scoreboard scoreboard = manager.getMainScoreboard();
 
-            @Override
-            public @NotNull Integer getDurationRound() {
-                return Optional.ofNullable(options.getDurationRound()).orElse(120);
+            for (GameTeam gameTeam : game.getGameTeams()) {
+                Team team = scoreboard.getTeam(gameTeam.getTeamId());
+                if (team != null) team.unregister();
             }
-        };
+        }
     }
 
     public enum GameState {

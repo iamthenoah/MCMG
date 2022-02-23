@@ -7,13 +7,18 @@ import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.config.ConfigProperty;
 import com.than00ber.mcmg.util.config.Configurable;
 import com.than00ber.mcmg.util.config.GameProperty;
+import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 
@@ -86,10 +91,33 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         return isParticipant(player) && players.get(player).equals(team);
     }
 
-    public final void switchTeam(Player player, GameTeam newTeam) {
+    public final void switchTeam(Player player, GameTeam newGameTeam) {
         if (isParticipant(player)) {
-            players.replace(player, newTeam);
-            newTeam.prepare(player);
+            addToScoreboardTeam(player, newGameTeam);
+            players.replace(player, newGameTeam);
+            newGameTeam.prepare(player);
+        }
+    }
+
+    private void addToScoreboardTeam(Player player, GameTeam newGameTeam) {
+        GameTeam currentGameTeam = players.get(player);
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+
+        if (manager != null) {
+            Scoreboard scoreboard = manager.getMainScoreboard();
+            Team currentTeam = scoreboard.getTeam(currentGameTeam.getTeamId());
+            Team newTeam = scoreboard.getTeam(newGameTeam.getTeamId());
+
+            if (currentTeam == null || newTeam == null) {
+                Console.warn("A team is not registered.");
+                return;
+            }
+
+            if (currentTeam.hasEntry(player.getDisplayName())) {
+                currentTeam.removeEntry(player.getDisplayName());
+            }
+
+            newTeam.addEntry(player.getDisplayName());
         }
     }
 
@@ -144,7 +172,11 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
         assignRandomRoles();
         ChatUtil.showRoundStartScreen(getParticipants());
-        players.keySet().forEach(this::sendToGameSpawn);
+
+        players.forEach((player, team) -> {
+            addToScoreboardTeam(player, team);
+            sendToGameSpawn(player);
+        });
     }
 
     @Override
@@ -159,9 +191,13 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
 
-        players.keySet().forEach(player -> {
+        getWorld().setThundering(false);
+        getWorld().setStorm(false);
+        getWorld().setTime(6000);
+
+        getWorld().getPlayers().forEach(player -> {
             GameTeams.resetPlayer(player);
-            player.teleport(playgroundSpawn.get());
+            sendToGameSpawn(player);
         });
     }
 
@@ -198,7 +234,10 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             }
         }
 
-        players.forEach((p, r) -> r.prepare(p));
+        players.forEach((p, r) -> {
+            r.prepare(p);
+            addToScoreboardTeam(p, r);
+        });
     }
 
     public abstract String getGameName();

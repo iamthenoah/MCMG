@@ -52,7 +52,7 @@ public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGam
                 Entity victim = event.getEntity();
 
                 if (!(victim instanceof Player)) {
-                    player.damage(.5);
+                    player.damage(game.getDamagePenalty());
                 }
             }
         }
