@@ -4,6 +4,7 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.init.MiniGames;
 import com.than00ber.mcmg.util.ActionResult;
+import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ConfigUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.Bukkit;
@@ -24,13 +25,19 @@ public class GameCommandExecutor extends PluginCommandExecutor {
 
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
-        return switch (args[0]) {
+        ActionResult result = switch (args[0]) {
             case "play"     -> handleGameMount(args);
             case "start"    -> Main.GAME_ENGINE.startGame(getReason(sender, args, "started"));
             case "end"      -> Main.GAME_ENGINE.endGame(getReason(sender, args, "ended"));
             case "restart"  -> Main.GAME_ENGINE.restartGame(getReason(sender, args, "restarted"));
             default         -> PluginCommandExecutor.INVALID_COMMAND;
         };
+
+        if (result.isSuccessful()) {
+            ChatUtil.toAll(result.getFormattedMessages());
+            return ActionResult.success();
+        }
+        return result;
     }
 
     @Override
