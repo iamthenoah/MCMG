@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
@@ -37,8 +38,15 @@ public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGam
 
         if (game.isInTeam(player, GameTeams.HIDERS)) {
             Entity entity = event.getRightClicked();
+
+            if (entity instanceof Player) {
+                return;
+            }
+
             MobDisguise disguise = new MobDisguise(DisguiseType.getType(entity));
             DisguiseAPI.disguiseToAll(player, disguise);
+        } else {
+            event.setCancelled(true);
         }
     }
 
@@ -54,6 +62,18 @@ public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGam
                 if (!(victim instanceof Player)) {
                     player.damage(game.getDamagePenalty());
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityRegainHealth(EntityRegainHealthEvent event) {
+        Entity entity = event.getEntity();
+
+        if (entity instanceof Player player) {
+
+            if (game.isInTeam(player, GameTeams.SEEKERS)) {
+                event.setCancelled(true);
             }
         }
     }
