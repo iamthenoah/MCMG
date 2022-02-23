@@ -10,7 +10,6 @@ import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.config.GameProperty;
-import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -63,10 +62,7 @@ public class HideNSeekGame extends MiniGame {
     @Override
     public void onGameStarted() {
         super.onGameStarted();
-        getWorld().setGameRule(GameRule.NATURAL_REGENERATION, false);
-
         spawnRandomVillagers();
-
         players.forEach((p, r) -> {
             if (r.equals(GameTeams.SEEKERS)) {
                 int duration = durationGrace.get() * 20;
@@ -80,7 +76,6 @@ public class HideNSeekGame extends MiniGame {
     @Override
     public void onGameEnded() {
         super.onGameEnded();
-        getWorld().setGameRule(GameRule.NATURAL_REGENERATION, true);
         villagers.forEach(Entity::remove);
     }
 
@@ -93,7 +88,7 @@ public class HideNSeekGame extends MiniGame {
     }
 
     private void spawnRandomVillagers() {
-        int count = (int) Math.round(Math.pow((float) playgroundRadius.get() / 2, 2));
+        int count = Math.min(100, (int) Math.round(Math.pow((float) playgroundRadius.get() / 2, 2)));
         Random random = new Random();
 
         for (int i = 0; i < count; i++) {
