@@ -220,7 +220,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
                 int frequency = Collections.frequency(players.values(), team);
 
                 if (frequency / (float) total <= team.getWeight()) {
-                    Player player = queued.get(0);
+                    Player player = queued.get(random.nextInt(queued.size()));
                     players.put(player, team);
                     queued.remove(player);
                 }
