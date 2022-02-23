@@ -3,6 +3,7 @@ package com.than00ber.mcmg;
 import com.than00ber.mcmg.commands.ConfigsCommandExecutor;
 import com.than00ber.mcmg.commands.GameCommandExecutor;
 import com.than00ber.mcmg.commands.ReadyCommandExecutor;
+import com.than00ber.mcmg.events.GlobalEventListener;
 import com.than00ber.mcmg.game.GameEngine;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.util.ConfigUtil;
@@ -17,13 +18,13 @@ public class Main extends JavaPlugin {
     public static Main INSTANCE;
     public static World WORLD;
 
-    // username: Gaojinglu80!
-
     @Override
     public void onEnable() {
         INSTANCE = this;
         WORLD = Bukkit.getWorld("world");
         GAME_ENGINE = new GameEngine<>(this);
+
+        Bukkit.getPluginManager().registerEvents(new GlobalEventListener(), this);
 
         new GameCommandExecutor(this, WORLD);
         new ConfigsCommandExecutor(this, WORLD);
