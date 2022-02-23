@@ -15,6 +15,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -156,6 +158,8 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     @Override
     public void onGameStarted() {
+        clearMonsters();
+
         getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         getWorld().setGameRule(GameRule.MOB_GRIEFING, false);
@@ -177,10 +181,18 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             addToScoreboardTeam(player, team);
             sendToGameSpawn(player);
         });
+
+        for (Entity entity : getWorld().getEntities()) {
+            if (entity instanceof Monster) {
+                entity.remove();
+            }
+        }
     }
 
     @Override
     public void onGameEnded() {
+        clearMonsters();
+
         getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
         getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, true);
         getWorld().setGameRule(GameRule.MOB_GRIEFING, true);
@@ -238,6 +250,14 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             r.prepare(p);
             addToScoreboardTeam(p, r);
         });
+    }
+
+    protected void clearMonsters() {
+        for (Entity entity : getWorld().getEntities()) {
+            if (entity instanceof Monster) {
+                entity.remove();
+            }
+        }
     }
 
     public abstract String getGameName();

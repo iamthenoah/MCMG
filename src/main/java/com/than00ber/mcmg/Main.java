@@ -8,6 +8,7 @@ import com.than00ber.mcmg.game.GameEngine;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.util.ConfigUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,6 +18,8 @@ public class Main extends JavaPlugin {
     public static GameEngine<MiniGame> GAME_ENGINE;
     public static Main INSTANCE;
     public static World WORLD;
+
+    // 6033393598488652660 -2000 ~ 1000
 
     @Override
     public void onEnable() {
@@ -29,6 +32,8 @@ public class Main extends JavaPlugin {
         new GameCommandExecutor(this, WORLD);
         new ConfigsCommandExecutor(this, WORLD);
         new ReadyCommandExecutor(this, WORLD);
+
+        WORLD.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
     }
 
     @Override
