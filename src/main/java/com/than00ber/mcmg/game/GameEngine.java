@@ -152,12 +152,13 @@ public class GameEngine<G extends MiniGame> {
         game.getWorld().getWorldBorder().setSize(game.getOptions().getPlaygroundRadius());
         game.getWorld().getWorldBorder().setCenter(game.getOptions().getPlaygroundSpawn());
 
+        unregisterTeams();
+        registerTeams();
         game.onGameStarted();
         if (game.hasEventListener()) {
             game.getEventListener().register();
         }
 
-        registerTeams();
         currentHandler = handlerSupplier.get();
         currentHandler.activate();
 
@@ -173,11 +174,11 @@ public class GameEngine<G extends MiniGame> {
         game.getWorld().getWorldBorder().reset();
 
         game.onGameEnded();
+        unregisterTeams();
         if (game.hasEventListener()) {
             game.getEventListener().unregister();
         }
 
-        unregisterTeams();
         currentHandler.deactivate();
         currentHandler = null;
 
@@ -208,14 +209,9 @@ public class GameEngine<G extends MiniGame> {
 
     private void unregisterTeams() {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
-
         if (manager != null) {
             Scoreboard scoreboard = manager.getMainScoreboard();
-
-            for (GameTeam gameTeam : game.getGameTeams()) {
-                Team team = scoreboard.getTeam(gameTeam.getTeamId());
-                if (team != null) team.unregister();
-            }
+            scoreboard.getTeams().forEach(Team::unregister);
         }
     }
 
