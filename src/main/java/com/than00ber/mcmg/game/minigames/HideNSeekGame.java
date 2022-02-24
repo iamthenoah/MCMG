@@ -66,7 +66,7 @@ public class HideNSeekGame extends MiniGame {
     public void onGameStarted() {
         super.onGameStarted();
         disablePlayerCollisions();
-        getWorld().setDifficulty(Difficulty.EASY);
+        getWorld().setDifficulty(Difficulty.PEACEFUL);
         spawnRandomVillagers();
     }
 

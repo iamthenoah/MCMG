@@ -10,6 +10,7 @@ import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.config.GameProperty;
+import org.bukkit.Difficulty;
 import org.bukkit.World;
 
 public class PropHuntGame extends MiniGame {
@@ -46,6 +47,12 @@ public class PropHuntGame extends MiniGame {
         return ImmutableList.of(
                 WinConditions.NO_PROPS
         );
+    }
+
+    @Override
+    public void onGameStarted() {
+        super.onGameStarted();
+        getWorld().setDifficulty(Difficulty.PEACEFUL);
     }
 
     @Override
