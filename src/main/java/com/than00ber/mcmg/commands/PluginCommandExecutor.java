@@ -43,7 +43,7 @@ public abstract class PluginCommandExecutor implements CommandExecutor, TabCompl
                 ChatUtil.toSelf(sender, messages);
             }
         } catch (Exception e) {
-            Console.error(e);
+            Console.error(e.getMessage());
             Console.error(e.getStackTrace());
             ChatUtil.toSelf(sender, INVALID_COMMAND.getFormattedMessages());
             ChatUtil.toSelf(sender, ChatColor.RED + "Should be: " + ChatColor.ITALIC + command.getUsage());
