@@ -9,11 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="fixed WerewolfGame time cycle being day on round start">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameItems.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/objects/GameItem.java" afterDir="false" />
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="added GameItem with basic items">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/PropHuntGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/PropHuntGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -152,20 +149,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1645207527445</updated>
-    </task>
-    <task id="LOCAL-00010" summary="added HideNSeek game">
-      <created>1645400864396</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1645400864396</updated>
-    </task>
-    <task id="LOCAL-00011" summary="cleaned up hns and ph">
-      <created>1645469925531</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1645469925531</updated>
     </task>
     <task id="LOCAL-00012" summary="added GameTeam required property">
       <created>1645470914283</created>
@@ -496,7 +479,21 @@
       <option name="project" value="LOCAL" />
       <updated>1645726860035</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="fixed hunger issues on hns and ph">
+      <created>1645729413873</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1645729413873</updated>
+    </task>
+    <task id="LOCAL-00060" summary="added GameItem with basic items">
+      <created>1645729434351</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1645729434352</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -512,8 +509,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixed missing hunters gameteam" />
-    <MESSAGE value="fixed ready command vote failed while game running" />
     <MESSAGE value="added villager spawning within playground for hns" />
     <MESSAGE value="fixed health regen in hns" />
     <MESSAGE value="fixed player respawn on death" />
@@ -537,6 +532,8 @@
     <MESSAGE value="fixed plugin reloading not ending game" />
     <MESSAGE value="added GameTeam disableWhileInGrace property" />
     <MESSAGE value="fixed WerewolfGame time cycle being day on round start" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed WerewolfGame time cycle being day on round start" />
+    <MESSAGE value="fixed hunger issues on hns and ph" />
+    <MESSAGE value="added GameItem with basic items" />
+    <option name="LAST_COMMIT_MESSAGE" value="added GameItem with basic items" />
   </component>
 </project>
