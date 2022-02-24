@@ -12,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Team;
 
 import java.util.Random;
@@ -150,12 +151,14 @@ public class GameTeams {
         player.setExp(0);
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
-        player.getActivePotionEffects().clear();
         player.setFoodLevel(20);
         player.getInventory().clear();
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
         player.setHealth(20);
         DisguiseAPI.undisguiseToAll(player);
+        for (PotionEffect potion : player.getActivePotionEffects()) {
+            player.removePotionEffect(potion.getType());
+        }
     }
 
     private static void setWerewolfPlayer(Player player) {
