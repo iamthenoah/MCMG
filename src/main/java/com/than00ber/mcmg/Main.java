@@ -42,6 +42,10 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         if (GAME_ENGINE != null && GAME_ENGINE.hasGame()) {
             ConfigUtil.saveConfigs(this, GAME_ENGINE.getCurrentGame());
+
+            if (GAME_ENGINE.hasRunningGame()) {
+                GAME_ENGINE.endGame("Game ending caused by plugin disabling.");
+            }
         }
     }
 }
