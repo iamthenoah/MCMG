@@ -9,12 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="added WerewolfGame events">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/commands/AssignCommandExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-    </list>
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="added AssignCommandExecutor command" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -480,7 +475,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645660526990</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="added AssignCommandExecutor command">
+      <created>1645661904719</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1645661904719</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -496,7 +498,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added canhideinwater ph game property" />
     <MESSAGE value="moved files around" />
     <MESSAGE value="renamed PluginEventListener" />
     <MESSAGE value="changed all List to ImmutableList" />
@@ -521,6 +522,7 @@
     <MESSAGE value="fixed teams not unregistering" />
     <MESSAGE value="fixed player role assignment bias" />
     <MESSAGE value="added WerewolfGame events" />
-    <option name="LAST_COMMIT_MESSAGE" value="added WerewolfGame events" />
+    <MESSAGE value="added AssignCommandExecutor command" />
+    <option name="LAST_COMMIT_MESSAGE" value="added AssignCommandExecutor command" />
   </component>
 </project>

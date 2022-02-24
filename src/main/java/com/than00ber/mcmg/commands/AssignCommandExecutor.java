@@ -5,7 +5,6 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.util.ActionResult;
-import com.than00ber.mcmg.util.Console;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,11 +30,7 @@ public class AssignCommandExecutor extends PluginCommandExecutor {
 
             if (player != null) {
                 String teamName = args[1];
-                game.getGameTeams().stream().filter(t -> {
-                            Console.debug("'" + t.getDisplayName() + "'");
-                            Console.debug("'" + teamName + "'");
-                            return Objects.equals(t.getDisplayName(), teamName);
-                        })
+                game.getGameTeams().stream().filter(t -> Objects.equals(t.getDisplayName(), teamName))
                         .findFirst().ifPresent(team -> game.switchTeam(player, team));
 
                 return ActionResult.success(playerName + " is now in the " + teamName + " team.");
