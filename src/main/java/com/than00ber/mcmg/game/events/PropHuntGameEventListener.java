@@ -37,12 +37,17 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        boolean rightClicked = event.getAction().equals(Action.RIGHT_CLICK_BLOCK);
 
-        if (rightClicked && game.isInTeam(player, GameTeams.PROPS)) {
-            Material material = event.getClickedBlock().getType();
-            MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
-            DisguiseAPI.disguiseToAll(player, disguise);
+        if (game.isInTeam(player, GameTeams.PROPS)) {
+            boolean rightClicked = event.getAction().equals(Action.RIGHT_CLICK_BLOCK);
+            boolean isSneaking = player.isSneaking();
+
+            if (rightClicked && isSneaking) {
+                Material material = event.getClickedBlock().getType();
+                MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
+                DisguiseAPI.disguiseToAll(player, disguise);
+                event.setCancelled(true);
+            }
         }
     }
 
