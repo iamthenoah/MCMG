@@ -82,8 +82,8 @@ public class WerewolfGame extends MiniGame {
 
     @Override
     public void onRoundStarted(MiniGameEvent event) {
-        isDaytime = true;
-        setDay(event.getBossBar());
+        isDaytime = false;
+        setNight(event.getBossBar());
     }
 
     @Override
