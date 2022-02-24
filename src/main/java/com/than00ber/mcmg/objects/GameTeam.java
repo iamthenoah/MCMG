@@ -207,7 +207,7 @@ public class GameTeam implements Configurable {
             return this;
         }
 
-        public Builder setRequired() {
+        public Builder isRequired() {
             isRequired = true;
             return this;
         }

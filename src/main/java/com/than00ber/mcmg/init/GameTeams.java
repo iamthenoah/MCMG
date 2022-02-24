@@ -56,7 +56,7 @@ public class GameTeams {
             .setCatchPhrase("Shh, they shouldn't suspect a thing...")
             .setSound(Sound.ENTITY_WOLF_GROWL)
             .prepare(GameTeams::setWerewolfPlayer)
-            .setRequired()
+            .isRequired()
             .build();
     public static final GameTeam TRAITORS = new GameTeam.Builder("traitors")
             .setDisplayName("Traitor")
@@ -114,7 +114,7 @@ public class GameTeams {
             .setCatchPhrase("Something's not right. I can feel it.")
             .setSound(Sound.BLOCK_ANVIL_LAND)
             .prepare(GameTeams::setHunterPlayer)
-            .setRequired()
+            .isRequired()
             .disableWhileInGrace()
             .build();
 
@@ -140,7 +140,7 @@ public class GameTeams {
             .setCatchPhrase("Something's not right. I can feel it.")
             .setSound(Sound.BLOCK_ANVIL_LAND)
             .prepare(GameTeams::setSeekerPlayer)
-            .setRequired()
+            .isRequired()
             .disableWhileInGrace()
             .build();
 
