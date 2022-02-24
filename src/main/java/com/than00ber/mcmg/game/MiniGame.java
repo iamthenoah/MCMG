@@ -101,6 +101,12 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         }
     }
 
+    public final void removePlayer(Player player) {
+        if (isParticipant(player)) {
+            players.remove(player);
+        }
+    }
+
     private void addToScoreboardTeam(Player player, GameTeam newGameTeam) {
         GameTeam currentGameTeam = players.get(player);
         ScoreboardManager manager = Bukkit.getScoreboardManager();
