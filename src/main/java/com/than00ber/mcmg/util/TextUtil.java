@@ -36,13 +36,13 @@ public class TextUtil {
         return matching;
     }
 
-    public static String formatRole(GameTeam team) {
+    public static String formatGameTeam(GameTeam team) {
         return team.getColor() + "" + ChatColor.BOLD + team.getDisplayName();
     }
 
     public static String[] formatObjective(GameTeam team) {
         List<String> info = new ArrayList<>();
-        info.add("> " + formatRole(team));
+        info.add("> " + formatGameTeam(team));
         if (team.getObjective() != null) {
             info.add("\u0020\u0020Objective: " + team.getColor() + team.getObjective());
         }

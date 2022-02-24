@@ -33,7 +33,7 @@ public class ChatUtil {
             ChatUtil.toSelf(player, TextUtil.formatObjective(team));
             ChatUtil.toSelf(player, "");
             String comment = ChatColor.ITALIC + team.getCatchPhrase();
-            player.sendTitle(TextUtil.formatRole(team), comment, 5, 50, 15);
+            player.sendTitle(TextUtil.formatGameTeam(team), comment, 5, 50, 15);
             player.playSound(player.getLocation(), team.getSound(), 100, 1);
         });
     }
@@ -53,7 +53,7 @@ public class ChatUtil {
                             .map(Player::getDisplayName)
                             .collect(Collectors.joining(", "));
 
-                    String s = "> In the " + TextUtil.formatRole(team).toUpperCase() + ChatColor.RESET + " team was...";
+                    String s = "> In the " + TextUtil.formatGameTeam(team).toUpperCase() + ChatColor.RESET + " team was...";
                     ChatUtil.toSelf(player, s);
                     ChatUtil.toSelf(player, String.join(", ", names));
                 }

@@ -1,5 +1,6 @@
 package com.than00ber.mcmg;
 
+import com.than00ber.mcmg.commands.AssignCommandExecutor;
 import com.than00ber.mcmg.commands.ConfigsCommandExecutor;
 import com.than00ber.mcmg.commands.GameCommandExecutor;
 import com.than00ber.mcmg.commands.ReadyCommandExecutor;
@@ -32,6 +33,7 @@ public class Main extends JavaPlugin {
         new GameCommandExecutor(this, WORLD);
         new ConfigsCommandExecutor(this, WORLD);
         new ReadyCommandExecutor(this, WORLD);
+        new AssignCommandExecutor(this, WORLD);
 
         WORLD.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
     }

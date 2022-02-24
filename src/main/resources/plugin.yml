@@ -19,9 +19,9 @@ commands:
     description: Players can vote when they are ready to start a new game
     usage: /ready
     permission: none
-  fakeplayer:
-    description: Adds a fake player for dev testing
-    usage: /fakeplayer <Name?>
+  assign:
+    description: Assigns a player to a game team
+    usage: /assign <Name> <Team>
     permission: admin
 
 permissions:
