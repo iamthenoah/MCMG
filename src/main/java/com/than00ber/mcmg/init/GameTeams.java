@@ -179,8 +179,7 @@ public class GameTeams {
         resetPlayer(player);
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(10);
         player.setInvisible(true);
-        Random random = new Random();
-        int i = random.nextInt(Material.values().length - 1);
+        int i = new Random().nextInt(Material.values().length - 1);
         Material randomMaterial = Material.values()[i];
         MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, randomMaterial);
         DisguiseAPI.disguiseToAll(player, disguise);
