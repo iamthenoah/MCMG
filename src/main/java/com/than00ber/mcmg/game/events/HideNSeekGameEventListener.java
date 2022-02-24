@@ -34,19 +34,16 @@ public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGam
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        event.setCancelled(true);
         Player player = event.getPlayer();
 
         if (game.isInTeam(player, GameTeams.HIDERS)) {
             Entity entity = event.getRightClicked();
-
-            if (entity instanceof Player) {
-                return;
-            }
+            if (entity instanceof Player) return;
 
             MobDisguise disguise = new MobDisguise(DisguiseType.getType(entity));
+            disguise.setViewSelfDisguise(false);
             DisguiseAPI.disguiseToAll(player, disguise);
-        } else {
-            event.setCancelled(true);
         }
     }
 

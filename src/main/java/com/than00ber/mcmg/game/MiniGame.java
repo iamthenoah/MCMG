@@ -11,13 +11,12 @@ import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.config.ConfigProperty;
 import com.than00ber.mcmg.util.config.Configurable;
 import com.than00ber.mcmg.util.config.GameProperty;
-import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
@@ -176,23 +175,14 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, true);
 
+        getWorld().setDifficulty(Difficulty.NORMAL);
         getWorld().setThundering(false);
         getWorld().setStorm(false);
         getWorld().setTime(6000);
 
         assignRandomRoles();
         ChatUtil.showRoundStartScreen(getParticipants());
-
-        players.forEach((player, team) -> {
-            addToScoreboardTeam(player, team);
-            sendToGameSpawn(player);
-        });
-
-        for (Entity entity : getWorld().getEntities()) {
-            if (entity instanceof Monster) {
-                entity.remove();
-            }
-        }
+        players.keySet().forEach(this::sendToGameSpawn);
     }
 
     @Override
@@ -209,6 +199,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
         getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
 
+        getWorld().setDifficulty(Difficulty.NORMAL);
         getWorld().setThundering(false);
         getWorld().setStorm(false);
         getWorld().setTime(6000);
@@ -252,17 +243,22 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             }
         }
 
-        players.forEach((p, r) -> {
-            r.prepare(p);
-            addToScoreboardTeam(p, r);
+        players.forEach((p, t) -> {
+            t.prepare(p);
+            addToScoreboardTeam(p, t);
+
+            if (t.disableWhileGrace()) {
+                int duration = durationGrace.get() * 20;
+                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 100));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 10));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, duration, 250));
+            }
         });
     }
 
     protected void clearMonsters() {
         for (Entity entity : getWorld().getEntities()) {
-            if (entity instanceof Monster) {
-                entity.remove();
-            }
+            if (entity instanceof Monster) entity.remove(); // TODO - add game util class
         }
     }
 

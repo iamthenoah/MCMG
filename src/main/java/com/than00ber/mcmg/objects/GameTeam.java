@@ -25,6 +25,7 @@ public class GameTeam implements Configurable {
     private final GameProperty.EnumProperty<Sound> sound;
     private final GameProperty.BooleanProperty isSpectator;
     private final GameProperty.BooleanProperty isRequired;
+    private final GameProperty.BooleanProperty disableWhileGrace;
     private final Consumer<Player> preparePlayer;
 
     public GameTeam(
@@ -39,6 +40,7 @@ public class GameTeam implements Configurable {
             Sound sound,
             boolean isSpectator,
             boolean isRequired,
+            boolean disableWhileGrace,
             Consumer<Player> preparePlayer
     ) {
         this.teamId = new GameProperty.StringProperty(teamId + ".id", teamId);
@@ -52,6 +54,7 @@ public class GameTeam implements Configurable {
         this.sound = new GameProperty.EnumProperty<>(teamId + ".sound", Sound.class, sound);
         this.isSpectator = new GameProperty.BooleanProperty(teamId + ".spectator", isSpectator);
         this.isRequired = new GameProperty.BooleanProperty(teamId + ".required", isRequired);
+        this.disableWhileGrace = new GameProperty.BooleanProperty(teamId + ".disableWhileGrace", disableWhileGrace);
         this.preparePlayer = preparePlayer;
     }
 
@@ -99,6 +102,10 @@ public class GameTeam implements Configurable {
         return isRequired.get();
     }
 
+    public boolean disableWhileGrace() {
+        return disableWhileGrace.get();
+    }
+
     public void prepare(Player player) {
         preparePlayer.accept(player);
     }
@@ -120,7 +127,9 @@ public class GameTeam implements Configurable {
                 catchPhrase,
                 objective,
                 sound,
-                isSpectator
+                isSpectator,
+                isRequired,
+                disableWhileGrace
         );
     }
 
@@ -137,6 +146,7 @@ public class GameTeam implements Configurable {
         private Sound sound;
         private boolean isSpectator;
         private boolean isRequired;
+        private boolean disableWhileGrace;
         Consumer<Player> preparePlayer;
 
         public Builder(String id) {
@@ -148,6 +158,7 @@ public class GameTeam implements Configurable {
             visibility = OptionStatus.FOR_OWN_TEAM;
             isSpectator = false;
             isRequired = false;
+            disableWhileGrace = false;
             preparePlayer = p -> {};
         }
 
@@ -201,6 +212,11 @@ public class GameTeam implements Configurable {
             return this;
         }
 
+        public Builder disableWhileInGrace() {
+            disableWhileGrace = true;
+            return this;
+        }
+
         public Builder prepare(Consumer<Player> consumer) {
             preparePlayer = consumer;
             return this;
@@ -219,6 +235,7 @@ public class GameTeam implements Configurable {
                     sound,
                     isSpectator,
                     isRequired,
+                    disableWhileGrace,
                     preparePlayer
             );
         }

@@ -9,10 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="fixed potion effects not clear on game end">
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="fixed plugin reloading not ending game">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/events/PropHuntGameEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/events/PropHuntGameEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/MiniGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/events/HideNSeekGameEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/events/HideNSeekGameEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/HideNSeekGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/HideNSeekGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/PropHuntGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/PropHuntGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/objects/GameTeam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/objects/GameTeam.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,40 +147,12 @@
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task id="LOCAL-00003" summary="FIXED COMPILATION REMAPPING (With FakePlayerCommandExecutor)">
-      <created>1645197539270</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1645197539270</updated>
-    </task>
     <task active="true" id="Default" summary="Default task">
       <changelist id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="FIXED COMPILATION REMAPPING (With FakePlayerCommandExecutor)" />
       <created>1645207527445</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1645207527445</updated>
-    </task>
-    <task id="LOCAL-00004" summary="persist data on config change">
-      <created>1645208757697</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1645208757697</updated>
-    </task>
-    <task id="LOCAL-00005" summary="ADDED BASIC MVP FOR HNS">
-      <created>1645325071868</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1645325071868</updated>
-    </task>
-    <task id="LOCAL-00006" summary="updated voting system">
-      <created>1645376395180</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1645376395180</updated>
     </task>
     <task id="LOCAL-00007" summary="updated vote failed timeout">
       <created>1645376438918</created>
@@ -493,7 +469,35 @@
       <option name="project" value="LOCAL" />
       <updated>1645663010660</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="fixed right click event when prop">
+      <created>1645665613098</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1645665613098</updated>
+    </task>
+    <task id="LOCAL-00053" summary="added Death skull prop to WerewolfGame">
+      <created>1645668088119</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1645668088119</updated>
+    </task>
+    <task id="LOCAL-00054" summary="fixed error message on command error">
+      <created>1645714434826</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1645714434826</updated>
+    </task>
+    <task id="LOCAL-00055" summary="fixed plugin reloading not ending game">
+      <created>1645716219938</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1645716219938</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -509,10 +513,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixed role switch issue on games" />
-    <MESSAGE value="added game spawn points" />
-    <MESSAGE value="testing commit" />
-    <MESSAGE value="fixed lifecycle issue causing world to be null" />
     <MESSAGE value="added onEntityDamageByEntity damage event" />
     <MESSAGE value="renamed default game config file suffix" />
     <MESSAGE value="fixed missing hunters gameteam" />
@@ -534,6 +534,10 @@
     <MESSAGE value="removed console logs" />
     <MESSAGE value="added PlayerQuitEvent event handler" />
     <MESSAGE value="fixed potion effects not clear on game end" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed potion effects not clear on game end" />
+    <MESSAGE value="fixed right click event when prop" />
+    <MESSAGE value="added Death skull prop to WerewolfGame" />
+    <MESSAGE value="fixed error message on command error" />
+    <MESSAGE value="fixed plugin reloading not ending game" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed plugin reloading not ending game" />
   </component>
 </project>

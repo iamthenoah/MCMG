@@ -115,6 +115,7 @@ public class GameTeams {
             .setSound(Sound.BLOCK_ANVIL_LAND)
             .prepare(GameTeams::setHunterPlayer)
             .setRequired()
+            .disableWhileInGrace()
             .build();
 
     /**
@@ -140,13 +141,16 @@ public class GameTeams {
             .setSound(Sound.BLOCK_ANVIL_LAND)
             .prepare(GameTeams::setSeekerPlayer)
             .setRequired()
+            .disableWhileInGrace()
             .build();
 
     /**
      * GameTeam Player Preparation Helper Methods
      */
     public static void resetPlayer(Player player) {
+        player.setCollidable(true);
         player.setInvisible(false);
+        player.setGlowing(false);
         player.setLevel(0);
         player.setExp(0);
         player.getInventory().clear();
@@ -194,6 +198,7 @@ public class GameTeams {
     private static void setHiderPlayer(Player player) {
         resetPlayer(player);
         MobDisguise disguise = new MobDisguise(DisguiseType.VILLAGER);
+        disguise.setViewSelfDisguise(false);
         DisguiseAPI.disguiseToAll(player, disguise);
     }
 
@@ -201,8 +206,6 @@ public class GameTeams {
         resetPlayer(player);
         ItemStack axe = new ItemStack(Material.IRON_AXE);
         ItemStack bow = new ItemStack(Material.BOW);
-        ItemStack food = new ItemStack(Material.BREAD);
-        food.setAmount(16);
-        player.getInventory().addItem(axe, bow, food);
+        player.getInventory().addItem(axe, bow);
     }
 }

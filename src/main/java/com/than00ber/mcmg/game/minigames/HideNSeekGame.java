@@ -10,13 +10,16 @@ import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.config.GameProperty;
+import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,20 +65,15 @@ public class HideNSeekGame extends MiniGame {
     @Override
     public void onGameStarted() {
         super.onGameStarted();
+        disablePlayerCollisions();
+        getWorld().setDifficulty(Difficulty.EASY);
         spawnRandomVillagers();
-        players.forEach((p, r) -> {
-            if (r.equals(GameTeams.SEEKERS)) {
-                int duration = durationGrace.get() * 20;
-                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 100));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 10));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, duration, 250));
-            }
-        });
     }
 
     @Override
     public void onGameEnded() {
         super.onGameEnded();
+        enablePlayerCollisions();
         villagers.forEach(Entity::remove);
     }
 
@@ -97,6 +95,7 @@ public class HideNSeekGame extends MiniGame {
 
             int c = random.nextInt(Villager.Profession.values().length);
             Villager.Profession profession = Villager.Profession.values()[c];
+            villager.setVillagerType(Villager.Type.PLAINS);
             villager.setProfession(profession);
 
             villagers.add(villager);
@@ -111,5 +110,25 @@ public class HideNSeekGame extends MiniGame {
         int z = random.nextInt(center.getBlockZ() - r, center.getBlockZ() + r);
         int y = getWorld().getHighestBlockYAt(x, z) + 1;
         return new Location(getWorld(), x, y, z);
+    }
+
+    private void disablePlayerCollisions() {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        if (manager == null) return;
+
+        Scoreboard scoreboard = manager.getMainScoreboard();
+        for (Team team : scoreboard.getTeams()) {
+            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+        }
+    }
+
+    private void enablePlayerCollisions() {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        if (manager == null) return;
+
+        Scoreboard scoreboard = manager.getMainScoreboard();
+        for (Team team : scoreboard.getTeams()) {
+            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.ALWAYS);
+        }
     }
 }
