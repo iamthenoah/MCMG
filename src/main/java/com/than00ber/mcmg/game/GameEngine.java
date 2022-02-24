@@ -80,7 +80,6 @@ public class GameEngine<G extends MiniGame> {
 
             @Override
             public void run() {
-
                 if (countdownGrace > 0) {
                     if (countdownGrace <= 3) {
                         game.getWorld().getPlayers().forEach(p -> {
@@ -103,14 +102,6 @@ public class GameEngine<G extends MiniGame> {
                         }
                     }
                 } else {
-                    WinCondition<?> condition =  game.getWinConditions().stream()
-                            .filter(c -> c.check(game)).findAny().orElse(null);
-
-                    if (condition != null) {
-                        game.onRoundWon(condition);
-                        endGame(null);
-                    }
-
                     if (countdownRound == 0) {
                         countdownRound = game.getOptions().getDurationRound();
                         game.onRoundCycled(event);
@@ -127,6 +118,14 @@ public class GameEngine<G extends MiniGame> {
 
                     countdownRound--;
                     event.getBossBar().setProgress((float) countdownRound / game.getOptions().getDurationRound());
+                }
+
+                WinCondition<?> condition =  game.getWinConditions().stream()
+                        .filter(c -> c.check(game)).findAny().orElse(null);
+
+                if (condition != null) {
+                    game.onRoundWon(condition);
+                    endGame(null);
                 }
             }
         };
