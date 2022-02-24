@@ -169,8 +169,8 @@ public class GameTeams {
         resetPlayer(player);
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
         player.setHealth(40);
-        ItemStack hoe = new ItemStack(Material.WOODEN_HOE);
-        ItemStack food = new ItemStack(Material.COOKED_SALMON);
+        ItemStack hoe = GameItems.SURVIVORS_WEAPON.get();
+        ItemStack food = GameItems.SURVIVORS_FOOD.get();
         food.setAmount(5);
         player.getInventory().addItem(hoe, food);
     }
@@ -188,11 +188,9 @@ public class GameTeams {
 
     private static void setHunterPlayer(Player player) {
         resetPlayer(player);
-        ItemStack axe = new ItemStack(Material.GOLDEN_AXE);
-        ItemStack bow = new ItemStack(Material.BOW);
-        ItemStack food = new ItemStack(Material.APPLE);
-        food.setAmount(32);
-        player.getInventory().addItem(axe, bow, food);
+        ItemStack axe = GameItems.HUNTERS_AXE.get();
+        ItemStack bow = GameItems.HUNTERS_BOW.get();
+        player.getInventory().addItem(axe, bow);
     }
 
     private static void setHiderPlayer(Player player) {
@@ -204,8 +202,8 @@ public class GameTeams {
 
     private static void setSeekerPlayer(Player player) {
         resetPlayer(player);
-        ItemStack axe = new ItemStack(Material.IRON_AXE);
-        ItemStack bow = new ItemStack(Material.BOW);
+        ItemStack axe = GameItems.SEEKERS_AXE.get();
+        ItemStack bow = GameItems.SEEKERS_BOW.get();
         player.getInventory().addItem(axe, bow);
     }
 }

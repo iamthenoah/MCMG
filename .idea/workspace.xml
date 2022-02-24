@@ -9,7 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="added GameTeam disableWhileInGrace property" />
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="fixed WerewolfGame time cycle being day on round start">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameItems.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/objects/GameItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/PropHuntGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/PropHuntGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -56,6 +62,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="OverrideImplement.combined" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -145,13 +152,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1645207527445</updated>
-    </task>
-    <task id="LOCAL-00009" summary="renamed HideNSeek to PropsHunt">
-      <created>1645400057179</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1645400057179</updated>
     </task>
     <task id="LOCAL-00010" summary="added HideNSeek game">
       <created>1645400864396</created>
@@ -489,7 +489,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645726258706</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="fixed WerewolfGame time cycle being day on round start">
+      <created>1645726860035</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1645726860035</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -505,7 +512,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="renamed default game config file suffix" />
     <MESSAGE value="fixed missing hunters gameteam" />
     <MESSAGE value="fixed ready command vote failed while game running" />
     <MESSAGE value="added villager spawning within playground for hns" />
@@ -530,6 +536,7 @@
     <MESSAGE value="fixed error message on command error" />
     <MESSAGE value="fixed plugin reloading not ending game" />
     <MESSAGE value="added GameTeam disableWhileInGrace property" />
-    <option name="LAST_COMMIT_MESSAGE" value="added GameTeam disableWhileInGrace property" />
+    <MESSAGE value="fixed WerewolfGame time cycle being day on round start" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed WerewolfGame time cycle being day on round start" />
   </component>
 </project>
