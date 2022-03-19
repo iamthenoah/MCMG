@@ -9,9 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="added GameItem with basic items">
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="fixed game engine not checking for win cond.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,27 +149,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1645207527445</updated>
-    </task>
-    <task id="LOCAL-00012" summary="added GameTeam required property">
-      <created>1645470914283</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1645470914283</updated>
-    </task>
-    <task id="LOCAL-00013" summary="changed win title message">
-      <created>1645482215344</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1645482215344</updated>
-    </task>
-    <task id="LOCAL-00014" summary="added working game start/end player set/reset">
-      <created>1645482479897</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1645482479897</updated>
     </task>
     <task id="LOCAL-00015" summary="removed FakePlayerCommandExecutor">
       <created>1645482511690</created>
@@ -493,7 +472,28 @@
       <option name="project" value="LOCAL" />
       <updated>1645729434352</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="fixed game engine not checking for win cond.">
+      <created>1645741752513</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1645741752513</updated>
+    </task>
+    <task id="LOCAL-00062" summary="fixed game engine not checking for win cond.">
+      <created>1645741771563</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1645741771563</updated>
+    </task>
+    <task id="LOCAL-00063" summary="fixed game engine not checking for win cond.">
+      <created>1645741774621</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1645741774621</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -509,7 +509,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added villager spawning within playground for hns" />
     <MESSAGE value="fixed health regen in hns" />
     <MESSAGE value="fixed player respawn on death" />
     <MESSAGE value="removed this refs" />
@@ -534,6 +533,7 @@
     <MESSAGE value="fixed WerewolfGame time cycle being day on round start" />
     <MESSAGE value="fixed hunger issues on hns and ph" />
     <MESSAGE value="added GameItem with basic items" />
-    <option name="LAST_COMMIT_MESSAGE" value="added GameItem with basic items" />
+    <MESSAGE value="fixed game engine not checking for win cond." />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed game engine not checking for win cond." />
   </component>
 </project>
