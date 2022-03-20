@@ -24,14 +24,7 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-
-        if (game.isInTeam(player, GameTeams.HUNTERS)) {
-            game.switchTeam(player, GameTeams.SPECTATORS);
-        } else {
-            game.switchTeam(player, GameTeams.HUNTERS);
-            game.sendToGameSpawn(player);
-        }
+        game.switchTeam(event.getEntity(), GameTeams.SPECTATORS);
     }
 
     @EventHandler
@@ -40,9 +33,8 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
 
         if (game.isInTeam(player, GameTeams.PROPS)) {
             boolean rightClicked = event.getAction().equals(Action.RIGHT_CLICK_BLOCK);
-            boolean isSneaking = player.isSneaking();
 
-            if (rightClicked && isSneaking) {
+            if (rightClicked && !player.isSneaking()) {
                 Material material = event.getClickedBlock().getType();
                 MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
                 DisguiseAPI.disguiseToAll(player, disguise);
