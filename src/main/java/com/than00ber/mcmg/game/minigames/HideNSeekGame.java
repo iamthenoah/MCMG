@@ -10,10 +10,7 @@ import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.GameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.config.GameProperty;
-import org.bukkit.Bukkit;
-import org.bukkit.Difficulty;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
@@ -108,7 +105,7 @@ public class HideNSeekGame extends MiniGame {
         int r = playgroundRadius.get() / 2;
         int x = random.nextInt(center.getBlockX() - r, center.getBlockX() + r);
         int z = random.nextInt(center.getBlockZ() - r, center.getBlockZ() + r);
-        int y = getWorld().getHighestBlockYAt(x, z) + 1;
+        int y = getWorld().getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES) + 1;
         return new Location(getWorld(), x, y, z);
     }
 

@@ -9,12 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="fixed world null issue">
+    <list default="true" id="7364eee3-0e5d-4e53-ba34-7e9340b961ba" name="Changes" comment="added hunters arrows">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/events/PropHuntGameEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/events/PropHuntGameEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/init/GameTeams.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/objects/GameItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/objects/GameItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/HideNSeekGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/than00ber/mcmg/game/minigames/HideNSeekGame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,20 +149,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1645207527445</updated>
-    </task>
-    <task id="LOCAL-00017" summary="removed unnecessary lists in minigames">
-      <created>1645483460659</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1645483460659</updated>
-    </task>
-    <task id="LOCAL-00018" summary="fixed NO_HIDERS win conditions">
-      <created>1645483554045</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1645483554045</updated>
     </task>
     <task id="LOCAL-00019" summary="fixed missing game progress title">
       <created>1645487202447</created>
@@ -496,7 +479,21 @@
       <option name="project" value="LOCAL" />
       <updated>1647789332601</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="dead props are now spectators">
+      <created>1647792237510</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1647792237510</updated>
+    </task>
+    <task id="LOCAL-00067" summary="added hunters arrows">
+      <created>1647792252967</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1647792252967</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -512,8 +509,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="removed this refs" />
-    <MESSAGE value="added global event listener" />
     <MESSAGE value="fixed message not showing to all when game started" />
     <MESSAGE value="improved all minigames" />
     <MESSAGE value="fixed villager being too high" />
@@ -537,6 +532,8 @@
     <MESSAGE value="fixed game engine not checking for win cond." />
     <MESSAGE value="removed debug code" />
     <MESSAGE value="fixed world null issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed world null issue" />
+    <MESSAGE value="dead props are now spectators" />
+    <MESSAGE value="added hunters arrows" />
+    <option name="LAST_COMMIT_MESSAGE" value="added hunters arrows" />
   </component>
 </project>
