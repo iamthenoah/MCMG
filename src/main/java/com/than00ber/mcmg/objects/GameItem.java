@@ -53,18 +53,18 @@ public class GameItem {
     }
 
     public boolean canBuy(Player player) {
-        return this.canBuy(player);
+        return canBuy(player);
     }
 
     public ItemStack get() {
         ItemStack item = new ItemStack(this.material);
-        this.meta.setDisplayName(this.name);
-        this.meta.setUnbreakable(this.unbreakable);
-        this.meta.setLore(this.tooltips);
-        if (this.glowing) {
+        meta.setDisplayName(this.name);
+        meta.setUnbreakable(this.unbreakable);
+        meta.setLore(tooltips);
+        if (glowing) {
             item.addUnsafeEnchantment(Enchantment.LOYALTY, 1);
         }
-        item.setItemMeta(this.meta);
+        item.setItemMeta(meta);
         return item;
     }
 
@@ -109,27 +109,27 @@ public class GameItem {
         }
 
         public Builder unbreakable() {
-            this.unbreakable = true;
+            unbreakable = true;
             return this;
         }
 
         public Builder glowing() {
-            this.glowing = true;
+            glowing = true;
             return this;
         }
 
-        public Builder addTooltipLine(String line) {
-            this.tooltips.add(line);
+        public Builder addTooltip(String... line) {
+            tooltips.addAll(List.of(line));
             return this;
         }
 
         public Builder addBlackListed(GameTeam team) {
-            this.blacklisted.add(team);
+            blacklisted.add(team);
             return this;
         }
 
         public Builder setMeta(Supplier<ItemMeta> supplier) {
-            this.meta = supplier.get();
+            meta = supplier.get();
             return this;
         }
 
@@ -139,20 +139,20 @@ public class GameItem {
         }
 
         public GameItem build() {
-            if (this.meta == null) {
-                this.meta = new ItemStack(this.material).getItemMeta();
+            if (meta == null) {
+                meta = new ItemStack(material).getItemMeta();
             }
             return new GameItem(
-                    this.material,
-                    this.name,
-                    this.tooltips,
-                    this.blacklisted,
-                    this.cost,
-                    this.unbreakable,
-                    this.glowing,
-                    this.count,
-                    this.meta,
-                    this.canBuy
+                    material,
+                    name,
+                    tooltips,
+                    blacklisted,
+                    cost,
+                    unbreakable,
+                    glowing,
+                    count,
+                    meta,
+                    canBuy
             );
         }
     }

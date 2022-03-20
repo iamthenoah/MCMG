@@ -4,8 +4,10 @@ import com.than00ber.mcmg.objects.GameItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -20,7 +22,7 @@ public class GameItems {
      */
     public static final GameItem SURVIVORS_WEAPON = new GameItem.Builder(Material.WOODEN_HOE)
             .setName("Survivor's weapon")
-            .addTooltipLine(ChatColor.ITALIC + "Who said you can't trust hoes?")
+            .addTooltip(ChatColor.ITALIC + "Who said you can't trust hoes?")
             .unbreakable()
             .build();
     public static final GameItem SURVIVORS_FOOD = new GameItem.Builder(Material.COOKED_SALMON)
@@ -30,8 +32,10 @@ public class GameItems {
             .build();
     public static final GameItem LIQUID_SUGAR_POTION = new GameItem.Builder(Material.POTION)
             .setName("Liquid Sugar")
-            .addTooltipLine("Gives a 2s speed boost.")
-            .addTooltipLine("Triggers a very short, but really fast sugar rush!")
+            .addTooltip(
+                    "Gives a 2s speed boost.",
+                    "Triggers a very short, but really fast sugar rush!"
+            )
             .setCost(1)
             .setMeta(() -> {
                 PotionMeta meta = (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
@@ -56,13 +60,26 @@ public class GameItems {
     /**
      * PropHunt Items
      */
-    public static final GameItem HUNTERS_AXE = new GameItem.Builder(Material.IRON_AXE)
-            .setName(ChatColor.AQUA + "Hunter's Axe")
+    public static final GameItem HUNTERS_SWORD = new GameItem.Builder(Material.IRON_SWORD)
+            .setName(ChatColor.AQUA + "Hunter's Sword")
             .unbreakable()
             .build();
     public static final GameItem HUNTERS_BOW = new GameItem.Builder(Material.BOW)
             .setName(ChatColor.AQUA + "Hunter's Bow")
+            .setMeta(() -> {
+                ItemMeta meta = new ItemStack(Material.BOW).getItemMeta();
+                meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+                return meta;
+            })
             .unbreakable()
+            .build();
+    public static final GameItem HUNTERS_ARROWS = new GameItem.Builder(Material.TIPPED_ARROW)
+            .setName(ChatColor.AQUA + "Hunter's Bow")
+            .build();
+    public static final GameItem HUNTERS_COMPASS = new GameItem.Builder(Material.COMPASS)
+            .setName(ChatColor.AQUA + "Revelation Compass")
+            .setMeta(() -> new ItemStack(Material.COMPASS).getItemMeta()) // TODO - Hunter's Compass
+            .addTooltip("Reveals the general direction of the closest props to you for a brief moment.")
             .build();
 
     /**

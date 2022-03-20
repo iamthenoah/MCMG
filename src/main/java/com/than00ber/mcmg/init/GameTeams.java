@@ -187,9 +187,11 @@ public class GameTeams {
 
     private static void setHunterPlayer(Player player) {
         resetPlayer(player);
-        ItemStack axe = GameItems.HUNTERS_AXE.get();
+        ItemStack axe = GameItems.HUNTERS_SWORD.get();
         ItemStack bow = GameItems.HUNTERS_BOW.get();
+        ItemStack arrow = GameItems.HUNTERS_ARROWS.get();
         player.getInventory().addItem(axe, bow);
+        player.getInventory().setItem(8, arrow);
     }
 
     private static void setHiderPlayer(Player player) {
