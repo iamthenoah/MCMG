@@ -24,7 +24,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         INSTANCE = this;
-        WORLD = Bukkit.getWorld("world");
+        WORLD = Bukkit.getWorlds().get(0);
         GAME_ENGINE = new GameEngine<>(this);
 
         Bukkit.getPluginManager().registerEvents(new GlobalEventListener(), this);
