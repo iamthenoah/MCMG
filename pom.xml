@@ -11,7 +11,7 @@
 
     <groupId>mcmg-than00ber</groupId>
     <artifactId>mcmg</artifactId>
-    <version>latest</version>
+    <version>1.18.1</version>
 
     <dependencies>
         <!-- SPIGOT REMAPPED -->
