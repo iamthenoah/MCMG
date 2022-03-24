@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -69,17 +70,20 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
         }, 20L * (voteDuration / 2));
 
         VOTING_POOL_ID = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
-            ActionResult result = Main.MINIGAME_ENGINE.startMiniGame(QUEUED_PLAYERS, null);
-
-            if (!result.isSuccessful()) {
-                ChatUtil.toAll("Vote failed.");
-                ChatUtil.toAll(result.getFormattedMessages());
+            try {
+                ActionResult result = Main.MINIGAME_ENGINE.startMiniGame(QUEUED_PLAYERS, null);
+                if (!result.isSuccessful()) {
+                    ChatUtil.toAll("Vote failed.");
+                    ChatUtil.toAll(result.getFormattedMessages());
+                }
+            } catch (Exception exception) {
+                endCurrentVotingPool();
+            } finally {
+                QUEUED_PLAYERS.clear();
+                MINIGAME_NAME = null;
+                VOTING_POOL_ID = null;
+                REMINDER_ID = null;
             }
-
-            QUEUED_PLAYERS.clear();
-            MINIGAME_NAME = null;
-            VOTING_POOL_ID = null;
-            REMINDER_ID = null;
         }, 20L * voteDuration);
     }
 
