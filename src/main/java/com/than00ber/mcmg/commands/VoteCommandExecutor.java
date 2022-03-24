@@ -22,6 +22,7 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
 
     public static String MINIGAME_NAME = null;
     private static Integer VOTING_POOL_ID = null;
+    private static Integer REMINDER_ID = null;
 
     public VoteCommandExecutor(Main instance, World world) {
         super("ready", instance, world);
@@ -53,6 +54,20 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
         ChatUtil.toAll(info, vote, duration);
 
         Optional.ofNullable(VOTING_POOL_ID).ifPresent(id -> Bukkit.getScheduler().cancelTask(id));
+        Optional.ofNullable(REMINDER_ID).ifPresent(id -> Bukkit.getScheduler().cancelTask(id));
+
+        REMINDER_ID = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
+            REMINDER_ID = null;
+
+            for (Player player : Main.WORLD.getPlayers()) {
+                ChatUtil.toSelf(player, voteDuration / 2 + " seconds remaining to vote.");
+
+                if (!QUEUED_PLAYERS.contains(player)) {
+                    ChatUtil.toSelf(player, ChatColor.YELLOW + "You have not voted yet! " + ChatColor.ITALIC + "(/ready)");
+                }
+            }
+        }, 20L * (voteDuration / 2));
+
         VOTING_POOL_ID = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
             ActionResult result = Main.MINIGAME_ENGINE.startMiniGame(QUEUED_PLAYERS, null);
 
@@ -64,6 +79,7 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
             QUEUED_PLAYERS.clear();
             MINIGAME_NAME = null;
             VOTING_POOL_ID = null;
+            REMINDER_ID = null;
         }, 20L * voteDuration);
     }
 
@@ -72,6 +88,7 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
         QUEUED_PLAYERS.clear();
         MINIGAME_NAME = null;
         VOTING_POOL_ID = null;
+        REMINDER_ID = null;
     }
 
     public static boolean hasOngoingPoll() {
