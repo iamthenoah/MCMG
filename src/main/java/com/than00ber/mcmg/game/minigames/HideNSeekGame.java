@@ -13,8 +13,6 @@ import com.than00ber.mcmg.util.config.GameProperty;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Villager;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
@@ -46,8 +44,8 @@ public class HideNSeekGame extends MiniGame {
     @Override
     public ImmutableList<GameTeam> getGameTeams() {
         return ImmutableList.of(
+                GameTeams.SEEKERS,
                 GameTeams.HIDERS
-//                GameTeams.SEEKERS
         );
     }
 
@@ -70,7 +68,13 @@ public class HideNSeekGame extends MiniGame {
     public void onGameEnded() {
         super.onGameEnded();
         enablePlayerCollisions();
-        entities.forEach(Entity::remove);
+        if (ENTITY_TYPE.get().equals(EntityType.VILLAGER)) {
+            /* START - ugly code */
+            /**/ Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "/kill @e[type=minecraft:villager]");
+            /* END - ugly code */
+        } else {
+            entities.forEach(Entity::remove);
+        }
     }
 
     @Override
@@ -85,9 +89,20 @@ public class HideNSeekGame extends MiniGame {
         int count = Math.min(100, (int) Math.round(Math.pow((float) PLAYGROUND_RADIUS.get() / 2, 2)));
 
         for (int i = 0; i < count; i++) {
-            Location location = getRandomLocation();
-            Entity entity = getWorld().spawnEntity(location, ENTITY_TYPE.get());
-            entities.add(entity);
+            Location loc = getRandomLocation();
+
+            if (ENTITY_TYPE.get().equals(EntityType.VILLAGER)) {
+                /* START - ugly code */
+                /**/ int professionIndex = new Random().nextInt(4);
+                /**/ String l = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
+                /**/ String cmd = "/summon minecraft:villager " + l + " {Profession:-" + professionIndex + "}";
+                System.out.println(cmd);
+                /**/ Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+                /* END - ugly code */
+            } else {
+                Entity entity = getWorld().spawnEntity(loc, ENTITY_TYPE.get());
+                entities.add(entity);
+            }
         }
     }
 
