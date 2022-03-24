@@ -44,7 +44,7 @@ public class HideNSeekMiniGame extends MiniGame {
     @Override
     public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
-//                MiniGameTeams.SEEKERS,
+                MiniGameTeams.SEEKERS,
                 MiniGameTeams.HIDERS
         );
     }
