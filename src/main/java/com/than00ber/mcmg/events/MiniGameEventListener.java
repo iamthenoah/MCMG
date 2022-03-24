@@ -8,8 +8,8 @@ import org.bukkit.event.Listener;
 
 public abstract class MiniGameEventListener<G extends MiniGame> implements Listener {
 
-    public final G minigame;
-    private final Main instance;
+    protected final G minigame;
+    protected final Main instance;
 
     protected MiniGameEventListener(Main instance, G game) {
         this.instance = instance;

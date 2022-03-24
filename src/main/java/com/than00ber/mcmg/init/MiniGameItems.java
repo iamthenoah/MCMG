@@ -4,10 +4,8 @@ import com.than00ber.mcmg.objects.MiniGameItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -66,14 +64,9 @@ public class MiniGameItems {
             .build();
     public static final MiniGameItem HUNTERS_BOW = new MiniGameItem.Builder(Material.BOW)
             .setName(ChatColor.AQUA + "Hunter's Bow")
-            .setMeta(() -> {
-                ItemMeta meta = new ItemStack(Material.BOW).getItemMeta();
-                meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
-                return meta;
-            })
             .unbreakable()
             .build();
-    public static final MiniGameItem HUNTERS_ARROWS = new MiniGameItem.Builder(Material.TIPPED_ARROW)
+    public static final MiniGameItem HUNTERS_ARROWS = new MiniGameItem.Builder(Material.ARROW)
             .setName(ChatColor.AQUA + "Hunter's Bow")
             .build();
     public static final MiniGameItem HUNTERS_COMPASS = new MiniGameItem.Builder(Material.COMPASS)
