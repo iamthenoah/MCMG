@@ -3,7 +3,7 @@ package com.than00ber.mcmg.commands;
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.util.ActionResult;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -22,8 +22,8 @@ public class AssignCommandExecutor extends PluginCommandExecutor {
 
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
-        if (Main.GAME_ENGINE.hasGame()) {
-            MiniGame game = Main.GAME_ENGINE.getCurrentGame();
+        if (Main.MINIGAME_ENGINE.hasGame()) {
+            MiniGame game = Main.MINIGAME_ENGINE.getCurrentGame();
             String playerName = args[0];
             Player player = game.getWorld().getPlayers().stream().filter(p -> p.getDisplayName().equals(playerName))
                     .findFirst().orElse(null);
@@ -37,14 +37,14 @@ public class AssignCommandExecutor extends PluginCommandExecutor {
             }
             return ActionResult.failure("Could not find player " + playerName);
         }
-        return ActionResult.warn("No game currently selected");
+        return ActionResult.warn("No minigame currently selected");
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
-        if (Main.GAME_ENGINE.hasGame() && args.length == 1) {
-            ImmutableList<GameTeam> teams = Main.GAME_ENGINE.getCurrentGame().getGameTeams();
-            return teams.stream().map(GameTeam::getDisplayName).toList();
+        if (Main.MINIGAME_ENGINE.hasGame() && args.length == 1) {
+            ImmutableList<MiniGameTeam> teams = Main.MINIGAME_ENGINE.getCurrentGame().getGameTeams();
+            return teams.stream().map(MiniGameTeam::getDisplayName).toList();
         }
         return null;
     }

@@ -1,8 +1,8 @@
 package com.than00ber.mcmg.game.events;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.minigames.PropHuntGame;
-import com.than00ber.mcmg.init.GameTeams;
+import com.than00ber.mcmg.game.minigames.PropHuntMiniGame;
+import com.than00ber.mcmg.init.MiniGameTeams;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
@@ -16,22 +16,22 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame> {
+public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHuntMiniGame> {
 
-    public PropHuntGameEventListener(Main instance, PropHuntGame game) {
+    public PropHuntMiniGameEventListener(Main instance, PropHuntMiniGame game) {
         super(instance, game);
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        game.switchTeam(event.getEntity(), GameTeams.SPECTATORS);
+        minigame.switchTeam(event.getEntity(), MiniGameTeams.SPECTATORS);
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (game.isInTeam(player, GameTeams.PROPS)) {
+        if (minigame.isInTeam(player, MiniGameTeams.PROPS)) {
             boolean rightClicked = event.getAction().equals(Action.RIGHT_CLICK_BLOCK);
 
             if (rightClicked && !player.isSneaking()) {
@@ -45,10 +45,10 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!PropHuntGame.PROPS_IN_WATER.get()) {
+        if (!PropHuntMiniGame.PROPS_IN_WATER.get()) {
             Player player = event.getPlayer();
 
-            if (game.isInTeam(player, GameTeams.PROPS) && player.isInWater()) {
+            if (minigame.isInTeam(player, MiniGameTeams.PROPS) && player.isInWater()) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10, 10));
             }
         }

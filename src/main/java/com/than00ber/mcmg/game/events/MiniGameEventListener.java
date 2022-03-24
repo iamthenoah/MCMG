@@ -6,14 +6,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-public abstract class PluginEventListener<G extends MiniGame> implements Listener {
+public abstract class MiniGameEventListener<G extends MiniGame> implements Listener {
 
-    public final G game;
+    public final G minigame;
     private final Main instance;
 
-    protected PluginEventListener(Main instance, G game) {
+    protected MiniGameEventListener(Main instance, G game) {
         this.instance = instance;
-        this.game = game;
+        this.minigame = game;
     }
 
     public void unregister() {
@@ -21,6 +21,6 @@ public abstract class PluginEventListener<G extends MiniGame> implements Listene
     }
 
     public void register() {
-        Bukkit.getPluginManager().registerEvents(game.getEventListener(), instance);
+        Bukkit.getPluginManager().registerEvents(minigame.getEventListener(), instance);
     }
 }

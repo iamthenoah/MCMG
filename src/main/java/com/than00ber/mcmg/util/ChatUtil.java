@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.util;
 
 import com.google.common.collect.ImmutableMap;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,7 +27,7 @@ public class ChatUtil {
         }
     }
 
-    public static void showRoundStartScreen(ImmutableMap<Player, GameTeam> players) {
+    public static void showRoundStartScreen(ImmutableMap<Player, MiniGameTeam> players) {
         players.forEach((player, team) -> {
             ChatUtil.toSelf(player, "");
             ChatUtil.toSelf(player, TextUtil.formatObjective(team));
@@ -38,13 +38,13 @@ public class ChatUtil {
         });
     }
 
-    public static void showRoundEndScreen(ImmutableMap<Player, GameTeam> players, List<GameTeam> teams, WinCondition<?> condition) {
+    public static void showRoundEndScreen(ImmutableMap<Player, MiniGameTeam> players, List<MiniGameTeam> teams, WinCondition<?> condition) {
         players.forEach((player, role) -> {
             // scoreboard
             ChatUtil.toSelf(player, ChatColor.YELLOW + " ---------- Scoreboard ----------");
             ChatUtil.toSelf(player, "");
-            for (GameTeam team : teams) {
-                Map<Player, GameTeam> filtered = players.entrySet().stream()
+            for (MiniGameTeam team : teams) {
+                Map<Player, MiniGameTeam> filtered = players.entrySet().stream()
                         .filter(entry -> entry.getValue().equals(team))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 

@@ -17,19 +17,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class GameCommandExecutor extends PluginCommandExecutor {
+public class MiniGameCommandExecutor extends PluginCommandExecutor {
 
-    public GameCommandExecutor(Main instance, World world) {
-        super("game", instance, world);
+    public MiniGameCommandExecutor(Main instance, World world) {
+        super("minigame", instance, world);
     }
 
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
         ActionResult result = switch (args[0]) {
             case "play"     -> handleGameMount(args);
-            case "start"    -> Main.GAME_ENGINE.startGame(getReason(sender, args, "started"));
-            case "end"      -> Main.GAME_ENGINE.endGame(getReason(sender, args, "ended"));
-            case "restart"  -> Main.GAME_ENGINE.restartGame(getReason(sender, args, "restarted"));
+            case "start"    -> Main.MINIGAME_ENGINE.startGame(getReason(sender, args, "started"));
+            case "end"      -> Main.MINIGAME_ENGINE.endGame(getReason(sender, args, "ended"));
+            case "restart"  -> Main.MINIGAME_ENGINE.restartGame(getReason(sender, args, "restarted"));
             default         -> PluginCommandExecutor.INVALID_COMMAND;
         };
 
@@ -59,18 +59,18 @@ public class GameCommandExecutor extends PluginCommandExecutor {
             MiniGame game = supplier.get();
             ConfigUtil.loadConfigs(instance, game);
 
-            ActionResult result = Main.GAME_ENGINE.mount(game);
+            ActionResult result = Main.MINIGAME_ENGINE.mount(game);
             if (!result.isSuccessful()) return result;
 
             ReadyCommandExecutor.setVote(game.getGameName(), Bukkit.getOnlinePlayers().size());
 
             return ActionResult.success();
         }
-        return ActionResult.failure("Game '" + args[1] + "' not found.");
+        return ActionResult.failure("Minigame '" + args[1] + "' not found.");
     }
 
     private static String getReason(CommandSender sender, String[] args, String action) {
-        String message = "Game was " + action + " by " + sender.getName();
+        String message = "Minigame was " + action + " by " + sender.getName();
         if (args.length > 2) {
             String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
             message += " (" + reason + ")";

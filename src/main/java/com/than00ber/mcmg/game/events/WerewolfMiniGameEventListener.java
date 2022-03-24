@@ -1,8 +1,8 @@
 package com.than00ber.mcmg.game.events;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.minigames.WerewolfGame;
-import com.than00ber.mcmg.init.GameTeams;
+import com.than00ber.mcmg.game.minigames.WerewolfMiniGame;
+import com.than00ber.mcmg.init.MiniGameTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,21 +19,21 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Random;
 
-public class WerewolfGameEventListener extends PluginEventListener<WerewolfGame> {
+public class WerewolfMiniGameEventListener extends MiniGameEventListener<WerewolfMiniGame> {
 
-    public WerewolfGameEventListener(Main instance, WerewolfGame game) {
+    public WerewolfMiniGameEventListener(Main instance, WerewolfMiniGame game) {
         super(instance, game);
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        game.switchTeam(event.getEntity(), GameTeams.SPECTATORS);
+        minigame.switchTeam(event.getEntity(), MiniGameTeams.SPECTATORS);
 
-        if (WerewolfGame.DEATH_SKULL.get()) {
+        if (WerewolfMiniGame.DEATH_SKULL.get()) {
             Location location = player.getLocation();
             BlockData blockData = Material.SKELETON_SKULL.createBlockData();
-            game.getWorld().setBlockData(location, blockData);
+            minigame.getWorld().setBlockData(location, blockData);
         }
     }
 
@@ -41,7 +41,7 @@ public class WerewolfGameEventListener extends PluginEventListener<WerewolfGame>
     public void onEntitySpawn(EntitySpawnEvent event) {
         Entity entity = event.getEntity();
 
-        if (entity.getNearbyEntities(30, 30, 30).size() > WerewolfGame.ZOMBIE_COUNT.get()) {
+        if (entity.getNearbyEntities(30, 30, 30).size() > WerewolfMiniGame.ZOMBIE_COUNT.get()) {
             event.setCancelled(true);
             return;
         }
@@ -51,7 +51,7 @@ public class WerewolfGameEventListener extends PluginEventListener<WerewolfGame>
 
             Location location = event.getLocation();
             EntityType type = EntityType.ZOMBIE_VILLAGER;
-            ZombieVillager zombieVillager = (ZombieVillager) game.getWorld().spawnEntity(location, type);
+            ZombieVillager zombieVillager = (ZombieVillager) minigame.getWorld().spawnEntity(location, type);
 
             zombieVillager.setAdult();
             zombieVillager.setHealth(10.0F);
@@ -99,7 +99,7 @@ public class WerewolfGameEventListener extends PluginEventListener<WerewolfGame>
             Location to = target.getEyeLocation();
             Location from = zombieVillager.getEyeLocation();
 
-            if (getDistance(to, from) > WerewolfGame.AGGRO_DISTANCE.get()) {
+            if (getDistance(to, from) > WerewolfMiniGame.AGGRO_DISTANCE.get()) {
                 event.setTarget(null);
                 event.setCancelled(true);
                 return;

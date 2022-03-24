@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.game;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ActionResult;
 import org.bukkit.Bukkit;
@@ -18,25 +18,25 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class GameEngine<G extends MiniGame> {
+public class MiniGameEngine<G extends MiniGame> {
 
     private final Main instance;
-    private G game;
-    private Supplier<GameHandler> handlerSupplier;
-    private GameHandler currentHandler;
+    private G minigame;
+    private Supplier<MiniGameHandler> handlerSupplier;
+    private MiniGameHandler currentHandler;
     private GameState gameState;
 
-    public GameEngine(Main instance) {
+    public MiniGameEngine(Main instance) {
         this.instance = instance;
         gameState = GameState.EMPTY;
     }
 
     public G getCurrentGame() {
-        return game;
+        return minigame;
     }
 
     public boolean hasGame() {
-        return game != null;
+        return minigame != null;
     }
 
     public boolean hasIdleGame() {
@@ -49,16 +49,16 @@ public class GameEngine<G extends MiniGame> {
 
     public ActionResult mount(G nextGame) {
         if (hasRunningGame()) {
-            return ActionResult.failure("Cannot mount a game while a game is running");
+            return ActionResult.failure("Cannot mount a minigame while a minigame is running");
         }
 
-        if (game != null && game.hasEventListener()) {
-            game.getEventListener().unregister();
+        if (minigame != null && minigame.hasEventListener()) {
+            minigame.getEventListener().unregister();
         }
 
-        game = nextGame;
+        minigame = nextGame;
 
-        handlerSupplier = () -> new GameHandler(instance) {
+        handlerSupplier = () -> new MiniGameHandler(instance) {
 
             private MiniGameEvent event;
             private int countdownGrace;
@@ -66,10 +66,10 @@ public class GameEngine<G extends MiniGame> {
 
             @Override
             public void onActivate() {
-                countdownGrace = game.getOptions().getDurationGrace();
-                countdownRound = game.getOptions().getDurationRound();
+                countdownGrace = minigame.getOptions().getDurationGrace();
+                countdownRound = minigame.getOptions().getDurationRound();
                 BossBar bar = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
-                game.getWorld().getPlayers().forEach(bar::addPlayer);
+                minigame.getWorld().getPlayers().forEach(bar::addPlayer);
                 event = new MiniGameEvent(bar);
             }
 
@@ -82,20 +82,20 @@ public class GameEngine<G extends MiniGame> {
             public void run() {
                 if (countdownGrace > 0) {
                     if (countdownGrace <= 3) {
-                        game.getWorld().getPlayers().forEach(p -> {
+                        minigame.getWorld().getPlayers().forEach(p -> {
                             Note note = Note.natural(1, Note.Tone.A);
                             p.playNote(p.getLocation(), Instrument.XYLOPHONE, note);
                         });
                     }
 
                     countdownGrace--;
-                    event.getBossBar().setProgress((float) countdownGrace / game.getOptions().getDurationGrace());
-                    event.getBossBar().setTitle("Game starting in " + countdownGrace + " seconds");
+                    event.getBossBar().setProgress((float) countdownGrace / minigame.getOptions().getDurationGrace());
+                    event.getBossBar().setTitle("Minigame starting in " + countdownGrace + " seconds");
 
                     if (countdownGrace == 0) {
                         event.getBossBar().setTitle("");
                         event.getBossBar().setProgress(1);
-                        game.onRoundStarted(event);
+                        minigame.onRoundStarted(event);
 
                         if (event.getBossBar().getTitle().isEmpty()) {
                             event.getBossBar().setTitle("Time Remaining");
@@ -103,29 +103,29 @@ public class GameEngine<G extends MiniGame> {
                     }
                 } else {
                     if (countdownRound == 0) {
-                        countdownRound = game.getOptions().getDurationRound();
-                        game.onRoundCycled(event);
+                        countdownRound = minigame.getOptions().getDurationRound();
+                        minigame.onRoundCycled(event);
 
                         if (event.getBossBar().getTitle().isEmpty()) {
                             event.getBossBar().setTitle("Time Remaining");
                         }
 
                         if (event.hasEnded()) {
-                            game.onRoundWon(event.getWinCondition());
+                            minigame.onRoundWon(event.getWinCondition());
                             endGame(null);
                         }
                     }
 
-                    WinCondition<?> condition =  game.getWinConditions().stream()
-                            .filter(c -> c.check(game)).findAny().orElse(null);
+                    WinCondition<?> condition =  minigame.getWinConditions().stream()
+                            .filter(c -> c.check(minigame)).findAny().orElse(null);
 
                     if (condition != null) {
-                        game.onRoundWon(condition);
+                        minigame.onRoundWon(condition);
                         endGame(null);
                     }
 
                     countdownRound--;
-                    event.getBossBar().setProgress((float) countdownRound / game.getOptions().getDurationRound());
+                    event.getBossBar().setProgress((float) countdownRound / minigame.getOptions().getDurationRound());
                 }
 
             }
@@ -136,27 +136,27 @@ public class GameEngine<G extends MiniGame> {
     }
 
     public ActionResult startGame(@Nullable String message) {
-        if (game == null) {
-            return ActionResult.warn("No game is set.");
+        if (minigame == null) {
+            return ActionResult.warn("No minigame is set.");
         }
         if (currentHandler != null) {
-            return ActionResult.warn("A game of " + game.getGameName() + " is already running.");
+            return ActionResult.warn("A minigame of " + minigame.getGameName() + " is already running.");
         }
-        if (game.getOptions().getPlaygroundSpawn() == null) {
-            return ActionResult.warn("No playground spawn set for game " + game.getGameName());
+        if (minigame.getOptions().getPlaygroundSpawn() == null) {
+            return ActionResult.warn("No playground spawn set for minigame " + minigame.getGameName());
         }
-        if (game.getOptions().getPlaygroundRadius() == null) {
-            return ActionResult.warn("No playground radius set for game " + game.getGameName());
+        if (minigame.getOptions().getPlaygroundRadius() == null) {
+            return ActionResult.warn("No playground radius set for minigame " + minigame.getGameName());
         }
 
-        game.getWorld().getWorldBorder().setSize(game.getOptions().getPlaygroundRadius());
-        game.getWorld().getWorldBorder().setCenter(game.getOptions().getPlaygroundSpawn());
+        minigame.getWorld().getWorldBorder().setSize(minigame.getOptions().getPlaygroundRadius());
+        minigame.getWorld().getWorldBorder().setCenter(minigame.getOptions().getPlaygroundSpawn());
 
         unregisterTeams();
         registerTeams();
-        game.onGameStarted();
-        if (game.hasEventListener()) {
-            game.getEventListener().register();
+        minigame.onMinigameStarted();
+        if (minigame.hasEventListener()) {
+            minigame.getEventListener().register();
         }
 
         currentHandler = handlerSupplier.get();
@@ -167,16 +167,16 @@ public class GameEngine<G extends MiniGame> {
     }
 
     public ActionResult endGame(@Nullable String reason) {
-        if (currentHandler == null || game == null) {
-            return ActionResult.warn("No game is currently running.");
+        if (currentHandler == null || minigame == null) {
+            return ActionResult.warn("No minigame is currently running.");
         }
 
-        game.getWorld().getWorldBorder().reset();
+        minigame.getWorld().getWorldBorder().reset();
 
-        game.onGameEnded();
+        minigame.onMinigameEnded();
         unregisterTeams();
-        if (game.hasEventListener()) {
-            game.getEventListener().unregister();
+        if (minigame.hasEventListener()) {
+            minigame.getEventListener().unregister();
         }
 
         currentHandler.deactivate();
@@ -200,9 +200,9 @@ public class GameEngine<G extends MiniGame> {
         if (manager != null) {
             Scoreboard scoreboard = manager.getMainScoreboard();
 
-            for (GameTeam gameTeam : game.getGameTeams()) {
-                Team team = scoreboard.registerNewTeam(gameTeam.getTeamId());
-                team.setOption(Team.Option.NAME_TAG_VISIBILITY, gameTeam.getVisibility());
+            for (MiniGameTeam miniGameTeam : minigame.getGameTeams()) {
+                Team team = scoreboard.registerNewTeam(miniGameTeam.getTeamId());
+                team.setOption(Team.Option.NAME_TAG_VISIBILITY, miniGameTeam.getVisibility());
             }
         }
     }

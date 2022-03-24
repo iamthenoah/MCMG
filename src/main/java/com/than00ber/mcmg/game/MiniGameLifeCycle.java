@@ -2,18 +2,18 @@ package com.than00ber.mcmg.game;
 
 import com.than00ber.mcmg.objects.WinCondition;
 
-public interface GameLifeCycle {
+public interface MiniGameLifeCycle {
     /**
-     * Called when the game has started.
+     * Called when the minigame has started.
      * Usually to set the environment.
      */
-    void onGameStarted();
+    void onMinigameStarted();
 
     /**
-     * Called when the game has ended.
+     * Called when the minigame has ended.
      * Usually to reset the environment.
      */
-    void onGameEnded();
+    void onMinigameEnded();
 
     /**
      * Called when a round begins.

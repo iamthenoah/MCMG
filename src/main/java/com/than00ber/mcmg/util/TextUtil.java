@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.util;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.util.StringUtil;
 
@@ -36,11 +36,11 @@ public class TextUtil {
         return matching;
     }
 
-    public static String formatGameTeam(GameTeam team) {
+    public static String formatGameTeam(MiniGameTeam team) {
         return team.getColor() + "" + ChatColor.BOLD + team.getDisplayName();
     }
 
-    public static String[] formatObjective(GameTeam team) {
+    public static String[] formatObjective(MiniGameTeam team) {
         List<String> info = new ArrayList<>();
         info.add("> " + formatGameTeam(team));
         if (team.getObjective() != null) {

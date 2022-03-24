@@ -3,12 +3,12 @@ package com.than00ber.mcmg.game;
 import com.than00ber.mcmg.Main;
 import org.bukkit.Bukkit;
 
-public abstract class GameHandler implements Runnable {
+public abstract class MiniGameHandler implements Runnable {
 
     private final Main instance;
     private int id;
 
-    protected GameHandler(Main instance) {
+    protected MiniGameHandler(Main instance) {
         this.instance = instance;
     }
 

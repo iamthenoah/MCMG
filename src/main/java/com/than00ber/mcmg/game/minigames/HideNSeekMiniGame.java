@@ -4,12 +4,12 @@ import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.game.MiniGameEvent;
-import com.than00ber.mcmg.game.events.HideNSeekGameEventListener;
-import com.than00ber.mcmg.init.GameTeams;
+import com.than00ber.mcmg.game.events.HideNSeekMiniGameEventListener;
+import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
-import com.than00ber.mcmg.util.config.GameProperty;
+import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -21,17 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class HideNSeekGame extends MiniGame {
+public class HideNSeekMiniGame extends MiniGame {
 
-    public static final GameProperty.DoubleProperty DAMAGE_PENALTY = new GameProperty.DoubleProperty("damage.penalty", .5).validate(d -> d <= 40);
-    public static final GameProperty.EnumProperty<EntityType> ENTITY_TYPE = new GameProperty.EnumProperty<>("entity.type", EntityType.class, EntityType.VILLAGER);
-    public static final GameProperty.BooleanProperty HIDE_DISGUISE = new GameProperty.BooleanProperty("hide.disguise", true);
+    public static final MiniGameProperty.DoubleProperty DAMAGE_PENALTY = new MiniGameProperty.DoubleProperty("damage.penalty", .5).validate(d -> d <= 40);
+    public static final MiniGameProperty.EnumProperty<EntityType> ENTITY_TYPE = new MiniGameProperty.EnumProperty<>("entity.type", EntityType.class, EntityType.VILLAGER);
+    public static final MiniGameProperty.BooleanProperty HIDE_DISGUISE = new MiniGameProperty.BooleanProperty("hide.disguise", true);
 
     private final List<Entity> entities;
 
-    public HideNSeekGame(Main instance, World world) {
+    public HideNSeekMiniGame(Main instance, World world) {
         super(world);
-        setEventListener(new HideNSeekGameEventListener(instance, this));
+        setEventListener(new HideNSeekMiniGameEventListener(instance, this));
         addProperties(DAMAGE_PENALTY, ENTITY_TYPE, HIDE_DISGUISE);
         entities = new ArrayList<>();
     }
@@ -42,10 +42,10 @@ public class HideNSeekGame extends MiniGame {
     }
 
     @Override
-    public ImmutableList<GameTeam> getGameTeams() {
+    public ImmutableList<MiniGameTeam> getGameTeams() {
         return ImmutableList.of(
-                GameTeams.SEEKERS,
-                GameTeams.HIDERS
+                MiniGameTeams.SEEKERS,
+                MiniGameTeams.HIDERS
         );
     }
 
@@ -57,16 +57,16 @@ public class HideNSeekGame extends MiniGame {
     }
 
     @Override
-    public void onGameStarted() {
-        super.onGameStarted();
+    public void onMinigameStarted() {
+        super.onMinigameStarted();
         disablePlayerCollisions();
         getWorld().setDifficulty(Difficulty.PEACEFUL);
         spawnRandomEntities();
     }
 
     @Override
-    public void onGameEnded() {
-        super.onGameEnded();
+    public void onMinigameEnded() {
+        super.onMinigameEnded();
         enablePlayerCollisions();
         if (ENTITY_TYPE.get().equals(EntityType.VILLAGER)) {
             /* START - ugly code */

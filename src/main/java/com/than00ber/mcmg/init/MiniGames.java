@@ -2,9 +2,9 @@ package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
-import com.than00ber.mcmg.game.minigames.HideNSeekGame;
-import com.than00ber.mcmg.game.minigames.PropHuntGame;
-import com.than00ber.mcmg.game.minigames.WerewolfGame;
+import com.than00ber.mcmg.game.minigames.HideNSeekMiniGame;
+import com.than00ber.mcmg.game.minigames.PropHuntMiniGame;
+import com.than00ber.mcmg.game.minigames.WerewolfMiniGame;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -15,12 +15,12 @@ public class MiniGames {
     public static final HashMap<String, Supplier<? extends MiniGame>> MINI_GAMES = new HashMap<>();
 
     static {
-        register(() -> new WerewolfGame(Main.INSTANCE, Main.WORLD));
-        register(() -> new PropHuntGame(Main.INSTANCE, Main.WORLD));
-        register(() -> new HideNSeekGame(Main.INSTANCE, Main.WORLD));
+        register(() -> new WerewolfMiniGame(Main.INSTANCE, Main.WORLD));
+        register(() -> new PropHuntMiniGame(Main.INSTANCE, Main.WORLD));
+        register(() -> new HideNSeekMiniGame(Main.INSTANCE, Main.WORLD));
     }
 
-    private static void register(Supplier<? extends MiniGame> game) {
-        MINI_GAMES.put(game.get().getGameName().toLowerCase(Locale.ENGLISH), game);
+    private static void register(Supplier<? extends MiniGame> minigame) {
+        MINI_GAMES.put(minigame.get().getGameName().toLowerCase(Locale.ENGLISH), minigame);
     }
 }

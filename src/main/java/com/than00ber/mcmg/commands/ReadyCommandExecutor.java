@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ReadyCommandExecutor extends PluginCommandExecutor {
 
-    public static String GAME_NAME = null;
+    public static String MINIGAME_NAME = null;
     public static Integer VOTING_POOL_ID;
     public static int CURRENT_COUNT;
     public static int TOTAL_COUNT;
@@ -25,8 +25,8 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
 
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
-        if (GAME_NAME == null) {
-            return ActionResult.warn("There are no game to vote for.");
+        if (MINIGAME_NAME == null) {
+            return ActionResult.warn("There are no minigame to vote for.");
         }
 
         CURRENT_COUNT++;
@@ -46,7 +46,7 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
     }
 
     public static void setVote(String name, int total) {
-        String info = "Next game: " + ChatColor.BLUE + name;
+        String info = "Next minigame: " + ChatColor.BLUE + name;
         String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
         String status = "Current vote count: " + ChatColor.YELLOW + "0/" + total;
         ChatUtil.toAll(info, vote, status);
@@ -59,27 +59,27 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
                 Main.INSTANCE, ReadyCommandExecutor::voteFailed, 20 * 30
         );
 
-        GAME_NAME = name;
+        MINIGAME_NAME = name;
         TOTAL_COUNT = total;
         CURRENT_COUNT = 0;
     }
 
     public static void voteFailed() {
-        if (GAME_NAME != null && !Main.GAME_ENGINE.hasIdleGame() && !Main.GAME_ENGINE.hasRunningGame()) {
-            String info = ChatColor.RED + "Vote failed for game " + ChatColor.BLUE + GAME_NAME;
+        if (MINIGAME_NAME != null && !Main.MINIGAME_ENGINE.hasIdleGame() && !Main.MINIGAME_ENGINE.hasRunningGame()) {
+            String info = ChatColor.RED + "Vote failed for minigame " + ChatColor.BLUE + MINIGAME_NAME;
             String status = ChatColor.RED + "Not enough players were ready to play.";
             ChatUtil.toAll(info, status);
 
-            GAME_NAME = null;
+            MINIGAME_NAME = null;
             TOTAL_COUNT = 0;
             CURRENT_COUNT = 0;
         }
     }
 
     public static void voteSucceeded() {
-        Main.GAME_ENGINE.startGame(null);
+        Main.MINIGAME_ENGINE.startGame(null);
 
-        GAME_NAME = null;
+        MINIGAME_NAME = null;
         TOTAL_COUNT = 0;
         CURRENT_COUNT = 0;
     }

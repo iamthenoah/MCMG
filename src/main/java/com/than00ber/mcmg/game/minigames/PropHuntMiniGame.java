@@ -4,24 +4,24 @@ import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.game.MiniGameEvent;
-import com.than00ber.mcmg.game.events.PropHuntGameEventListener;
-import com.than00ber.mcmg.init.GameTeams;
+import com.than00ber.mcmg.game.events.PropHuntMiniGameEventListener;
+import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
-import com.than00ber.mcmg.util.config.GameProperty;
+import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
 
-public class PropHuntGame extends MiniGame {
+public class PropHuntMiniGame extends MiniGame {
 
-    public static final GameProperty.BooleanProperty BLOCKS_ONLY = new GameProperty.BooleanProperty("_blocks.solid", false);
-    public static final GameProperty.BooleanProperty NON_BLOCK_ONLY = new GameProperty.BooleanProperty("_blocks.nonsolid", false);
-    public static final GameProperty.BooleanProperty PROPS_IN_WATER = new GameProperty.BooleanProperty("blocks.inWater", false);
+    public static final MiniGameProperty.BooleanProperty BLOCKS_ONLY = new MiniGameProperty.BooleanProperty("_blocks.solid", false);
+    public static final MiniGameProperty.BooleanProperty NON_BLOCK_ONLY = new MiniGameProperty.BooleanProperty("_blocks.nonsolid", false);
+    public static final MiniGameProperty.BooleanProperty PROPS_IN_WATER = new MiniGameProperty.BooleanProperty("blocks.inWater", false);
 
-    public PropHuntGame(Main instance, World world) {
+    public PropHuntMiniGame(Main instance, World world) {
         super(world);
-        setEventListener(new PropHuntGameEventListener(instance, this));
+        setEventListener(new PropHuntMiniGameEventListener(instance, this));
         addProperties(BLOCKS_ONLY, NON_BLOCK_ONLY, PROPS_IN_WATER);
     }
 
@@ -31,10 +31,10 @@ public class PropHuntGame extends MiniGame {
     }
 
     @Override
-    public ImmutableList<GameTeam> getGameTeams() {
+    public ImmutableList<MiniGameTeam> getGameTeams() {
         return ImmutableList.of(
-                GameTeams.HUNTERS,
-                GameTeams.PROPS
+                MiniGameTeams.HUNTERS,
+                MiniGameTeams.PROPS
         );
     }
 
@@ -46,8 +46,8 @@ public class PropHuntGame extends MiniGame {
     }
 
     @Override
-    public void onGameStarted() {
-        super.onGameStarted();
+    public void onMinigameStarted() {
+        super.onMinigameStarted();
         getWorld().setDifficulty(Difficulty.PEACEFUL);
     }
 

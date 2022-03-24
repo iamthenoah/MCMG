@@ -4,28 +4,28 @@ import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.game.MiniGameEvent;
-import com.than00ber.mcmg.game.events.WerewolfGameEventListener;
-import com.than00ber.mcmg.init.GameTeams;
+import com.than00ber.mcmg.game.events.WerewolfMiniGameEventListener;
+import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
-import com.than00ber.mcmg.util.config.GameProperty;
+import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
 
-public class WerewolfGame extends MiniGame {
+public class WerewolfMiniGame extends MiniGame {
 
-    public static final GameProperty.IntegerProperty AGGRO_DISTANCE = new GameProperty.IntegerProperty("aggro.distance", 10).validate(d -> d > 0);
-    public static final GameProperty.IntegerProperty ZOMBIE_COUNT = new GameProperty.IntegerProperty("zombie.count", 5).validate(d -> d > 0);
-    public static final GameProperty.BooleanProperty DEATH_SKULL = new GameProperty.BooleanProperty("death.skull", true);
+    public static final MiniGameProperty.IntegerProperty AGGRO_DISTANCE = new MiniGameProperty.IntegerProperty("aggro.distance", 10).validate(d -> d > 0);
+    public static final MiniGameProperty.IntegerProperty ZOMBIE_COUNT = new MiniGameProperty.IntegerProperty("zombie.count", 5).validate(d -> d > 0);
+    public static final MiniGameProperty.BooleanProperty DEATH_SKULL = new MiniGameProperty.BooleanProperty("death.skull", true);
 
     private boolean isDaytime;
 
-    public WerewolfGame(Main instance, World world) {
+    public WerewolfMiniGame(Main instance, World world) {
         super(world);
-        setEventListener(new WerewolfGameEventListener(instance, this));
+        setEventListener(new WerewolfMiniGameEventListener(instance, this));
         addProperties(AGGRO_DISTANCE, ZOMBIE_COUNT, DEATH_SKULL);
     }
 
@@ -35,13 +35,13 @@ public class WerewolfGame extends MiniGame {
     }
 
     @Override
-    public ImmutableList<GameTeam> getGameTeams() {
+    public ImmutableList<MiniGameTeam> getGameTeams() {
         return ImmutableList.of(
-                GameTeams.VILLAGERS,
-                GameTeams.WEREWOLVES,
-                GameTeams.TRAITORS,
-                GameTeams.VAMPIRES,
-                GameTeams.POSSESSED
+                MiniGameTeams.VILLAGERS,
+                MiniGameTeams.WEREWOLVES,
+                MiniGameTeams.TRAITORS,
+                MiniGameTeams.VAMPIRES,
+                MiniGameTeams.POSSESSED
         );
     }
 
