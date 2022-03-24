@@ -1,7 +1,10 @@
-package com.than00ber.mcmg;
+package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.MiniGameEngine;
+import com.than00ber.mcmg.MiniGameLifeCycle;
 import com.than00ber.mcmg.events.MiniGameEventListener;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.objects.MiniGameTeam;
@@ -25,8 +28,8 @@ import java.util.*;
 
 public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
-    public static final MiniGameProperty.LocationProperty PLAYGROUND_SPAWN = new MiniGameProperty.LocationProperty("playground.spawn");
-    public static final MiniGameProperty.IntegerProperty PLAYGROUND_RADIUS = new MiniGameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
+    public static final MiniGameProperty.LocationProperty PLAYGROUND_SPAWN = new MiniGameProperty.LocationProperty("playground.spawn", Main.WORLD.getSpawnLocation());
+    public static final MiniGameProperty.IntegerProperty PLAYGROUND_RADIUS = new MiniGameProperty.IntegerProperty("playground.radius", 100).validate(i -> i > 0);
     public static final MiniGameProperty.IntegerProperty DURATION_GRACE = new MiniGameProperty.IntegerProperty("duration.grace", 30).validate(i -> i > 0 && i < 86400);
     public static final MiniGameProperty.IntegerProperty DURATION_ROUND = new MiniGameProperty.IntegerProperty("duration.round", 120).validate(i -> i > 0 && i < 84600);
     public static final MiniGameProperty.IntegerProperty PLAYER_MINIMUM = new MiniGameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= Main.MINIGAME_ENGINE.getCurrentGame().getParticipants().size());
@@ -40,7 +43,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         this.world = world;
         players = new HashMap<>();
         properties = new ArrayList<>();
-        getGameTeams().forEach(t -> properties.addAll(t.getProperties()));
+        getMiniGameTeams().forEach(t -> properties.addAll(t.getProperties()));
         addProperties(
                 PLAYGROUND_SPAWN,
                 PLAYGROUND_RADIUS,
@@ -76,7 +79,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
     @Override
     public final String getConfigName() {
-        return getGameName().toLowerCase() + "-latest";
+        return getMiniGameName().toLowerCase() + "-latest";
     }
 
     @Override
@@ -212,7 +215,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
     @Override
     public void onRoundWon(WinCondition<?> condition) {
-        ChatUtil.showRoundEndScreen(getParticipants(), getGameTeams(), condition);
+        ChatUtil.showRoundEndScreen(getParticipants(), getMiniGameTeams(), condition);
     }
 
     private void assignRandomRoles() {
@@ -222,8 +225,8 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         Random random = new Random();
 
         do {
-            int i = random.nextInt(getGameTeams().size());
-            MiniGameTeam team = getGameTeams().get(i);
+            int i = random.nextInt(getMiniGameTeams().size());
+            MiniGameTeam team = getMiniGameTeams().get(i);
 
             if (!team.isSpectator() && total >= team.getThreshold()) {
                 int frequency = Collections.frequency(players.values(), team);
@@ -236,7 +239,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
             }
         } while (!queued.isEmpty());
 
-        for (MiniGameTeam team : getGameTeams()) {
+        for (MiniGameTeam team : getMiniGameTeams()) {
             if (team.isRequired() && !players.containsValue(team)) {
                 assignRandomRoles();
                 break;
@@ -262,9 +265,9 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         }
     }
 
-    public abstract String getGameName();
+    public abstract String getMiniGameName();
 
-    public abstract ImmutableList<MiniGameTeam> getGameTeams();
+    public abstract ImmutableList<MiniGameTeam> getMiniGameTeams();
 
     public abstract ImmutableList<WinCondition> getWinConditions();
 }

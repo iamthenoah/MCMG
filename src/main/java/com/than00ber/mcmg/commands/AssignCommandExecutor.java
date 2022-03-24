@@ -2,7 +2,7 @@ package com.than00ber.mcmg.commands;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGame;
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.util.ActionResult;
 import org.bukkit.World;
@@ -30,7 +30,7 @@ public class AssignCommandExecutor extends PluginCommandExecutor {
 
             if (player != null) {
                 String teamName = args[1];
-                game.getGameTeams().stream().filter(t -> Objects.equals(t.getDisplayName(), teamName))
+                game.getMiniGameTeams().stream().filter(t -> Objects.equals(t.getDisplayName(), teamName))
                         .findFirst().ifPresent(team -> game.switchTeam(player, team));
 
                 return ActionResult.success(playerName + " is now in the " + teamName + " team.");
@@ -43,7 +43,7 @@ public class AssignCommandExecutor extends PluginCommandExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
         if (Main.MINIGAME_ENGINE.hasGame() && args.length == 1) {
-            ImmutableList<MiniGameTeam> teams = Main.MINIGAME_ENGINE.getCurrentGame().getGameTeams();
+            ImmutableList<MiniGameTeam> teams = Main.MINIGAME_ENGINE.getCurrentGame().getMiniGameTeams();
             return teams.stream().map(MiniGameTeam::getDisplayName).toList();
         }
         return null;

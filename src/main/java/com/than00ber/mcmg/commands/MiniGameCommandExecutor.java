@@ -1,8 +1,8 @@
 package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGame;
 import com.than00ber.mcmg.init.MiniGames;
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
@@ -62,7 +62,7 @@ public class MiniGameCommandExecutor extends PluginCommandExecutor {
             ActionResult result = Main.MINIGAME_ENGINE.mount(game);
             if (!result.isSuccessful()) return result;
 
-            ReadyCommandExecutor.setVote(game.getGameName(), Bukkit.getOnlinePlayers().size());
+            ReadyCommandExecutor.setVote(game.getMiniGameName(), Bukkit.getOnlinePlayers().size());
 
             return ActionResult.success();
         }

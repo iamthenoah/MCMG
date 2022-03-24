@@ -1,8 +1,10 @@
 package com.than00ber.mcmg;
 
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ActionResult;
+import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
@@ -54,8 +56,6 @@ public class MiniGameEngine<G extends MiniGame> {
         if (minigame != null && minigame.hasEventListener()) {
             minigame.getEventListener().unregister();
         }
-
-        minigame = nextGame;
 
         handlerSupplier = () -> new MiniGameHandler(instance) {
 
@@ -130,23 +130,14 @@ public class MiniGameEngine<G extends MiniGame> {
             }
         };
 
+        minigame = nextGame;
         gameState = GameState.IDLE;
         return ActionResult.success();
     }
 
     public ActionResult startGame(@Nullable String message) {
-        if (minigame == null) {
-            return ActionResult.warn("No minigame is set.");
-        }
-        if (currentHandler != null) {
-            return ActionResult.warn("A minigame of " + minigame.getGameName() + " is already running.");
-        }
-        if (minigame.getOptions().getPlaygroundSpawn() == null) {
-            return ActionResult.warn("No playground spawn set for minigame " + minigame.getGameName());
-        }
-        if (minigame.getOptions().getPlaygroundRadius() == null) {
-            return ActionResult.warn("No playground radius set for minigame " + minigame.getGameName());
-        }
+        ActionResult invalid = validateOptions();
+        if (!invalid.isSuccessful()) return invalid;
 
         minigame.getWorld().getWorldBorder().setSize(minigame.getOptions().getPlaygroundRadius());
         minigame.getWorld().getWorldBorder().setCenter(minigame.getOptions().getPlaygroundSpawn());
@@ -199,7 +190,7 @@ public class MiniGameEngine<G extends MiniGame> {
         if (manager != null) {
             Scoreboard scoreboard = manager.getMainScoreboard();
 
-            for (MiniGameTeam miniGameTeam : minigame.getGameTeams()) {
+            for (MiniGameTeam miniGameTeam : minigame.getMiniGameTeams()) {
                 Team team = scoreboard.registerNewTeam(miniGameTeam.getTeamId());
                 team.setOption(Team.Option.NAME_TAG_VISIBILITY, miniGameTeam.getVisibility());
             }
@@ -214,21 +205,21 @@ public class MiniGameEngine<G extends MiniGame> {
         }
     }
 
-    public enum GameState {
-        IDLE, ONGOING, EMPTY
-    }
-
-    public interface Options {
-
-        @Nullable Integer getMinimumPlayer();
-
-        @Nullable Location getPlaygroundSpawn();
-
-        @Nullable Integer getPlaygroundRadius();
-
-        @Nullable Integer getDurationGrace();
-
-        @Nullable Integer getDurationRound();
+    private ActionResult validateOptions() {
+        if (minigame == null) {
+            return ActionResult.warn("No minigame is set.");
+        }
+        String name = TextUtil.formatMiniGame(minigame);
+        if (currentHandler != null) {
+            return ActionResult.warn("A minigame of " + name + " is already running.");
+        }
+        if (minigame.getOptions().getPlaygroundSpawn() == null) {
+            return ActionResult.warn("No playground spawn set for minigame " + name);
+        }
+        if (minigame.getOptions().getPlaygroundRadius() == null) {
+            return ActionResult.warn("No playground radius set for minigame " + name);
+        }
+        return ActionResult.success();
     }
 
     private abstract static class MiniGameHandler implements Runnable {
@@ -256,5 +247,22 @@ public class MiniGameEngine<G extends MiniGame> {
         public abstract void onActivate();
 
         public abstract void onDeactivate();
+    }
+
+    public enum GameState {
+        IDLE, ONGOING, EMPTY
+    }
+
+    public interface Options {
+
+        Integer getMinimumPlayer();
+
+        Location getPlaygroundSpawn();
+
+        Integer getPlaygroundRadius();
+
+        Integer getDurationGrace();
+
+        Integer getDurationRound();
     }
 }

@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.init;
 
-import com.than00ber.mcmg.MiniGame;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.minigames.WerewolfMiniGame;
 import com.than00ber.mcmg.objects.WinCondition;

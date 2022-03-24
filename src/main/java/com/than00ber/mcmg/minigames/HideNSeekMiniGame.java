@@ -2,7 +2,6 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGame;
 import com.than00ber.mcmg.MiniGameEvent;
 import com.than00ber.mcmg.events.HideNSeekMiniGameEventListener;
 import com.than00ber.mcmg.init.MiniGameTeams;
@@ -37,12 +36,12 @@ public class HideNSeekMiniGame extends MiniGame {
     }
 
     @Override
-    public String getGameName() {
+    public String getMiniGameName() {
         return "HideNSeek";
     }
 
     @Override
-    public ImmutableList<MiniGameTeam> getGameTeams() {
+    public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
                 MiniGameTeams.SEEKERS,
                 MiniGameTeams.HIDERS

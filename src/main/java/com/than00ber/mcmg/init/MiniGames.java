@@ -1,8 +1,8 @@
 package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGame;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.minigames.WerewolfMiniGame;
 
@@ -21,6 +21,6 @@ public class MiniGames {
     }
 
     private static void register(Supplier<? extends MiniGame> minigame) {
-        MINI_GAMES.put(minigame.get().getGameName().toLowerCase(Locale.ENGLISH), minigame);
+        MINI_GAMES.put(minigame.get().getMiniGameName().toLowerCase(Locale.ENGLISH), minigame);
     }
 }

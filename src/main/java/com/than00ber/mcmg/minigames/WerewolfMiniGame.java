@@ -2,7 +2,6 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGame;
 import com.than00ber.mcmg.MiniGameEvent;
 import com.than00ber.mcmg.events.WerewolfMiniGameEventListener;
 import com.than00ber.mcmg.init.MiniGameTeams;
@@ -30,12 +29,12 @@ public class WerewolfMiniGame extends MiniGame {
     }
 
     @Override
-    public String getGameName() {
+    public String getMiniGameName() {
         return "Werewolf";
     }
 
     @Override
-    public ImmutableList<MiniGameTeam> getGameTeams() {
+    public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
                 MiniGameTeams.VILLAGERS,
                 MiniGameTeams.WEREWOLVES,

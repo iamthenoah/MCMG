@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGame;
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
@@ -31,7 +31,7 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
 
         if (sender instanceof Player player) {
             MiniGame game = Main.MINIGAME_ENGINE.getCurrentGame();
-            String propertyName = game.getGameName() + "#" + args[0];
+            String propertyName = game.getMiniGameName() + "#" + args[0];
 
             MiniGameProperty<?> property = (MiniGameProperty<?>) game.getProperties().stream()
                     .filter(p -> Objects.equals(p.getPath(), args[0]))

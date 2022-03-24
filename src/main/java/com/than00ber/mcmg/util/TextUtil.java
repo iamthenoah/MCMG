@@ -1,6 +1,7 @@
 package com.than00ber.mcmg.util;
 
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.util.StringUtil;
@@ -47,5 +48,13 @@ public class TextUtil {
             info.add("\u0020\u0020Objective: " + team.getColor() + team.getObjective());
         }
         return info.toArray(new String[0]);
+    }
+
+    public static String formatMiniGame(MiniGame minigame) {
+        return formatMiniGame(minigame.getMiniGameName());
+    }
+
+    public static String formatMiniGame(String name) {
+        return ChatColor.BLUE + name;
     }
 }

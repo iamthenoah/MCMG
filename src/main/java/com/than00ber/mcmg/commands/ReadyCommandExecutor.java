@@ -3,6 +3,7 @@ package com.than00ber.mcmg.commands;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -46,7 +47,7 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
     }
 
     public static void setVote(String name, int total) {
-        String info = "Next minigame: " + ChatColor.BLUE + name;
+        String info = "Next minigame: " + TextUtil.formatMiniGame(name);
         String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
         String status = "Current vote count: " + ChatColor.YELLOW + "0/" + total;
         ChatUtil.toAll(info, vote, status);
@@ -66,7 +67,7 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
 
     public static void voteFailed() {
         if (MINIGAME_NAME != null && !Main.MINIGAME_ENGINE.hasIdleGame() && !Main.MINIGAME_ENGINE.hasRunningGame()) {
-            String info = ChatColor.RED + "Vote failed for minigame " + ChatColor.BLUE + MINIGAME_NAME;
+            String info = ChatColor.RED + "Vote failed for minigame " + TextUtil.formatMiniGame(MINIGAME_NAME);
             String status = ChatColor.RED + "Not enough players were ready to play.";
             ChatUtil.toAll(info, status);
 
