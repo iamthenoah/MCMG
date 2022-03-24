@@ -27,9 +27,9 @@ public class MiniGameCommandExecutor extends PluginCommandExecutor {
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
         ActionResult result = switch (args[0]) {
             case "play"     -> handleGameMount(args);
-            case "start"    -> Main.MINIGAME_ENGINE.startGame(getReason(sender, args, "started"));
-            case "end"      -> Main.MINIGAME_ENGINE.endGame(getReason(sender, args, "ended"));
-            case "restart"  -> Main.MINIGAME_ENGINE.restartGame(getReason(sender, args, "restarted"));
+            case "start"    -> Main.MINIGAME_ENGINE.startMiniGame(getReason(sender, args, "started"));
+            case "end"      -> Main.MINIGAME_ENGINE.endMiniGame(getReason(sender, args, "ended"));
+            case "restart"  -> Main.MINIGAME_ENGINE.restartMiniGame(getReason(sender, args, "restarted"));
             default         -> PluginCommandExecutor.INVALID_COMMAND;
         };
 

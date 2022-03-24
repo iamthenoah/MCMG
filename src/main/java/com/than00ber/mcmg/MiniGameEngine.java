@@ -111,7 +111,7 @@ public class MiniGameEngine<G extends MiniGame> {
 
                         if (event.hasEnded()) {
                             minigame.onRoundWon(event.getWinCondition());
-                            endGame(null);
+                            endMiniGame(null);
                         }
                     }
 
@@ -120,7 +120,7 @@ public class MiniGameEngine<G extends MiniGame> {
 
                     if (condition != null) {
                         minigame.onRoundWon(condition);
-                        endGame(null);
+                        endMiniGame(null);
                     }
 
                     countdownRound--;
@@ -135,7 +135,7 @@ public class MiniGameEngine<G extends MiniGame> {
         return ActionResult.success();
     }
 
-    public ActionResult startGame(@Nullable String message) {
+    public ActionResult startMiniGame(@Nullable String message) {
         ActionResult invalid = validateOptions();
         if (!invalid.isSuccessful()) return invalid;
 
@@ -156,7 +156,7 @@ public class MiniGameEngine<G extends MiniGame> {
         return ActionResult.success(message);
     }
 
-    public ActionResult endGame(@Nullable String reason) {
+    public ActionResult endMiniGame(@Nullable String reason) {
         if (currentHandler == null || minigame == null) {
             return ActionResult.warn("No minigame is currently running.");
         }
@@ -176,9 +176,9 @@ public class MiniGameEngine<G extends MiniGame> {
         return ActionResult.success(reason);
     }
 
-    public ActionResult restartGame(@Nullable String reason) {
-        endGame(null);
-        ActionResult startResult = startGame(null);
+    public ActionResult restartMiniGame(@Nullable String reason) {
+        endMiniGame(null);
+        ActionResult startResult = startMiniGame(null);
         return !startResult.isSuccessful()
                 ? startResult
                 : ActionResult.success(reason);

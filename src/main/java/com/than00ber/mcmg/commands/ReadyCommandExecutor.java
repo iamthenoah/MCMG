@@ -78,7 +78,7 @@ public class ReadyCommandExecutor extends PluginCommandExecutor {
     }
 
     public static void voteSucceeded() {
-        Main.MINIGAME_ENGINE.startGame(null);
+        Main.MINIGAME_ENGINE.startMiniGame(null);
 
         MINIGAME_NAME = null;
         TOTAL_COUNT = 0;

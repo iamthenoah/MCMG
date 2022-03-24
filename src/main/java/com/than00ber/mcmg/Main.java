@@ -40,7 +40,7 @@ public class Main extends JavaPlugin {
             ConfigUtil.saveConfigs(this, MINIGAME_ENGINE.getCurrentGame());
 
             if (MINIGAME_ENGINE.hasRunningGame()) {
-                MINIGAME_ENGINE.endGame("Minigame ending caused by plugin disabling.");
+                MINIGAME_ENGINE.endMiniGame("Minigame ending caused by plugin disabling.");
             }
         }
     }
