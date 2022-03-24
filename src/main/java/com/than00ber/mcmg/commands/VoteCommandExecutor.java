@@ -72,6 +72,7 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
         VOTING_POOL_ID = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
             try {
                 ActionResult result = Main.MINIGAME_ENGINE.startMiniGame(QUEUED_PLAYERS, null);
+
                 if (!result.isSuccessful()) {
                     ChatUtil.toAll("Vote failed.");
                     ChatUtil.toAll(result.getFormattedMessages());
