@@ -116,17 +116,18 @@ public class GameEngine<G extends MiniGame> {
                         }
                     }
 
+                    WinCondition<?> condition =  game.getWinConditions().stream()
+                            .filter(c -> c.check(game)).findAny().orElse(null);
+
+                    if (condition != null) {
+                        game.onRoundWon(condition);
+                        endGame(null);
+                    }
+
                     countdownRound--;
                     event.getBossBar().setProgress((float) countdownRound / game.getOptions().getDurationRound());
                 }
 
-                WinCondition<?> condition =  game.getWinConditions().stream()
-                        .filter(c -> c.check(game)).findAny().orElse(null);
-
-                if (condition != null) {
-                    game.onRoundWon(condition);
-                    endGame(null);
-                }
             }
         };
 
