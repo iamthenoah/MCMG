@@ -28,8 +28,8 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
 
     public static final GameProperty.LocationProperty PLAYGROUND_SPAWN = new GameProperty.LocationProperty("playground.spawn");
     public static final GameProperty.IntegerProperty PLAYGROUND_RADIUS = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
-    public static final GameProperty.IntegerProperty DURATION_GRACE = new GameProperty.IntegerProperty("duration.grace", 5).validate(i -> i > 0 && i < 86400);
-    public static final GameProperty.IntegerProperty DURATION_ROUND = new GameProperty.IntegerProperty("duration.round", 10).validate(i -> i > 0 && i < 84600);
+    public static final GameProperty.IntegerProperty DURATION_GRACE = new GameProperty.IntegerProperty("duration.grace", 30).validate(i -> i > 0 && i < 86400);
+    public static final GameProperty.IntegerProperty DURATION_ROUND = new GameProperty.IntegerProperty("duration.round", 120).validate(i -> i > 0 && i < 84600);
     public static final GameProperty.IntegerProperty PLAYER_MINIMUM = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= Main.GAME_ENGINE.getCurrentGame().getParticipants().size());
 
     protected final HashMap<Player, GameTeam> players;

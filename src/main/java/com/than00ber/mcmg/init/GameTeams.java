@@ -3,6 +3,7 @@ package com.than00ber.mcmg.init;
 import com.than00ber.mcmg.game.minigames.HideNSeekGame;
 import com.than00ber.mcmg.objects.GameTeam;
 import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
@@ -11,6 +12,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -197,7 +199,10 @@ public class GameTeams {
 
     private static void setHiderPlayer(Player player) {
         resetPlayer(player);
-        MobDisguise disguise = new MobDisguise(DisguiseType.getType(HideNSeekGame.ENTITY_TYPE.get()));
+        DisguiseType disguiseType = DisguiseType.getType(HideNSeekGame.ENTITY_TYPE.get());
+        Disguise disguise = disguiseType.isMob()
+                ? new MobDisguise(disguiseType)
+                : new MiscDisguise(disguiseType);
         DisguiseAPI.disguiseToAll(player, disguise.setViewSelfDisguise(HideNSeekGame.HIDE_DISGUISE.get()));
     }
 
