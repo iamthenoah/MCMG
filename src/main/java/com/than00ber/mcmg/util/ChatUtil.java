@@ -65,9 +65,7 @@ public class ChatUtil {
             String title = condition.getTitleFor(role);
             String sub = condition.getSubTitleFor(role);
             player.sendTitle(ChatColor.BOLD + title, sub,5, 100, 30);
-            Sound sound = won
-                    ? Sound.UI_TOAST_CHALLENGE_COMPLETE
-                    : Sound.ENTITY_CHICKEN_HURT;
+            Sound sound = won ? Sound.UI_TOAST_CHALLENGE_COMPLETE : Sound.ENTITY_CHICKEN_HURT;
 
             player.playSound(player.getLocation(), sound, 100, 1);
         });
