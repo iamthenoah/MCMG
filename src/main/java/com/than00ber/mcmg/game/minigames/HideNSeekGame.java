@@ -13,6 +13,7 @@ import com.than00ber.mcmg.util.config.GameProperty;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Villager;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -25,18 +26,23 @@ import java.util.Random;
 public class HideNSeekGame extends MiniGame {
 
     private final GameProperty.DoubleProperty damagePenalty = new GameProperty.DoubleProperty("damage.penalty", .5).validate(d -> d <= 40);
+    private final GameProperty.EnumProperty<EntityType> entityType = new GameProperty.EnumProperty<>("entity.type", EntityType.class,EntityType.VILLAGER);
 
-    private final List<Villager> villagers;
+    private final List<LivingEntity> entities;
 
     public HideNSeekGame(Main instance, World world) {
         super(world);
         setEventListener(new HideNSeekGameEventListener(instance, this));
-        addProperties(damagePenalty);
-        villagers = new ArrayList<>();
+        addProperties(damagePenalty, entityType);
+        entities = new ArrayList<>();
     }
 
     public double getDamagePenalty() {
         return damagePenalty.get();
+    }
+
+    public EntityType getEntityType() {
+        return entityType.get();
     }
 
     @Override
@@ -64,14 +70,14 @@ public class HideNSeekGame extends MiniGame {
         super.onGameStarted();
         disablePlayerCollisions();
         getWorld().setDifficulty(Difficulty.PEACEFUL);
-        spawnRandomVillagers();
+        spawnRandomEntities();
     }
 
     @Override
     public void onGameEnded() {
         super.onGameEnded();
         enablePlayerCollisions();
-        villagers.forEach(Entity::remove);
+        entities.forEach(Entity::remove);
     }
 
     @Override
@@ -82,7 +88,7 @@ public class HideNSeekGame extends MiniGame {
         event.setWinCondition(WinConditions.HIDERS_SURVIVED);
     }
 
-    private void spawnRandomVillagers() {
+    private void spawnRandomEntities() {
         int count = Math.min(100, (int) Math.round(Math.pow((float) playgroundRadius.get() / 2, 2)));
         Random random = new Random();
 
@@ -95,7 +101,7 @@ public class HideNSeekGame extends MiniGame {
             villager.setVillagerType(Villager.Type.PLAINS);
             villager.setProfession(profession);
 
-            villagers.add(villager);
+            entities.add(villager);
         }
     }
 

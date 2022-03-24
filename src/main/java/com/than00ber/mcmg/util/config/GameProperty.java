@@ -1,12 +1,15 @@
 package com.than00ber.mcmg.util.config;
 
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public class GameProperty<V> extends ConfigProperty<V> {
@@ -110,11 +113,11 @@ public class GameProperty<V> extends ConfigProperty<V> {
         }
 
         public EnumProperty(String name, Class<E> enumClass, E defaultValue) {
-            this(name, defaultValue, (p, a) -> E.valueOf(enumClass, a[0]),s -> true, enumClass);
+            this(name, defaultValue, (p, a) -> safeValueOf(enumClass, a[0]), s -> true, enumClass);
         }
 
         public EnumProperty(String name, Class<E> enumClass) {
-            this(name, null, (p, a) -> E.valueOf(enumClass, a[0]),s -> true, enumClass);
+            this(name, null, (p, a) -> safeValueOf(enumClass, a[0]), s -> true, enumClass);
         }
 
         @Override
@@ -171,7 +174,7 @@ public class GameProperty<V> extends ConfigProperty<V> {
         }
 
         public ChatColorProperty(String name, ChatColor defaultValue) {
-            this(name, defaultValue, ChatColorProperty::toChatColor,s -> true);
+            this(name, defaultValue, ChatColorProperty::toChatColor, s -> true);
         }
 
         @Override
@@ -188,11 +191,19 @@ public class GameProperty<V> extends ConfigProperty<V> {
         }
 
         private static ChatColor toChatColor(Player player, String[] args) {
-            try {
-                return ChatColor.valueOf(args[0]);
-            } catch (Exception e) {
-                return null;
-            }
+            return safeValueOf(ChatColor.class, args[0]);
         }
+    }
+
+    public static <E extends Enum<E>> @Nullable E safeValueOf(Class<E> enumClass, String string) {
+        try {
+            return E.valueOf(enumClass, string);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static <E extends Enum<E>> E safeValueOf(Class<E> enumClass, String string, E defaultValue) {
+        return Optional.ofNullable(safeValueOf(enumClass, string)).orElse(defaultValue);
     }
 }
