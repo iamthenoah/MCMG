@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.init;
 
+import com.than00ber.mcmg.game.minigames.HideNSeekGame;
 import com.than00ber.mcmg.objects.GameTeam;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -196,9 +197,8 @@ public class GameTeams {
 
     private static void setHiderPlayer(Player player) {
         resetPlayer(player);
-        MobDisguise disguise = new MobDisguise(DisguiseType.VILLAGER);
-        disguise.setViewSelfDisguise(false);
-        DisguiseAPI.disguiseToAll(player, disguise);
+        MobDisguise disguise = new MobDisguise(DisguiseType.getType(HideNSeekGame.ENTITY_TYPE.get()));
+        DisguiseAPI.disguiseToAll(player, disguise.setViewSelfDisguise(HideNSeekGame.HIDE_DISGUISE.get()));
     }
 
     private static void setSeekerPlayer(Player player) {

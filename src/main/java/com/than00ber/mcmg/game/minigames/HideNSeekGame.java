@@ -29,7 +29,7 @@ public class HideNSeekGame extends MiniGame {
     public static final GameProperty.EnumProperty<EntityType> ENTITY_TYPE = new GameProperty.EnumProperty<>("entity.type", EntityType.class, EntityType.VILLAGER);
     public static final GameProperty.BooleanProperty HIDE_DISGUISE = new GameProperty.BooleanProperty("hide.disguise", true);
 
-    private final List<LivingEntity> entities;
+    private final List<Entity> entities;
 
     public HideNSeekGame(Main instance, World world) {
         super(world);
@@ -83,18 +83,11 @@ public class HideNSeekGame extends MiniGame {
 
     private void spawnRandomEntities() {
         int count = Math.min(100, (int) Math.round(Math.pow((float) PLAYGROUND_RADIUS.get() / 2, 2)));
-        Random random = new Random();
 
         for (int i = 0; i < count; i++) {
             Location location = getRandomLocation();
-            Villager villager = (Villager) getWorld().spawnEntity(location, EntityType.VILLAGER);
-
-            int c = random.nextInt(Villager.Profession.values().length);
-            Villager.Profession profession = Villager.Profession.values()[c];
-            villager.setVillagerType(Villager.Type.PLAINS);
-            villager.setProfession(profession);
-
-            entities.add(villager);
+            Entity entity = getWorld().spawnEntity(location, ENTITY_TYPE.get());
+            entities.add(entity);
         }
     }
 
