@@ -7,7 +7,7 @@ import com.than00ber.mcmg.commands.ReadyCommandExecutor;
 import com.than00ber.mcmg.events.GlobalEventListener;
 import com.than00ber.mcmg.game.GameEngine;
 import com.than00ber.mcmg.game.MiniGame;
-import com.than00ber.mcmg.util.ConfigUtil;
+import com.than00ber.mcmg.util.config.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
