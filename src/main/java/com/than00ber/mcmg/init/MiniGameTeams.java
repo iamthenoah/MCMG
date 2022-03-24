@@ -28,10 +28,7 @@ public class MiniGameTeams {
             .setDisplayName("Spectator")
             .setColor(ChatColor.BLUE)
             .setSpectator()
-            .prepare(player -> {
-                resetPlayer(player);
-                player.setGameMode(GameMode.SPECTATOR);
-            })
+            .prepare(MiniGameTeams::setSpectatorPlayer)
             .build();
 
     /**
@@ -165,6 +162,11 @@ public class MiniGameTeams {
         for (PotionEffect potion : player.getActivePotionEffects()) {
             player.removePotionEffect(potion.getType());
         }
+    }
+
+    private static void setSpectatorPlayer(Player player) {
+        resetPlayer(player);
+        player.setGameMode(GameMode.SPECTATOR);
     }
 
     private static void setWerewolfPlayer(Player player) {
