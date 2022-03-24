@@ -27,7 +27,7 @@ public class MiniGameCommandExecutor extends PluginCommandExecutor {
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
         ActionResult result = switch (args[0]) {
             case "play"     -> handleGameMount(args);
-            case "start"    -> handleGameStart(sender, args);
+            case "start"    -> Main.MINIGAME_ENGINE.startMiniGame(Main.WORLD.getPlayers(), getReason(sender, args, "started"));
             case "end"      -> Main.MINIGAME_ENGINE.endMiniGame(getReason(sender, args, "ended"));
             case "restart"  -> Main.MINIGAME_ENGINE.restartMiniGame(getReason(sender, args, "restarted"));
             default         -> PluginCommandExecutor.INVALID_COMMAND;
@@ -48,19 +48,8 @@ public class MiniGameCommandExecutor extends PluginCommandExecutor {
         return args.length == 0 ? TextUtil.getMatching(args, List.of("play", "start", "end", "restart")) : List.of();
     }
 
-    private ActionResult handleGameStart(CommandSender sender, String[] args) {
-        VoteCommandExecutor.endCurrentVotingPool();
-        return Main.MINIGAME_ENGINE.startMiniGame(Main.WORLD.getPlayers(), getReason(sender, args, "started"));
-    }
-
     private ActionResult handleGameMount(String[] args) {
-        if (args.length == 0) {
-            return PluginCommandExecutor.INVALID_COMMAND;
-        }
-        if (VoteCommandExecutor.hasOngoingPoll()) {
-            String name = TextUtil.formatMiniGame(VoteCommandExecutor.MINIGAME_NAME);
-            return ActionResult.warn("A voting poll of " + name + ChatColor.GOLD + " is still ongoing.");
-        }
+        if (args.length == 0) return PluginCommandExecutor.INVALID_COMMAND;
 
         Supplier<? extends MiniGame> supplier = MiniGames.MINI_GAMES.getOrDefault(args[1].toLowerCase(), null);
 

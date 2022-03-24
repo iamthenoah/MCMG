@@ -46,8 +46,8 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
     }
 
     public static void setVote(String name, int voteDuration) {
+        endCurrentVotingPool();
         MINIGAME_NAME = name;
-        QUEUED_PLAYERS.clear();
 
         String info = "Next minigame: " + TextUtil.formatMiniGame(name);
         String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
@@ -58,7 +58,10 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
         Optional.ofNullable(REMINDER_ID).ifPresent(id -> Bukkit.getScheduler().cancelTask(id));
 
         REMINDER_ID = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
-            REMINDER_ID = null;
+            if (Main.MINIGAME_ENGINE.hasRunningGame()) {
+                endCurrentVotingPool();
+                return;
+            }
 
             for (Player player : Main.WORLD.getPlayers()) {
                 ChatUtil.toSelf(player, voteDuration / 2 + " seconds remaining to vote.");
@@ -70,6 +73,11 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
         }, 20L * (voteDuration / 2));
 
         VOTING_POOL_ID = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
+            if (Main.MINIGAME_ENGINE.hasRunningGame()) {
+                endCurrentVotingPool();
+                return;
+            }
+
             try {
                 ActionResult result = Main.MINIGAME_ENGINE.startMiniGame(QUEUED_PLAYERS, null);
 
@@ -77,19 +85,15 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
                     ChatUtil.toAll("Vote failed.");
                     ChatUtil.toAll(result.getFormattedMessages());
                 }
-            } catch (StackOverflowError exception) {
-                endCurrentVotingPool();
             } finally {
-                QUEUED_PLAYERS.clear();
-                MINIGAME_NAME = null;
-                VOTING_POOL_ID = null;
-                REMINDER_ID = null;
+                endCurrentVotingPool();
             }
         }, 20L * voteDuration);
     }
 
     public static void endCurrentVotingPool() {
         Optional.ofNullable(VOTING_POOL_ID).ifPresent(id -> Bukkit.getScheduler().cancelTask(id));
+        Optional.ofNullable(REMINDER_ID).ifPresent(id -> Bukkit.getScheduler().cancelTask(id));
         QUEUED_PLAYERS.clear();
         MINIGAME_NAME = null;
         VOTING_POOL_ID = null;
