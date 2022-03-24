@@ -1,6 +1,5 @@
-package com.than00ber.mcmg.game;
+package com.than00ber.mcmg;
 
-import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ActionResult;

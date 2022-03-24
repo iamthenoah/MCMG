@@ -1,15 +1,15 @@
 package com.than00ber.mcmg.util.config;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
 public class MiniGameProperty<V> extends ConfigProperty<V> {

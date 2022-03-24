@@ -1,7 +1,7 @@
-package com.than00ber.mcmg.game.events;
+package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.MiniGame;
+import com.than00ber.mcmg.MiniGame;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;

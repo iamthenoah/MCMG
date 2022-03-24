@@ -1,4 +1,4 @@
-package com.than00ber.mcmg.game;
+package com.than00ber.mcmg;
 
 import com.than00ber.mcmg.objects.WinCondition;
 

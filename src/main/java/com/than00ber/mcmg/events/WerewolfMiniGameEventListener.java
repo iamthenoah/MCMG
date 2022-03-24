@@ -1,8 +1,8 @@
-package com.than00ber.mcmg.game.events;
+package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.minigames.WerewolfMiniGame;
 import com.than00ber.mcmg.init.MiniGameTeams;
+import com.than00ber.mcmg.minigames.WerewolfMiniGame;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

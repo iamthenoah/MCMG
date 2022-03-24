@@ -1,9 +1,8 @@
-package com.than00ber.mcmg.game;
+package com.than00ber.mcmg;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.events.MiniGameEventListener;
+import com.than00ber.mcmg.events.MiniGameEventListener;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;

@@ -1,8 +1,8 @@
-package com.than00ber.mcmg.game.events;
+package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.init.MiniGameTeams;
+import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;

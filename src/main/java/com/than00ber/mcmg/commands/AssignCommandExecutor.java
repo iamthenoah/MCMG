@@ -2,7 +2,7 @@ package com.than00ber.mcmg.commands;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.MiniGame;
+import com.than00ber.mcmg.MiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.util.ActionResult;
 import org.bukkit.World;

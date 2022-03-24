@@ -1,12 +1,12 @@
 package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.MiniGame;
+import com.than00ber.mcmg.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
-import com.than00ber.mcmg.util.config.ConfigUtil;
 import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import com.than00ber.mcmg.util.config.ConfigProperty;
+import com.than00ber.mcmg.util.config.ConfigUtil;
 import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;

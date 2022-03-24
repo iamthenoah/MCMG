@@ -1,10 +1,10 @@
-package com.than00ber.mcmg.game.minigames;
+package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.MiniGame;
-import com.than00ber.mcmg.game.MiniGameEvent;
-import com.than00ber.mcmg.game.events.WerewolfMiniGameEventListener;
+import com.than00ber.mcmg.MiniGame;
+import com.than00ber.mcmg.MiniGameEvent;
+import com.than00ber.mcmg.events.WerewolfMiniGameEventListener;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.MiniGameTeam;
