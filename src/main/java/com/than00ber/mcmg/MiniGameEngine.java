@@ -6,6 +6,7 @@ import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ActionResult;
+import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
@@ -103,7 +104,13 @@ public class MiniGameEngine<G extends MiniGame> {
                         }
                     }
                 } else {
-                    if (countdownRound == 0) {
+                    WinCondition<?> condition =  minigame.getWinConditions().stream()
+                            .filter(c -> c.check(minigame)).findAny().orElse(null);
+
+                    if (condition != null) {
+                        minigame.onRoundWon(condition);
+                        endMiniGame(null);
+                    } else if (countdownRound == 0) {
                         countdownRound = minigame.getOptions().getDurationRound();
                         minigame.onRoundCycled(event);
 
@@ -115,20 +122,11 @@ public class MiniGameEngine<G extends MiniGame> {
                             minigame.onRoundWon(event.getWinCondition());
                             endMiniGame(null);
                         }
+                    } else {
+                        countdownRound--;
+                        event.getBossBar().setProgress((float) countdownRound / minigame.getOptions().getDurationRound());
                     }
-
-                    WinCondition<?> condition =  minigame.getWinConditions().stream()
-                            .filter(c -> c.check(minigame)).findAny().orElse(null);
-
-                    if (condition != null) {
-                        minigame.onRoundWon(condition);
-                        endMiniGame(null);
-                    }
-
-                    countdownRound--;
-                    event.getBossBar().setProgress((float) countdownRound / minigame.getOptions().getDurationRound());
                 }
-
             }
         };
 
