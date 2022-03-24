@@ -15,18 +15,14 @@ import org.bukkit.World;
 
 public class PropHuntGame extends MiniGame {
 
-    private final GameProperty.BooleanProperty blocksOnly = new GameProperty.BooleanProperty("_blocks.solid", false);
-    private final GameProperty.BooleanProperty nonBlocksOnly = new GameProperty.BooleanProperty("_blocks.nonsolid", false);
-    private final GameProperty.BooleanProperty propsInWater = new GameProperty.BooleanProperty("blocks.inWater", false);
+    public static final GameProperty.BooleanProperty BLOCKS_ONLY = new GameProperty.BooleanProperty("_blocks.solid", false);
+    public static final GameProperty.BooleanProperty NON_BLOCK_ONLY = new GameProperty.BooleanProperty("_blocks.nonsolid", false);
+    public static final GameProperty.BooleanProperty PROPS_IN_WATER = new GameProperty.BooleanProperty("blocks.inWater", false);
 
     public PropHuntGame(Main instance, World world) {
         super(world);
         setEventListener(new PropHuntGameEventListener(instance, this));
-        addProperties(blocksOnly, nonBlocksOnly, propsInWater);
-    }
-
-    public boolean canHideInWater() {
-        return propsInWater.get();
+        addProperties(BLOCKS_ONLY, NON_BLOCK_ONLY, PROPS_IN_WATER);
     }
 
     @Override

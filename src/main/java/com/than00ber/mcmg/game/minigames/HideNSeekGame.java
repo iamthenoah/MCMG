@@ -25,24 +25,17 @@ import java.util.Random;
 
 public class HideNSeekGame extends MiniGame {
 
-    private final GameProperty.DoubleProperty damagePenalty = new GameProperty.DoubleProperty("damage.penalty", .5).validate(d -> d <= 40);
-    private final GameProperty.EnumProperty<EntityType> entityType = new GameProperty.EnumProperty<>("entity.type", EntityType.class,EntityType.VILLAGER);
+    public static final GameProperty.DoubleProperty DAMAGE_PENALTY = new GameProperty.DoubleProperty("damage.penalty", .5).validate(d -> d <= 40);
+    public static final GameProperty.EnumProperty<EntityType> ENTITY_TYPE = new GameProperty.EnumProperty<>("entity.type", EntityType.class, EntityType.VILLAGER);
+    public static final GameProperty.BooleanProperty HIDE_DISGUISE = new GameProperty.BooleanProperty("hide.disguise", true);
 
     private final List<LivingEntity> entities;
 
     public HideNSeekGame(Main instance, World world) {
         super(world);
         setEventListener(new HideNSeekGameEventListener(instance, this));
-        addProperties(damagePenalty, entityType);
+        addProperties(DAMAGE_PENALTY, ENTITY_TYPE, HIDE_DISGUISE);
         entities = new ArrayList<>();
-    }
-
-    public double getDamagePenalty() {
-        return damagePenalty.get();
-    }
-
-    public EntityType getEntityType() {
-        return entityType.get();
     }
 
     @Override
@@ -53,8 +46,8 @@ public class HideNSeekGame extends MiniGame {
     @Override
     public ImmutableList<GameTeam> getGameTeams() {
         return ImmutableList.of(
-                GameTeams.HIDERS,
-                GameTeams.SEEKERS
+                GameTeams.HIDERS
+//                GameTeams.SEEKERS
         );
     }
 
@@ -89,7 +82,7 @@ public class HideNSeekGame extends MiniGame {
     }
 
     private void spawnRandomEntities() {
-        int count = Math.min(100, (int) Math.round(Math.pow((float) playgroundRadius.get() / 2, 2)));
+        int count = Math.min(100, (int) Math.round(Math.pow((float) PLAYGROUND_RADIUS.get() / 2, 2)));
         Random random = new Random();
 
         for (int i = 0; i < count; i++) {
@@ -106,9 +99,9 @@ public class HideNSeekGame extends MiniGame {
     }
 
     private Location getRandomLocation() {
-        Location center = playgroundSpawn.get();
+        Location center = PLAYGROUND_SPAWN.get();
         Random random = new Random();
-        int r = playgroundRadius.get() / 2;
+        int r = PLAYGROUND_RADIUS.get() / 2;
         int x = random.nextInt(center.getBlockX() - r, center.getBlockX() + r);
         int z = random.nextInt(center.getBlockZ() - r, center.getBlockZ() + r);
         int y = getWorld().getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES) + 1;

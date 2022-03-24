@@ -2,6 +2,7 @@ package com.than00ber.mcmg.game;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.game.events.PluginEventListener;
 import com.than00ber.mcmg.init.GameTeams;
 import com.than00ber.mcmg.objects.GameTeam;
@@ -25,11 +26,11 @@ import java.util.*;
 
 public abstract class MiniGame implements GameLifeCycle, Configurable {
 
-    protected final GameProperty.LocationProperty playgroundSpawn = new GameProperty.LocationProperty("playground.spawn");
-    protected final GameProperty.IntegerProperty playgroundRadius = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
-    protected final GameProperty.IntegerProperty durationGrace = new GameProperty.IntegerProperty("duration.grace", 5).validate(i -> i > 0 && i < 86400);
-    protected final GameProperty.IntegerProperty durationRound = new GameProperty.IntegerProperty("duration.round", 10).validate(i -> i > 0 && i < 84600);
-    protected final GameProperty.IntegerProperty playerMinimum = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= getParticipants().size());
+    public static final GameProperty.LocationProperty PLAYGROUND_SPAWN = new GameProperty.LocationProperty("playground.spawn");
+    public static final GameProperty.IntegerProperty PLAYGROUND_RADIUS = new GameProperty.IntegerProperty("playground.radius").validate(i -> i > 0);
+    public static final GameProperty.IntegerProperty DURATION_GRACE = new GameProperty.IntegerProperty("duration.grace", 5).validate(i -> i > 0 && i < 86400);
+    public static final GameProperty.IntegerProperty DURATION_ROUND = new GameProperty.IntegerProperty("duration.round", 10).validate(i -> i > 0 && i < 84600);
+    public static final GameProperty.IntegerProperty PLAYER_MINIMUM = new GameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= Main.GAME_ENGINE.getCurrentGame().getParticipants().size());
 
     protected final HashMap<Player, GameTeam> players;
     private final List<GameProperty<?>> properties;
@@ -42,11 +43,11 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
         properties = new ArrayList<>();
         getGameTeams().forEach(t -> properties.addAll(t.getProperties()));
         addProperties(
-                playgroundSpawn,
-                playgroundRadius,
-                durationGrace,
-                playerMinimum,
-                durationRound
+                PLAYGROUND_SPAWN,
+                PLAYGROUND_RADIUS,
+                DURATION_GRACE,
+                PLAYER_MINIMUM,
+                DURATION_ROUND
         );
     }
 
@@ -129,34 +130,34 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
     }
 
     public final void sendToGameSpawn(Player player) {
-        player.teleport(playgroundSpawn.get());
+        player.teleport(PLAYGROUND_SPAWN.get());
     }
 
     public GameEngine.Options getOptions() {
         return new GameEngine.Options() {
             @Override
             public Integer getMinimumPlayer() {
-                return playerMinimum.get();
+                return PLAYER_MINIMUM.get();
             }
 
             @Override
             public Location getPlaygroundSpawn() {
-                return playgroundSpawn.get();
+                return PLAYGROUND_SPAWN.get();
             }
 
             @Override
             public Integer getPlaygroundRadius() {
-                return playgroundRadius.get();
+                return PLAYGROUND_RADIUS.get();
             }
 
             @Override
             public Integer getDurationGrace() {
-                return durationGrace.get();
+                return DURATION_GRACE.get();
             }
 
             @Override
             public Integer getDurationRound() {
-                return durationRound.get();
+                return DURATION_ROUND.get();
             }
         };
     }
@@ -248,7 +249,7 @@ public abstract class MiniGame implements GameLifeCycle, Configurable {
             addToScoreboardTeam(p, t);
 
             if (t.disableWhileGrace()) {
-                int duration = durationGrace.get() * 20;
+                int duration = DURATION_GRACE.get() * 20;
                 p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 100));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 10));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, duration, 250));

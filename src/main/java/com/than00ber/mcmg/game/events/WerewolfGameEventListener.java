@@ -30,7 +30,7 @@ public class WerewolfGameEventListener extends PluginEventListener<WerewolfGame>
         Player player = event.getEntity();
         game.switchTeam(event.getEntity(), GameTeams.SPECTATORS);
 
-        if (game.doesShowDeathSkull()) {
+        if (WerewolfGame.DEATH_SKULL.get()) {
             Location location = player.getLocation();
             BlockData blockData = Material.SKELETON_SKULL.createBlockData();
             game.getWorld().setBlockData(location, blockData);
@@ -41,7 +41,7 @@ public class WerewolfGameEventListener extends PluginEventListener<WerewolfGame>
     public void onEntitySpawn(EntitySpawnEvent event) {
         Entity entity = event.getEntity();
 
-        if (entity.getNearbyEntities(30, 30, 30).size() > game.getZombieSpawnCount()) {
+        if (entity.getNearbyEntities(30, 30, 30).size() > WerewolfGame.ZOMBIE_COUNT.get()) {
             event.setCancelled(true);
             return;
         }
@@ -99,7 +99,7 @@ public class WerewolfGameEventListener extends PluginEventListener<WerewolfGame>
             Location to = target.getEyeLocation();
             Location from = zombieVillager.getEyeLocation();
 
-            if (getDistance(to, from) > game.getAggroDistance()) {
+            if (getDistance(to, from) > WerewolfGame.AGGRO_DISTANCE.get()) {
                 event.setTarget(null);
                 event.setCancelled(true);
                 return;

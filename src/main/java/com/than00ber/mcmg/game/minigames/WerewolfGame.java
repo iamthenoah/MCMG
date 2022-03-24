@@ -17,28 +17,16 @@ import org.bukkit.boss.BossBar;
 
 public class WerewolfGame extends MiniGame {
 
-    private final GameProperty.IntegerProperty aggroDistance = new GameProperty.IntegerProperty("aggro.distance", 10).validate(d -> d > 0);
-    private final GameProperty.IntegerProperty zombieSpawnCount = new GameProperty.IntegerProperty("spawn.count", 5).validate(d -> d > 0);
-    private final GameProperty.BooleanProperty deathSkull = new GameProperty.BooleanProperty("death.skull", true);
+    public static final GameProperty.IntegerProperty AGGRO_DISTANCE = new GameProperty.IntegerProperty("aggro.distance", 10).validate(d -> d > 0);
+    public static final GameProperty.IntegerProperty ZOMBIE_COUNT = new GameProperty.IntegerProperty("zombie.count", 5).validate(d -> d > 0);
+    public static final GameProperty.BooleanProperty DEATH_SKULL = new GameProperty.BooleanProperty("death.skull", true);
 
     private boolean isDaytime;
 
     public WerewolfGame(Main instance, World world) {
         super(world);
         setEventListener(new WerewolfGameEventListener(instance, this));
-        addProperties(aggroDistance, zombieSpawnCount, deathSkull);
-    }
-
-    public int getAggroDistance() {
-        return aggroDistance.get();
-    }
-
-    public int getZombieSpawnCount() {
-        return zombieSpawnCount.get() + getParticipants().size();
-    }
-
-    public boolean doesShowDeathSkull() {
-        return deathSkull.get();
+        addProperties(AGGRO_DISTANCE, ZOMBIE_COUNT, DEATH_SKULL);
     }
 
     @Override

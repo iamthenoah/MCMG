@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.util.config;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -78,7 +79,7 @@ public class GameProperty<V> extends ConfigProperty<V> {
     public static class IntegerProperty extends GameProperty<Integer> {
 
         public IntegerProperty(String name, Integer defaultValue) {
-            super(name, defaultValue, (p, a) -> Integer.parseInt(a[0]), s -> true);
+            super(name, defaultValue, (p, a) -> Integer.parseInt(a[0]), i -> true);
         }
 
         public IntegerProperty(String name) {
@@ -92,7 +93,7 @@ public class GameProperty<V> extends ConfigProperty<V> {
     public static class DoubleProperty extends GameProperty<Double> {
 
         public DoubleProperty(String name, Double defaultValue) {
-            super(name, defaultValue, (p, a) -> Double.parseDouble(a[0]), s -> true);
+            super(name, defaultValue, (p, a) -> Double.parseDouble(a[0]), d -> true);
         }
 
         public DoubleProperty(String name) {
@@ -113,11 +114,11 @@ public class GameProperty<V> extends ConfigProperty<V> {
         }
 
         public EnumProperty(String name, Class<E> enumClass, E defaultValue) {
-            this(name, defaultValue, (p, a) -> safeValueOf(enumClass, a[0]), s -> true, enumClass);
+            this(name, defaultValue, (p, a) -> safeValueOf(enumClass, a[0]), Objects::nonNull, enumClass);
         }
 
         public EnumProperty(String name, Class<E> enumClass) {
-            this(name, null, (p, a) -> safeValueOf(enumClass, a[0]), s -> true, enumClass);
+            this(name, null, (p, a) -> safeValueOf(enumClass, a[0]), Objects::nonNull, enumClass);
         }
 
         @Override
@@ -142,7 +143,7 @@ public class GameProperty<V> extends ConfigProperty<V> {
     public static class LocationProperty extends GameProperty<Location> {
 
         public LocationProperty(String name, Location defaultValue) {
-            super(name, defaultValue, LocationProperty::toLocation, s -> true);
+            super(name, defaultValue, LocationProperty::toLocation, l -> true);
         }
 
         public LocationProperty(String name) {
@@ -174,7 +175,7 @@ public class GameProperty<V> extends ConfigProperty<V> {
         }
 
         public ChatColorProperty(String name, ChatColor defaultValue) {
-            this(name, defaultValue, ChatColorProperty::toChatColor, s -> true);
+            this(name, defaultValue, ChatColorProperty::toChatColor, Objects::nonNull);
         }
 
         @Override

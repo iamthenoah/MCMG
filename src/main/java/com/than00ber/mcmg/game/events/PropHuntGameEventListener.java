@@ -45,7 +45,7 @@ public class PropHuntGameEventListener extends PluginEventListener<PropHuntGame>
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!game.canHideInWater()) {
+        if (!PropHuntGame.PROPS_IN_WATER.get()) {
             Player player = event.getPlayer();
 
             if (game.isInTeam(player, GameTeams.PROPS) && player.isInWater()) {
