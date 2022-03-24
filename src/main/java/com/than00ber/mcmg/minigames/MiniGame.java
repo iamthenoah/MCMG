@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameEngine;
-import com.than00ber.mcmg.MiniGameLifeCycle;
 import com.than00ber.mcmg.events.MiniGameEventListener;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.objects.MiniGameTeam;
