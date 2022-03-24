@@ -76,7 +76,7 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
                     ChatUtil.toAll("Vote failed.");
                     ChatUtil.toAll(result.getFormattedMessages());
                 }
-            } catch (Exception exception) {
+            } catch (StackOverflowError exception) {
                 endCurrentVotingPool();
             } finally {
                 QUEUED_PLAYERS.clear();
