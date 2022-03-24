@@ -7,7 +7,7 @@ import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import com.than00ber.mcmg.util.config.ConfigUtil;
-import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ public class MiniGameCommandExecutor extends PluginCommandExecutor {
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
         ActionResult result = switch (args[0]) {
             case "play"     -> handleGameMount(args);
-            case "start"    -> Main.MINIGAME_ENGINE.startMiniGame(getReason(sender, args, "started"));
+            case "start"    -> handleGameStart(sender, args);
             case "end"      -> Main.MINIGAME_ENGINE.endMiniGame(getReason(sender, args, "ended"));
             case "restart"  -> Main.MINIGAME_ENGINE.restartMiniGame(getReason(sender, args, "restarted"));
             default         -> PluginCommandExecutor.INVALID_COMMAND;
@@ -48,21 +48,31 @@ public class MiniGameCommandExecutor extends PluginCommandExecutor {
         return args.length == 0 ? TextUtil.getMatching(args, List.of("play", "start", "end", "restart")) : List.of();
     }
 
+    private ActionResult handleGameStart(CommandSender sender, String[] args) {
+        VoteCommandExecutor.endCurrentVotingPool();
+        return Main.MINIGAME_ENGINE.startMiniGame(Main.WORLD.getPlayers(), getReason(sender, args, "started"));
+    }
+
     private ActionResult handleGameMount(String[] args) {
         if (args.length == 0) {
             return PluginCommandExecutor.INVALID_COMMAND;
+        }
+        if (VoteCommandExecutor.hasOngoingPoll()) {
+            String name = TextUtil.formatMiniGame(VoteCommandExecutor.MINIGAME_NAME);
+            return ActionResult.warn("A voting poll of " + name + ChatColor.GOLD + " is still ongoing.");
         }
 
         Supplier<? extends MiniGame> supplier = MiniGames.MINI_GAMES.getOrDefault(args[1].toLowerCase(), null);
 
         if (supplier != null) {
             MiniGame game = supplier.get();
-            ConfigUtil.loadConfigs(instance, game);
 
             ActionResult result = Main.MINIGAME_ENGINE.mount(game);
             if (!result.isSuccessful()) return result;
 
-            ReadyCommandExecutor.setVote(game.getMiniGameName(), Bukkit.getOnlinePlayers().size());
+            int duration = args.length == 3 ? Integer.parseInt(args[2]) : 30;
+            VoteCommandExecutor.setVote(game.getMiniGameName(), duration);
+            ConfigUtil.loadConfigs(instance, game);
 
             return ActionResult.success();
         }

@@ -32,7 +32,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     public static final MiniGameProperty.IntegerProperty PLAYGROUND_RADIUS = new MiniGameProperty.IntegerProperty("playground.radius", 100).validate(i -> i > 0);
     public static final MiniGameProperty.IntegerProperty DURATION_GRACE = new MiniGameProperty.IntegerProperty("duration.grace", 30).validate(i -> i > 0 && i < 86400);
     public static final MiniGameProperty.IntegerProperty DURATION_ROUND = new MiniGameProperty.IntegerProperty("duration.round", 120).validate(i -> i > 0 && i < 84600);
-    public static final MiniGameProperty.IntegerProperty PLAYER_MINIMUM = new MiniGameProperty.IntegerProperty("player.minimum", 1).validate(i -> i > 0 && i <= Main.MINIGAME_ENGINE.getCurrentGame().getParticipants().size());
+    public static final MiniGameProperty.IntegerProperty PLAYER_MINIMUM = new MiniGameProperty.IntegerProperty("player.minimum", 2).validate(i -> i > 1 && i <= Main.WORLD.getPlayers().size());
 
     protected final HashMap<Player, MiniGameTeam> players;
     private final List<MiniGameProperty<?>> properties;
@@ -165,48 +165,16 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     }
 
     @Override
-    public void onMinigameStarted() {
-        clearMonsters();
-
-        getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-        getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-        getWorld().setGameRule(GameRule.MOB_GRIEFING, false);
-        getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-        getWorld().setGameRule(GameRule.DO_ENTITY_DROPS, false);
-        getWorld().setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
-        getWorld().setGameRule(GameRule.LOG_ADMIN_COMMANDS, false);
-        getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
-        getWorld().setGameRule(GameRule.KEEP_INVENTORY, true);
-
-        getWorld().setDifficulty(Difficulty.NORMAL);
-        getWorld().setThundering(false);
-        getWorld().setStorm(false);
-        getWorld().setTime(6000);
-
-        assignRandomRoles();
+    public void onMinigameStarted(List<Player> participants) {
+        prepareWorld(false);
+        assignRandomRoles(participants);
         ChatUtil.showRoundStartScreen(getParticipants());
         players.keySet().forEach(this::sendToGameSpawn);
     }
 
     @Override
     public void onMinigameEnded() {
-        clearMonsters();
-
-        getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
-        getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, true);
-        getWorld().setGameRule(GameRule.MOB_GRIEFING, true);
-        getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
-        getWorld().setGameRule(GameRule.DO_ENTITY_DROPS, true);
-        getWorld().setGameRule(GameRule.SHOW_DEATH_MESSAGES, true);
-        getWorld().setGameRule(GameRule.LOG_ADMIN_COMMANDS, true);
-        getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
-        getWorld().setGameRule(GameRule.KEEP_INVENTORY, false);
-
-        getWorld().setDifficulty(Difficulty.NORMAL);
-        getWorld().setThundering(false);
-        getWorld().setStorm(false);
-        getWorld().setTime(6000);
-
+        prepareWorld(true);
         getWorld().getPlayers().forEach(player -> {
             MiniGameTeams.resetPlayer(player);
             sendToGameSpawn(player);
@@ -218,9 +186,9 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         ChatUtil.showRoundEndScreen(getParticipants(), getMiniGameTeams(), condition);
     }
 
-    private void assignRandomRoles() {
+    private void assignRandomRoles(List<Player> participants) {
         players.clear();
-        List<Player> queued = world.getPlayers(); // TODO - add queuing system
+        List<Player> queued = new ArrayList<>(participants);
         int total = queued.size();
         Random random = new Random();
 
@@ -241,7 +209,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
         for (MiniGameTeam team : getMiniGameTeams()) {
             if (team.isRequired() && !players.containsValue(team)) {
-                assignRandomRoles();
+                assignRandomRoles(queued);
                 break;
             }
         }
@@ -257,6 +225,25 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, duration, 250));
             }
         });
+    }
+
+    private void prepareWorld(boolean isGameEnding) {
+        clearMonsters();
+
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, !isGameEnding);
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, !isGameEnding);
+        world.setGameRule(GameRule.MOB_GRIEFING, !isGameEnding);
+        world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, !isGameEnding);
+        world.setGameRule(GameRule.DO_ENTITY_DROPS, !isGameEnding);
+        world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, !isGameEnding);
+        world.setGameRule(GameRule.LOG_ADMIN_COMMANDS, !isGameEnding);
+        world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, isGameEnding);
+        world.setGameRule(GameRule.KEEP_INVENTORY, isGameEnding);
+
+        world.setDifficulty(Difficulty.NORMAL);
+        world.setThundering(false);
+        world.setStorm(false);
+        world.setTime(6000);
     }
 
     protected void clearMonsters() {

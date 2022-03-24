@@ -1,13 +1,17 @@
 package com.than00ber.mcmg;
 
 import com.than00ber.mcmg.objects.WinCondition;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public interface MiniGameLifeCycle {
     /**
      * Called when the minigame has started.
      * Usually to set the environment.
+     * @param participants Participating players.
      */
-    void onMinigameStarted();
+    void onMinigameStarted(List<Player> participants);
 
     /**
      * Called when the minigame has ended.

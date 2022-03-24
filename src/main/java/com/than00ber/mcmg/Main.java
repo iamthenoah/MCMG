@@ -3,7 +3,7 @@ package com.than00ber.mcmg;
 import com.than00ber.mcmg.commands.AssignCommandExecutor;
 import com.than00ber.mcmg.commands.ConfigsCommandExecutor;
 import com.than00ber.mcmg.commands.MiniGameCommandExecutor;
-import com.than00ber.mcmg.commands.ReadyCommandExecutor;
+import com.than00ber.mcmg.commands.VoteCommandExecutor;
 import com.than00ber.mcmg.events.GlobalEventListener;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.config.ConfigUtil;
@@ -30,7 +30,7 @@ public class Main extends JavaPlugin {
 
         new MiniGameCommandExecutor(this, WORLD);
         new ConfigsCommandExecutor(this, WORLD);
-        new ReadyCommandExecutor(this, WORLD);
+        new VoteCommandExecutor(this, WORLD);
         new AssignCommandExecutor(this, WORLD);
     }
 

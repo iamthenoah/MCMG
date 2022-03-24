@@ -1,22 +1,24 @@
 package com.than00ber.mcmg;
 
+import com.than00ber.mcmg.events.MiniGameEventListener;
+import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.TextUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Instrument;
-import org.bukkit.Location;
-import org.bukkit.Note;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class MiniGameEngine<G extends MiniGame> {
@@ -135,8 +137,8 @@ public class MiniGameEngine<G extends MiniGame> {
         return ActionResult.success();
     }
 
-    public ActionResult startMiniGame(@Nullable String message) {
-        ActionResult invalid = validateOptions();
+    public ActionResult startMiniGame(List<Player> participants, @Nullable String message) {
+        ActionResult invalid = validateOptions(participants);
         if (!invalid.isSuccessful()) return invalid;
 
         minigame.getWorld().getWorldBorder().setSize(minigame.getOptions().getPlaygroundRadius());
@@ -144,9 +146,10 @@ public class MiniGameEngine<G extends MiniGame> {
 
         unregisterTeams();
         registerTeams();
-        minigame.onMinigameStarted();
-        if (minigame.hasEventListener()) {
-            minigame.getEventListener().register();
+        minigame.onMinigameStarted(participants);
+        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEventListener::register);
+        for (Player player : minigame.getWorld().getPlayers()) {
+            if (!participants.contains(player)) MiniGameTeams.SPECTATORS.prepare(player);
         }
 
         currentHandler = handlerSupplier.get();
@@ -165,23 +168,21 @@ public class MiniGameEngine<G extends MiniGame> {
 
         minigame.onMinigameEnded();
         unregisterTeams();
-        if (minigame.hasEventListener()) {
-            minigame.getEventListener().unregister();
-        }
+        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEventListener::unregister);
 
         currentHandler.deactivate();
         currentHandler = null;
+        handlerSupplier = null;
+        minigame = null;
 
-        gameState = GameState.IDLE;
+        gameState = GameState.EMPTY;
         return ActionResult.success(reason);
     }
 
     public ActionResult restartMiniGame(@Nullable String reason) {
-        endMiniGame(null);
-        ActionResult startResult = startMiniGame(null);
-        return !startResult.isSuccessful()
-                ? startResult
-                : ActionResult.success(reason);
+        currentHandler.deactivate();
+        ActionResult startResult = startMiniGame(minigame.getParticipants().keySet().asList(), null);
+        return !startResult.isSuccessful() ? startResult : ActionResult.success(reason);
     }
 
     private void registerTeams() {
@@ -205,7 +206,7 @@ public class MiniGameEngine<G extends MiniGame> {
         }
     }
 
-    private ActionResult validateOptions() {
+    private ActionResult validateOptions(List<Player> participants) {
         if (minigame == null) {
             return ActionResult.warn("No minigame is set.");
         }
@@ -218,6 +219,11 @@ public class MiniGameEngine<G extends MiniGame> {
         }
         if (minigame.getOptions().getPlaygroundRadius() == null) {
             return ActionResult.warn("No playground radius set for minigame " + name);
+        }
+        int minimum = minigame.getOptions().getMinimumPlayer();
+        if (minimum > participants.size()) {
+            String reason = ChatColor.GOLD + "(" + participants.size() + " of " + minimum + ")";
+            return ActionResult.warn("Not enough participants to play " + name + " " + reason);
         }
         return ActionResult.success();
     }

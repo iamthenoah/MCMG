@@ -1,0 +1,80 @@
+package com.than00ber.mcmg.commands;
+
+import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.util.ActionResult;
+import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.TextUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class VoteCommandExecutor extends PluginCommandExecutor {
+
+    private static final List<Player> QUEUED_PLAYERS = new ArrayList<>();
+
+    public static String MINIGAME_NAME = null;
+    private static Integer VOTING_POOL_ID = null;
+
+    public VoteCommandExecutor(Main instance, World world) {
+        super("ready", instance, world);
+    }
+
+    @Override
+    protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
+        if (sender instanceof Player player) {
+            if (MINIGAME_NAME == null) return ActionResult.warn("There is no minigame to vote for.");
+            ChatUtil.toAll(ChatColor.AQUA + player.getDisplayName() + ChatColor.RESET + " is ready!");
+            QUEUED_PLAYERS.add(player);
+            return ActionResult.success();
+        }
+        return PluginCommandExecutor.NOT_A_PLAYER;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
+        return null;
+    }
+
+    public static void setVote(String name, int voteDuration) {
+        MINIGAME_NAME = name;
+        QUEUED_PLAYERS.clear();
+
+        String info = "Next minigame: " + TextUtil.formatMiniGame(name);
+        String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
+        String duration = "Voting will last for " + voteDuration + " seconds.";
+        ChatUtil.toAll(info, vote, duration);
+
+        Optional.ofNullable(VOTING_POOL_ID).ifPresent(id -> Bukkit.getScheduler().cancelTask(id));
+        VOTING_POOL_ID = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
+            ActionResult result = Main.MINIGAME_ENGINE.startMiniGame(QUEUED_PLAYERS, null);
+
+            if (!result.isSuccessful()) {
+                ChatUtil.toAll("Vote failed.");
+                ChatUtil.toAll(result.getFormattedMessages());
+            }
+
+            QUEUED_PLAYERS.clear();
+            MINIGAME_NAME = null;
+            VOTING_POOL_ID = null;
+        }, 20L * voteDuration);
+    }
+
+    public static void endCurrentVotingPool() {
+        Optional.ofNullable(VOTING_POOL_ID).ifPresent(id -> Bukkit.getScheduler().cancelTask(id));
+        QUEUED_PLAYERS.clear();
+        MINIGAME_NAME = null;
+        VOTING_POOL_ID = null;
+    }
+
+    public static boolean hasOngoingPoll() {
+        return VOTING_POOL_ID != null;
+    }
+}

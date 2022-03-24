@@ -11,6 +11,9 @@ import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class PropHuntMiniGame extends MiniGame {
 
@@ -45,8 +48,8 @@ public class PropHuntMiniGame extends MiniGame {
     }
 
     @Override
-    public void onMinigameStarted() {
-        super.onMinigameStarted();
+    public void onMinigameStarted(List<Player> participants) {
+        super.onMinigameStarted(participants);
         getWorld().setDifficulty(Difficulty.PEACEFUL);
     }
 

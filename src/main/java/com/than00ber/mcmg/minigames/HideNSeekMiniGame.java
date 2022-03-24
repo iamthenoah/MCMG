@@ -12,6 +12,7 @@ import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
@@ -43,7 +44,7 @@ public class HideNSeekMiniGame extends MiniGame {
     @Override
     public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
-                MiniGameTeams.SEEKERS,
+//                MiniGameTeams.SEEKERS,
                 MiniGameTeams.HIDERS
         );
     }
@@ -56,8 +57,8 @@ public class HideNSeekMiniGame extends MiniGame {
     }
 
     @Override
-    public void onMinigameStarted() {
-        super.onMinigameStarted();
+    public void onMinigameStarted(List<Player> participants) {
+        super.onMinigameStarted(participants);
         disablePlayerCollisions();
         getWorld().setDifficulty(Difficulty.PEACEFUL);
         spawnRandomEntities();
