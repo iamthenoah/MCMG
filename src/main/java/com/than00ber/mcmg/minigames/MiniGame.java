@@ -33,14 +33,16 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     public static final MiniGameProperty.IntegerProperty DURATION_ROUND = new MiniGameProperty.IntegerProperty("duration.round", 120).validate(i -> i > 0 && i < 84600);
     public static final MiniGameProperty.IntegerProperty PLAYER_MINIMUM = new MiniGameProperty.IntegerProperty("player.minimum", 2).validate(i -> i > 1 && i <= Main.WORLD.getPlayers().size());
 
-    protected final HashMap<Player, MiniGameTeam> players;
+    protected final HashMap<Player, MiniGameTeam> alive;
+    protected final HashMap<Player, MiniGameTeam> dead;
     private final List<MiniGameProperty<?>> properties;
     private final World world;
     private MiniGameEventListener<?> listener;
 
     public MiniGame(World world) {
         this.world = world;
-        players = new HashMap<>();
+        alive = new HashMap<>();
+        dead = new HashMap<>();
         properties = new ArrayList<>();
         getMiniGameTeams().forEach(t -> properties.addAll(t.getProperties()));
         addProperties(
@@ -57,7 +59,9 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     }
 
     public ImmutableMap<Player, MiniGameTeam> getParticipants() {
-        return ImmutableMap.copyOf(players);
+        HashMap<Player, MiniGameTeam> participants = new HashMap<>(alive);
+        participants.putAll(dead);
+        return ImmutableMap.copyOf(participants);
     }
 
     public MiniGameEventListener<?> getEventListener() {
@@ -87,29 +91,34 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     }
 
     public final boolean isParticipant(Player player) {
-        return players.containsKey(player);
+        return getParticipants().containsKey(player);
     }
 
     public final boolean isInTeam(Player player, MiniGameTeam team) {
-        return isParticipant(player) && players.get(player).equals(team);
+        return isParticipant(player) && getParticipants().get(player).equals(team);
     }
 
     public final void switchTeam(Player player, MiniGameTeam newMiniGameTeam) {
-        if (isParticipant(player)) {
-            addToScoreboardTeam(player, newMiniGameTeam);
-            players.replace(player, newMiniGameTeam);
-            newMiniGameTeam.prepare(player);
-        }
+        dead.remove(player);
+        alive.remove(player);
+        alive.put(player, newMiniGameTeam);
+        addToScoreboardTeam(player, newMiniGameTeam);
+        newMiniGameTeam.prepare(player);
     }
 
     public final void removePlayer(Player player) {
         if (isParticipant(player)) {
-            players.remove(player);
+            alive.remove(player);
+            dead.remove(player);
         }
     }
 
+    public final void setPlayerDead(Player player) {
+        dead.put(player, alive.remove(player));
+    }
+
     private void addToScoreboardTeam(Player player, MiniGameTeam newMiniGameTeam) {
-        MiniGameTeam currentMiniGameTeam = players.get(player);
+        MiniGameTeam currentMiniGameTeam = getParticipants().get(player);
         ScoreboardManager manager = Bukkit.getScoreboardManager();
 
         if (manager != null) {
@@ -128,10 +137,6 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
             newTeam.addEntry(player.getDisplayName());
         }
-    }
-
-    public final void sendToGameSpawn(Player player) {
-        player.teleport(PLAYGROUND_SPAWN.get());
     }
 
     public MiniGameEngine.Options getOptions() {
@@ -168,7 +173,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         prepareWorld(false);
         assignRandomRoles(participants);
         ChatUtil.showRoundStartScreen(getParticipants());
-        players.keySet().forEach(this::sendToGameSpawn);
+        alive.keySet().forEach(this::sendToGameSpawn);
     }
 
     @Override
@@ -186,7 +191,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     }
 
     private void assignRandomRoles(List<Player> participants) {
-        players.clear();
+        alive.clear();
         List<Player> queued = new ArrayList<>(participants);
         int total = queued.size();
         Random random = new Random();
@@ -196,24 +201,24 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
             MiniGameTeam team = getMiniGameTeams().get(i);
 
             if (!team.isSpectator() && total >= team.getThreshold()) {
-                int frequency = Collections.frequency(players.values(), team);
+                int frequency = Collections.frequency(alive.values(), team);
 
                 if (frequency / (float) total <= team.getWeight()) {
                     Player player = queued.get(random.nextInt(queued.size()));
-                    players.put(player, team);
+                    alive.put(player, team);
                     queued.remove(player);
                 }
             }
         } while (!queued.isEmpty());
 
         for (MiniGameTeam team : getMiniGameTeams()) {
-            if (team.isRequired() && !players.containsValue(team)) {
+            if (team.isRequired() && !alive.containsValue(team)) {
                 assignRandomRoles(queued);
                 break;
             }
         }
 
-        players.forEach((p, t) -> {
+        alive.forEach((p, t) -> {
             t.prepare(p);
             addToScoreboardTeam(p, t);
 
@@ -243,6 +248,10 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         world.setThundering(false);
         world.setStorm(false);
         world.setTime(6000);
+    }
+
+    public final void sendToGameSpawn(Player player) {
+        player.teleport(PLAYGROUND_SPAWN.get());
     }
 
     protected void clearMonsters() {
