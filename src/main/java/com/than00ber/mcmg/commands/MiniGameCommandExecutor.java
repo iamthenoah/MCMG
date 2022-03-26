@@ -60,7 +60,7 @@ public class MiniGameCommandExecutor extends PluginCommandExecutor {
             if (!result.isSuccessful()) return result;
 
             int duration = args.length == 3 ? Integer.parseInt(args[2]) : 30;
-            VoteCommandExecutor.setVote(game.getMiniGameName(), duration);
+            VoteCommandExecutor.setVote(game, duration);
             ConfigUtil.loadConfigs(instance, game);
 
             return ActionResult.success();
