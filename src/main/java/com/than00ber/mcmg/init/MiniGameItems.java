@@ -1,17 +1,24 @@
 package com.than00ber.mcmg.init;
 
+import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.objects.MiniGameItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 public class MiniGameItems {
 
@@ -67,11 +74,24 @@ public class MiniGameItems {
             .unbreakable()
             .build();
     public static final MiniGameItem HUNTERS_ARROWS = new MiniGameItem.Builder(Material.ARROW)
-            .setName(ChatColor.AQUA + "Hunter's Bow")
+            .setName(ChatColor.AQUA + "Hunter's Arrow")
             .build();
     public static final MiniGameItem HUNTERS_COMPASS = new MiniGameItem.Builder(Material.COMPASS)
             .setName(ChatColor.AQUA + "Revelation Compass")
-            .setMeta(() -> new ItemStack(Material.COMPASS).getItemMeta()) // TODO - Hunter's Compass
+            .setMeta(() -> {
+                CompassMeta meta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
+                if (Main.MINIGAME_ENGINE.hasRunningGame()) {
+                    if (Main.MINIGAME_ENGINE.getCurrentGame() instanceof HideNSeekMiniGame game) {
+                        List<Player> players = new ArrayList<>();
+                        game.getParticipants().forEach((p, t) -> {
+                            if (t.equals(MiniGameTeams.PROPS)) players.add(p);
+                        });
+                        Location location = players.get(new Random().nextInt(players.size() - 1)).getLocation();
+                        meta.setLodestone(location);
+                    }
+                }
+                return meta;
+            })
             .addTooltip("Reveals the general direction of the closest props to you for a brief moment.")
             .build();
 

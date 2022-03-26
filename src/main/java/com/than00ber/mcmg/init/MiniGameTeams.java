@@ -181,7 +181,7 @@ public class MiniGameTeams {
 
     private static void setPropPlayer(Player player) {
         resetPlayer(player);
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(10);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(4);
         player.setInvisible(true);
         int i = new Random().nextInt(Material.values().length - 1);
         Material randomMaterial = Material.values()[i];
