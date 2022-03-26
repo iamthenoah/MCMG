@@ -1,6 +1,7 @@
 package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
@@ -31,7 +32,7 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
 
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
-        if (sender instanceof Player player) {
+        if (sender instanceof Player player && !QUEUED_PLAYERS.contains(player)) {
             if (MINIGAME_NAME == null) return ActionResult.warn("There is no minigame to vote for.");
             ChatUtil.toAll(ChatColor.AQUA + player.getDisplayName() + ChatColor.RESET + " is ready!");
             QUEUED_PLAYERS.add(player);
@@ -45,11 +46,11 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
         return null;
     }
 
-    public static void setVote(String name, int voteDuration) {
+    public static void setVote(MiniGame game, int voteDuration) {
         endCurrentVotingPool();
-        MINIGAME_NAME = name;
+        MINIGAME_NAME = game.getMiniGameName();
 
-        String info = "Next minigame: " + TextUtil.formatMiniGame(name);
+        String info = "Next minigame: " + TextUtil.formatMiniGame(game);
         String vote = "Cast your vote now if you are ready. " + ChatColor.ITALIC + "(/ready)";
         String duration = "Voting will last for " + voteDuration + " seconds.";
         ChatUtil.toAll(info, vote, duration);
@@ -98,9 +99,5 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
         MINIGAME_NAME = null;
         VOTING_POOL_ID = null;
         REMINDER_ID = null;
-    }
-
-    public static boolean hasOngoingPoll() {
-        return VOTING_POOL_ID != null;
     }
 }
