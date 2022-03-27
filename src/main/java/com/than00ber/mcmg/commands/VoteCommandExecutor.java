@@ -65,6 +65,13 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
                         ChatUtil.toAll("Vote failed.");
                         ChatUtil.toAll(result.getFormattedMessages());
                     }
+                } catch (Exception e) {
+                    ActionResult result = Main.MINIGAME_ENGINE.startMiniGame(QUEUED_PLAYERS, null);
+
+                    if (!result.isSuccessful()) {
+                        ChatUtil.toAll("Vote failed.");
+                        ChatUtil.toAll(result.getFormattedMessages());
+                    }
                 } finally {
                     endCurrentVotingPool();
                 }

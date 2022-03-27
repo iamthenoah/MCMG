@@ -52,7 +52,7 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
             } else {
                 Supplier<Integer> delta = () -> new Random().nextInt(4) - 2;
                 Location loc = player.getLocation().add(delta.get(), delta.get(), delta.get());
-                minigame.getParticipants().keySet().forEach(p -> p.playSound(loc, Sound.ENTITY_CAT_AMBIENT, 1, 1));
+                minigame.getCurrentPlayerRoles().keySet().forEach(p -> p.playSound(loc, Sound.ENTITY_CAT_AMBIENT, 1, 1));
             }
         }
     }

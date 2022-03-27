@@ -82,7 +82,7 @@ public class MiniGameItems {
                 if (Main.MINIGAME_ENGINE.hasRunningGame()) {
                     if (Main.MINIGAME_ENGINE.getCurrentGame() instanceof HideNSeekMiniGame game) {
                         List<Player> players = new ArrayList<>();
-                        game.getParticipants().forEach((p, t) -> {
+                        game.getCurrentPlayerRoles().forEach((p, t) -> {
                             if (t.equals(MiniGameTeams.PROPS)) players.add(p);
                         });
                         Location location = players.get(new Random().nextInt(players.size() - 1)).getLocation();

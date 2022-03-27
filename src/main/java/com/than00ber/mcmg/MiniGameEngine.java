@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 public class MiniGameEngine<G extends MiniGame> {
 
     private final Main instance;
+    private List<Player> participants; // TODO - revisit how players are queued
     private G minigame;
     private Supplier<MiniGameHandler> handlerSupplier;
     private MiniGameHandler currentHandler;
@@ -122,14 +123,16 @@ public class MiniGameEngine<G extends MiniGame> {
             }
         };
 
+        participants = null;
         minigame = nextGame;
         return ActionResult.success();
     }
 
-    public ActionResult startMiniGame(List<Player> participants, @Nullable String message) {
-        ActionResult invalid = checkCanStart(participants);
+    public ActionResult startMiniGame(List<Player> players, @Nullable String message) {
+        ActionResult invalid = checkCanStart(players);
         if (!invalid.isSuccessful()) return invalid;
 
+        participants = players;
         minigame.getWorld().getWorldBorder().setSize(minigame.getOptions().getPlaygroundRadius());
         minigame.getWorld().getWorldBorder().setCenter(minigame.getOptions().getPlaygroundSpawn());
 
@@ -172,7 +175,7 @@ public class MiniGameEngine<G extends MiniGame> {
         minigame.onMinigameEnded();
         Optional.ofNullable(currentHandler).ifPresent(MiniGameHandler::deactivate);
 
-        ActionResult startResult = startMiniGame(minigame.getParticipants().keySet().asList(), null);
+        ActionResult startResult = startMiniGame(participants, null);
         return !startResult.isSuccessful() ? startResult : ActionResult.success(reason);
     }
 
@@ -224,7 +227,6 @@ public class MiniGameEngine<G extends MiniGame> {
 
         private final Main instance;
         private int id;
-//        private boolean isRunning;
 
         protected MiniGameHandler(Main instance) {
             this.instance = instance;

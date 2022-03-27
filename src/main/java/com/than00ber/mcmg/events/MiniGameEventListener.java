@@ -3,11 +3,8 @@ package com.than00ber.mcmg.events;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.MiniGame;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 public abstract class MiniGameEventListener<G extends MiniGame> implements Listener {
 
@@ -25,13 +22,5 @@ public abstract class MiniGameEventListener<G extends MiniGame> implements Liste
 
     public void register() {
         Bukkit.getPluginManager().registerEvents(minigame.getEventListener(), instance);
-    }
-
-    @EventHandler
-    public final void handlePlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        if (minigame.getParticipants().containsValue(player)) {
-            minigame.setPlayerDead(player);
-        }
     }
 }

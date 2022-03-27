@@ -13,7 +13,7 @@ public class WinConditions {
      */
     public static final WinCondition<MiniGame> EVERYONE_DEAD = new WinCondition.Builder<MiniGame>()
             .setLoseReason("Nobody managed to survive.")
-            .setCondition(state -> state.getParticipants().isEmpty())
+            .setCondition(state -> state.getCurrentPlayerRoles().isEmpty())
             .build();
 
     /**
@@ -24,22 +24,22 @@ public class WinConditions {
             .setLoseReason("The vampire has survived long enough to stealing the victory.")
             .setWinners(MiniGameTeams.VAMPIRES)
             .setCondition(state -> {
-                boolean hasVampire = state.getParticipants().containsValue(MiniGameTeams.VAMPIRES);
-                boolean noVillagers = !state.getParticipants().containsValue(MiniGameTeams.VILLAGERS);
-                boolean noWerewolves = !state.getParticipants().containsValue(MiniGameTeams.WEREWOLVES);
+                boolean hasVampire = state.getCurrentPlayerRoles().containsValue(MiniGameTeams.VAMPIRES);
+                boolean noVillagers = !state.getCurrentPlayerRoles().containsValue(MiniGameTeams.VILLAGERS);
+                boolean noWerewolves = !state.getCurrentPlayerRoles().containsValue(MiniGameTeams.WEREWOLVES);
                 return hasVampire && (noVillagers || noWerewolves);
             }).build();
     public static final WinCondition<WerewolfMiniGame> ALL_VILLAGERS_DEAD = new WinCondition.Builder<WerewolfMiniGame>()
             .setLoseReason("All villagers got killed.")
             .setWinReason("Werewolves have killed all villagers.")
             .setWinners(MiniGameTeams.WEREWOLVES, MiniGameTeams.TRAITORS)
-            .setCondition(state -> !state.getParticipants().containsValue(MiniGameTeams.VILLAGERS))
+            .setCondition(state -> !state.getCurrentPlayerRoles().containsValue(MiniGameTeams.VILLAGERS))
             .build();
     public static final WinCondition<WerewolfMiniGame> ALL_WEREWOLVES_DEAD = new WinCondition.Builder<WerewolfMiniGame>()
             .setLoseReason("Villagers managed to kill all werewolves.")
             .setWinReason("Villagers have survived the terror of the werewolves.")
             .setWinners(MiniGameTeams.VILLAGERS, MiniGameTeams.POSSESSED)
-            .setCondition(state -> !state.getParticipants().containsValue(MiniGameTeams.WEREWOLVES))
+            .setCondition(state -> !state.getCurrentPlayerRoles().containsValue(MiniGameTeams.WEREWOLVES))
             .build();
 
     /**
@@ -49,7 +49,7 @@ public class WinConditions {
             .setLoseReason("All props have been eliminated.")
             .setWinReason("You have spotted all props.")
             .setWinners(MiniGameTeams.HUNTERS)
-            .setCondition(state -> !state.getParticipants().containsValue(MiniGameTeams.PROPS))
+            .setCondition(state -> !state.getCurrentPlayerRoles().containsValue(MiniGameTeams.PROPS))
             .build();
     public static final WinCondition<PropHuntMiniGame> PROPS_SURVIVED = new WinCondition.Builder<PropHuntMiniGame>()
             .setLoseReason("Some props have survived.")
@@ -64,7 +64,7 @@ public class WinConditions {
             .setLoseReason("All hiders have been eliminated.")
             .setWinReason("You have spotted all hiders.")
             .setWinners(MiniGameTeams.SEEKERS)
-            .setCondition(state -> !state.getParticipants().containsValue(MiniGameTeams.HIDERS))
+            .setCondition(state -> !state.getCurrentPlayerRoles().containsValue(MiniGameTeams.HIDERS))
             .build();
     public static final WinCondition<HideNSeekMiniGame> HIDERS_SURVIVED = new WinCondition.Builder<HideNSeekMiniGame>()
             .setLoseReason("Some hiders have survived.")

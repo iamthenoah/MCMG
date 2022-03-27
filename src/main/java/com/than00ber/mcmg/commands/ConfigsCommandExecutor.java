@@ -80,7 +80,7 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
-        if (args.length == 0 && Main.MINIGAME_ENGINE.hasRunningGame()) {
+        if (args.length == 0) {
             List<? extends ConfigProperty<?>> properties = Main.MINIGAME_ENGINE.getCurrentGame().getProperties();
             return TextUtil.getMatching(new String[] {option}, properties, ConfigProperty::getPath);
         }
