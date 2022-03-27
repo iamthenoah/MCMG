@@ -51,6 +51,12 @@ public class WinConditions {
             .setWinners(MiniGameTeams.HUNTERS)
             .setCondition(state -> !state.getCurrentPlayerRoles().containsValue(MiniGameTeams.PROPS))
             .build();
+    public static final WinCondition<PropHuntMiniGame> NO_HUNTERS = new WinCondition.Builder<PropHuntMiniGame>()
+            .setLoseReason("Somehow all hunters died.")
+            .setWinReason("The other team had no coordination.")
+            .setWinners(MiniGameTeams.PROPS)
+            .setCondition(state -> !state.getCurrentPlayerRoles().containsValue(MiniGameTeams.HUNTERS))
+            .build();
     public static final WinCondition<PropHuntMiniGame> PROPS_SURVIVED = new WinCondition.Builder<PropHuntMiniGame>()
             .setLoseReason("Some props have survived.")
             .setWinReason("You managed to stay alive.")

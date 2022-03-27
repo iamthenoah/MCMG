@@ -90,7 +90,7 @@ public class VoteCommandExecutor extends PluginCommandExecutor {
     public static ActionResult voteIsReady(Player player) {
         if (VOTING_POOL_ID != null) {
             if (!QUEUED_PLAYERS.contains(player)) {
-                ChatUtil.toAll(ChatColor.AQUA + player.getDisplayName() + ChatColor.RESET + " is ready!");
+                ChatUtil.toAll(TextUtil.formatPlayer(player) + " is ready!");
                 QUEUED_PLAYERS.add(player);
 
                 if (QUEUED_PLAYERS.size() == Main.WORLD.getPlayers().size()) {

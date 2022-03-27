@@ -4,6 +4,7 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public class TextUtil {
 
         matching.sort(String.CASE_INSENSITIVE_ORDER);
         return matching;
+    }
+
+    public static String formatPlayer(Player player) {
+        return ChatColor.AQUA + player.getDisplayName() + ChatColor.RESET;
     }
 
     public static String formatGameTeam(MiniGameTeam team) {

@@ -43,7 +43,8 @@ public class PropHuntMiniGame extends MiniGame {
     @Override
     public ImmutableList<WinCondition> getWinConditions() {
         return ImmutableList.of(
-                WinConditions.NO_PROPS
+                WinConditions.NO_PROPS,
+                WinConditions.NO_HUNTERS
         );
     }
 

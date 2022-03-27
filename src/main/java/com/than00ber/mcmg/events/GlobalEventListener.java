@@ -3,6 +3,7 @@ package com.than00ber.mcmg.events;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +30,7 @@ public class GlobalEventListener implements Listener {
         if (Main.MINIGAME_ENGINE.hasRunningGame()) {
             Player player = event.getPlayer();
             Main.MINIGAME_ENGINE.getCurrentGame().removePlayer(player);
-            ChatUtil.toAll(player.getDisplayName() + " has been removed from the minigame.");
+            ChatUtil.toAll(TextUtil.formatPlayer(player) + " has been removed from the minigame.");
         }
     }
 }

@@ -33,7 +33,7 @@ public class ChatUtil {
             ChatUtil.toSelf(player, TextUtil.formatObjective(team));
             ChatUtil.toSelf(player, "");
             String comment = ChatColor.ITALIC + team.getCatchPhrase();
-            player.sendTitle(TextUtil.formatGameTeam(team), comment, 5, 50, 15);
+            player.sendTitle(TextUtil.formatGameTeam(team), comment, 5, 100, 15);
             player.playSound(player.getLocation(), team.getSound(), 100, 1);
         });
     }

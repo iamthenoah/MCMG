@@ -3,7 +3,6 @@ package com.than00ber.mcmg.events;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameEngine;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.util.Console;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;

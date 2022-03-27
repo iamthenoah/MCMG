@@ -9,9 +9,8 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -41,15 +40,19 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (minigame.isInTeam(player, MiniGameTeams.PROPS)) {
-            boolean rightClicked = event.getAction().equals(Action.RIGHT_CLICK_BLOCK);
+        if (minigame.isInTeam(player, MiniGameTeams.PROPS) && !player.isSneaking()) {
+            Action action = event.getAction();
+            boolean rightClicked = action == Action.RIGHT_CLICK_BLOCK;
 
-            if (rightClicked && !player.isSneaking()) {
-                Material material = event.getClickedBlock().getType();
-                MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
-                DisguiseAPI.disguiseToAll(player, disguise);
-                event.setCancelled(true);
-            } else {
+            if (rightClicked) {
+                Block clickedBlock = event.getClickedBlock();
+
+                if (clickedBlock != null) {
+                    MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, clickedBlock.getType());
+                    DisguiseAPI.disguiseToAll(player, disguise);
+                    event.setCancelled(true);
+                }
+            } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
                 Supplier<Integer> delta = () -> new Random().nextInt(4) - 2;
                 Location loc = player.getLocation().add(delta.get(), delta.get(), delta.get());
                 minigame.getCurrentPlayerRoles().keySet().forEach(p -> p.playSound(loc, Sound.ENTITY_CAT_AMBIENT, 1, 1));
@@ -72,10 +75,9 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
     public void onEntityShootBow(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player player) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> {
-                boolean isRunning = Main.MINIGAME_ENGINE.hasRunningGame();
                 boolean hasArrow = player.getInventory().contains(MiniGameItems.HUNTERS_ARROWS.get());
 
-                if (isRunning && !hasArrow) {
+                if (Main.MINIGAME_ENGINE.hasRunningGame() && !hasArrow) {
                     player.getInventory().setItem(8, MiniGameItems.HUNTERS_ARROWS.get());
                 }
             }, 20 * 10);
@@ -84,9 +86,7 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
-        Entity entity = event.getHitEntity();
-
-        if (event.getHitEntity() != null && entity instanceof Player player) {
+        if (event.getHitEntity() instanceof Player player) {
 
             if (minigame.isInTeam(player, MiniGameTeams.PROPS)) {
                 player.setHealth(0);

@@ -39,10 +39,10 @@ public class AssignCommandExecutor extends PluginCommandExecutor {
                         .orElse(null);
 
                 if (found != null) {
-                    game.switchTeam(player, found);
-                    ChatUtil.toSelf(player, "You have been added to team " + TextUtil.formatGameTeam(found));
+                    game.addPlayer(player, found);
+                    ChatUtil.toAll(TextUtil.formatPlayer(player) + " is now in the " + TextUtil.formatGameTeam(found) + " team.");
                     ChatUtil.toSelf(player, TextUtil.formatObjective(found));
-                    return ActionResult.success(playerName + " is now in the " + teamName + " team.");
+                    return ActionResult.success();
                 }
                 return ActionResult.failure("Team '" + teamName + "' does not exist in game " + TextUtil.formatMiniGame(game));
             }

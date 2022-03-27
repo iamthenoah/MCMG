@@ -104,15 +104,16 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         team.prepare(player);
         addToScoreboardTeam(player, team);
         currentPlayerRoles.put(player, team);
-        if (!isParticipant(player)) {
-            originalPlayerRoles.put(player, team);
-        }
+    }
+
+    public final void addPlayer(Player player, MiniGameTeam team) {
+        originalPlayerRoles.put(player, team);
+        switchTeam(player, team);
     }
 
     public final void removePlayer(Player player) {
-        if (isParticipant(player)) {
-            originalPlayerRoles.remove(player);
-        }
+        originalPlayerRoles.remove(player);
+        currentPlayerRoles.remove(player);
     }
 
     private void addToScoreboardTeam(Player player, MiniGameTeam newMiniGameTeam) {
