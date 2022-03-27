@@ -1,6 +1,7 @@
 package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
+import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
@@ -181,7 +182,7 @@ public class MiniGameTeams {
 
     private static void setPropPlayer(Player player) {
         resetPlayer(player);
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(4);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(PropHuntMiniGame.PROPS_MAX_HEALTH.get());
         player.setInvisible(true);
         int i = new Random().nextInt(Material.values().length - 1);
         Material randomMaterial = Material.values()[i];
@@ -200,7 +201,7 @@ public class MiniGameTeams {
 
     private static void setHiderPlayer(Player player) {
         resetPlayer(player);
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(10);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HideNSeekMiniGame.HIDER_MAX_HEALTH.get());
         DisguiseType disguiseType = DisguiseType.getType(HideNSeekMiniGame.ENTITY_TYPE.get());
         Disguise disguise = disguiseType.isMob()
                 ? new MobDisguise(disguiseType)

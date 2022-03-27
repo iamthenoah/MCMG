@@ -20,11 +20,12 @@ public class PropHuntMiniGame extends MiniGame {
     public static final MiniGameProperty.BooleanProperty BLOCKS_ONLY = new MiniGameProperty.BooleanProperty("_blocks.solid", false);
     public static final MiniGameProperty.BooleanProperty NON_BLOCK_ONLY = new MiniGameProperty.BooleanProperty("_blocks.nonsolid", false);
     public static final MiniGameProperty.BooleanProperty PROPS_IN_WATER = new MiniGameProperty.BooleanProperty("blocks.inWater", false);
+    public static final MiniGameProperty.IntegerProperty PROPS_MAX_HEALTH = new MiniGameProperty.IntegerProperty("health.props", 4).validate(i -> i <= 40);
 
     public PropHuntMiniGame(Main instance, World world) {
         super(world);
         setEventListener(new PropHuntMiniGameEventListener(instance, this));
-        addProperties(BLOCKS_ONLY, NON_BLOCK_ONLY, PROPS_IN_WATER);
+        addProperties(BLOCKS_ONLY, NON_BLOCK_ONLY, PROPS_IN_WATER, PROPS_MAX_HEALTH);
     }
 
     @Override
