@@ -9,6 +9,7 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -48,7 +49,12 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
                 Block clickedBlock = event.getClickedBlock();
 
                 if (clickedBlock != null) {
-                    MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, clickedBlock.getType());
+                    Material material = clickedBlock.getType();
+
+                    if (!PropHuntMiniGame.ALLOW_BLOCKS.get() && !material.isBlock()) return;
+                    if (!PropHuntMiniGame.ALLOW_SPECIALS.get() && !material.isTransparent()) return;
+
+                    MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
                     DisguiseAPI.disguiseToAll(player, disguise);
                     event.setCancelled(true);
                 }
