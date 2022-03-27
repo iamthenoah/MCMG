@@ -86,8 +86,9 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
-        if (event.getHitEntity() instanceof Player player) {
-
+        if (event.getHitBlock() != null) {
+            event.getEntity().remove();
+        } else if (event.getHitEntity() instanceof Player player) {
             if (minigame.isInTeam(player, MiniGameTeams.PROPS)) {
                 player.setHealth(0);
             }
