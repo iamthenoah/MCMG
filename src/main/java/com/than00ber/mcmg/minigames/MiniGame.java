@@ -171,6 +171,8 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     @Override
     public void onMinigameStarted(List<Player> participants) {
         prepareWorld(false);
+        alive.clear();
+        dead.clear();
         assignRandomRoles(participants);
         ChatUtil.showRoundStartScreen(getParticipants());
         alive.keySet().forEach(this::sendToGameSpawn);
@@ -179,6 +181,8 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     @Override
     public void onMinigameEnded() {
         prepareWorld(true);
+        alive.clear();
+        dead.clear();
         getWorld().getPlayers().forEach(player -> {
             MiniGameTeams.resetPlayer(player);
             sendToGameSpawn(player);

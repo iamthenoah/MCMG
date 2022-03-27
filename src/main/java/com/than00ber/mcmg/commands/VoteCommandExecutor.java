@@ -1,10 +1,8 @@
 package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
-import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
