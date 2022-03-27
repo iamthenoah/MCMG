@@ -42,7 +42,7 @@ public class HideNSeekMiniGameEventListener extends MiniGameEventListener<HideNS
             if ((entity.getType() != HideNSeekMiniGame.ENTITY_TYPE.get())) return;
 
             MobDisguise disguise = new MobDisguise(DisguiseType.getType(entity));
-            disguise.setViewSelfDisguise(false);
+            disguise.setViewSelfDisguise(HideNSeekMiniGame.VIEW_DISGUISE.get());
             DisguiseAPI.disguiseToAll(player, disguise);
         }
     }

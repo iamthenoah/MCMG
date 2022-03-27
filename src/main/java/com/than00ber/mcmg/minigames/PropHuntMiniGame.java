@@ -19,13 +19,14 @@ public class PropHuntMiniGame extends MiniGame {
 
     public static final MiniGameProperty.BooleanProperty PROPS_IN_WATER = new MiniGameProperty.BooleanProperty("blocks.inWater", false);
     public static final MiniGameProperty.IntegerProperty PROPS_MAX_HEALTH = new MiniGameProperty.IntegerProperty("health.props", 4).validate(i -> i <= 40);
+    public static final MiniGameProperty.IntegerProperty ARROW_REPLENISH_COOLDOWN = new MiniGameProperty.IntegerProperty("replenish.seconds", 10).validate(i -> i <= Main.MINIGAME_ENGINE.getCurrentGame().getOptions().getDurationRound());
     public static final MiniGameProperty.BooleanProperty ALLOW_BLOCKS = new MiniGameProperty.BooleanProperty("allow.solids", true);
     public static final MiniGameProperty.BooleanProperty ALLOW_SPECIALS = new MiniGameProperty.BooleanProperty("allow.specials", true);
 
     public PropHuntMiniGame(Main instance, World world) {
         super(world);
         setEventListener(new PropHuntMiniGameEventListener(instance, this));
-        addProperties(PROPS_IN_WATER, PROPS_MAX_HEALTH, ALLOW_BLOCKS, ALLOW_SPECIALS);
+        addProperties(PROPS_IN_WATER, PROPS_MAX_HEALTH, ARROW_REPLENISH_COOLDOWN, ALLOW_BLOCKS, ALLOW_SPECIALS);
     }
 
     @Override

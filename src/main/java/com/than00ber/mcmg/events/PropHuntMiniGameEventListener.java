@@ -3,6 +3,7 @@ package com.than00ber.mcmg.events;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.init.MiniGameItems;
 import com.than00ber.mcmg.init.MiniGameTeams;
+import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -86,7 +87,7 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
                 if (Main.MINIGAME_ENGINE.hasRunningGame() && !hasArrow) {
                     player.getInventory().setItem(8, MiniGameItems.HUNTERS_ARROWS.get());
                 }
-            }, 20 * 10);
+            }, 20L * PropHuntMiniGame.ARROW_REPLENISH_COOLDOWN.get());
         }
     }
 
