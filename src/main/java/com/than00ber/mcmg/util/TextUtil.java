@@ -38,7 +38,7 @@ public class TextUtil {
     }
 
     public static String formatGameTeam(MiniGameTeam team) {
-        return team.getColor() + "" + ChatColor.BOLD + team.getDisplayName();
+        return team.getColor() + "" + ChatColor.BOLD + team.getDisplayName() + ChatColor.RESET;
     }
 
     public static String[] formatObjective(MiniGameTeam team) {
@@ -55,6 +55,6 @@ public class TextUtil {
     }
 
     public static String formatMiniGame(String name) {
-        return ChatColor.BLUE + name;
+        return ChatColor.BLUE + name + ChatColor.RESET;
     }
 }

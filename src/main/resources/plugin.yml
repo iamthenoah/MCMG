@@ -15,6 +15,10 @@ commands:
     description: Allows editing of all current minigame properties
     usage: /configs <Property> <Option?>
     permission: admin
+  vote:
+    description: Admins can initiate a vote for the current game
+    usage: /vote
+    permission: admin
   ready:
     description: Players can vote when they are ready to start a new minigame
     usage: /ready

@@ -5,6 +5,7 @@ import com.than00ber.mcmg.init.MiniGames;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import com.than00ber.mcmg.util.config.ConfigUtil;
 import org.bukkit.ChatColor;
@@ -60,10 +61,7 @@ public class MiniGameCommandExecutor extends PluginCommandExecutor {
             if (!result.isSuccessful()) return result;
             ConfigUtil.loadConfigs(instance, game);
 
-//            int duration = args.length == 3 ? Integer.parseInt(args[2]) : 30;
-//            VoteCommandExecutor.setVote(game, duration);
-
-            return ActionResult.success();
+            return ActionResult.info("Minigame set to " + TextUtil.formatMiniGame(game));
         }
         return ActionResult.failure("Minigame '" + args[1] + "' not found.");
     }
