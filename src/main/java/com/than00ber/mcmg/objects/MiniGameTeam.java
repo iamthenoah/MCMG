@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.objects;
 
 import com.than00ber.mcmg.util.config.Configurable;
-import com.than00ber.mcmg.util.config.GameProperty;
+import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -12,23 +12,23 @@ import java.util.function.Consumer;
 
 import static org.bukkit.scoreboard.Team.OptionStatus;
 
-public class GameTeam implements Configurable {
+public class MiniGameTeam implements Configurable {
 
-    private final GameProperty.StringProperty teamId;
-    private final GameProperty.StringProperty displayName;
-    private final GameProperty.DoubleProperty weight;
-    private final GameProperty.IntegerProperty threshold;
-    private final GameProperty.ChatColorProperty color;
-    private final GameProperty.EnumProperty<OptionStatus> visibility;
-    private final GameProperty.StringProperty catchPhrase;
-    private final GameProperty.StringProperty objective;
-    private final GameProperty.EnumProperty<Sound> sound;
-    private final GameProperty.BooleanProperty isSpectator;
-    private final GameProperty.BooleanProperty isRequired;
-    private final GameProperty.BooleanProperty disableWhileGrace;
+    private final MiniGameProperty.StringProperty teamId;
+    private final MiniGameProperty.StringProperty displayName;
+    private final MiniGameProperty.DoubleProperty weight;
+    private final MiniGameProperty.IntegerProperty threshold;
+    private final MiniGameProperty.ChatColorProperty color;
+    private final MiniGameProperty.EnumProperty<OptionStatus> visibility;
+    private final MiniGameProperty.StringProperty catchPhrase;
+    private final MiniGameProperty.StringProperty objective;
+    private final MiniGameProperty.EnumProperty<Sound> sound;
+    private final MiniGameProperty.BooleanProperty isSpectator;
+    private final MiniGameProperty.BooleanProperty isRequired;
+    private final MiniGameProperty.BooleanProperty disableWhileGrace;
     private final Consumer<Player> preparePlayer;
 
-    public GameTeam(
+    public MiniGameTeam(
             String teamId,
             String displayName,
             double weight,
@@ -43,18 +43,18 @@ public class GameTeam implements Configurable {
             boolean disableWhileGrace,
             Consumer<Player> preparePlayer
     ) {
-        this.teamId = new GameProperty.StringProperty(teamId + ".id", teamId);
-        this.displayName = new GameProperty.StringProperty(teamId + ".name", displayName);
-        this.weight = new GameProperty.DoubleProperty(teamId + ".weight", weight);
-        this.threshold = new GameProperty.IntegerProperty(teamId + ".threshold", threshold);
-        this.color = new GameProperty.ChatColorProperty(teamId + ".color", color);
-        this.visibility = new GameProperty.EnumProperty<>(teamId + ".visibility", OptionStatus.class, visibility);
-        this.catchPhrase = new GameProperty.StringProperty(teamId + ".phrase", catchPhrase);
-        this.objective = new GameProperty.StringProperty(teamId + ".objective", objective);
-        this.sound = new GameProperty.EnumProperty<>(teamId + ".sound", Sound.class, sound);
-        this.isSpectator = new GameProperty.BooleanProperty(teamId + ".spectator", isSpectator);
-        this.isRequired = new GameProperty.BooleanProperty(teamId + ".required", isRequired);
-        this.disableWhileGrace = new GameProperty.BooleanProperty(teamId + ".disableWhileGrace", disableWhileGrace);
+        this.teamId = new MiniGameProperty.StringProperty(teamId + ".id", teamId);
+        this.displayName = new MiniGameProperty.StringProperty(teamId + ".name", displayName);
+        this.weight = new MiniGameProperty.DoubleProperty(teamId + ".weight", weight);
+        this.threshold = new MiniGameProperty.IntegerProperty(teamId + ".threshold", threshold);
+        this.color = new MiniGameProperty.ChatColorProperty(teamId + ".color", color);
+        this.visibility = new MiniGameProperty.EnumProperty<>(teamId + ".visibility", OptionStatus.class, visibility);
+        this.catchPhrase = new MiniGameProperty.StringProperty(teamId + ".phrase", catchPhrase);
+        this.objective = new MiniGameProperty.StringProperty(teamId + ".objective", objective);
+        this.sound = new MiniGameProperty.EnumProperty<>(teamId + ".sound", Sound.class, sound);
+        this.isSpectator = new MiniGameProperty.BooleanProperty(teamId + ".spectator", isSpectator);
+        this.isRequired = new MiniGameProperty.BooleanProperty(teamId + ".required", isRequired);
+        this.disableWhileGrace = new MiniGameProperty.BooleanProperty(teamId + ".disableWhileGrace", disableWhileGrace);
         this.preparePlayer = preparePlayer;
     }
 
@@ -116,7 +116,7 @@ public class GameTeam implements Configurable {
     }
 
     @Override
-    public List<GameProperty<?>> getProperties() {
+    public List<MiniGameProperty<?>> getProperties() {
         return Arrays.asList(
                 teamId,
                 displayName,
@@ -222,8 +222,8 @@ public class GameTeam implements Configurable {
             return this;
         }
 
-        public GameTeam build() {
-            return new GameTeam(
+        public MiniGameTeam build() {
+            return new MiniGameTeam(
                     teamId,
                     displayName,
                     weight,

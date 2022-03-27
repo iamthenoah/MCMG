@@ -1,8 +1,8 @@
-package com.than00ber.mcmg.game.events;
+package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.minigames.HideNSeekGame;
-import com.than00ber.mcmg.init.GameTeams;
+import com.than00ber.mcmg.init.MiniGameTeams;
+import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
@@ -14,9 +14,9 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGame> {
+public class HideNSeekMiniGameEventListener extends MiniGameEventListener<HideNSeekMiniGame> {
 
-    public HideNSeekGameEventListener(Main instance, HideNSeekGame game) {
+    public HideNSeekMiniGameEventListener(Main instance, HideNSeekMiniGame game) {
         super(instance, game);
     }
 
@@ -24,11 +24,11 @@ public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGam
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (game.isInTeam(player, GameTeams.SEEKERS)) {
-            game.switchTeam(player, GameTeams.SPECTATORS);
+        if (minigame.isInTeam(player, MiniGameTeams.SEEKERS)) {
+            minigame.switchTeam(player, MiniGameTeams.SPECTATORS);
         } else {
-            game.switchTeam(player, GameTeams.SEEKERS);
-            game.sendToGameSpawn(player);
+            minigame.switchTeam(player, MiniGameTeams.SEEKERS);
+            minigame.sendToGameSpawn(player);
         }
     }
 
@@ -37,12 +37,12 @@ public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGam
         event.setCancelled(true);
         Player player = event.getPlayer();
 
-        if (game.isInTeam(player, GameTeams.HIDERS)) {
+        if (minigame.isInTeam(player, MiniGameTeams.HIDERS)) {
             Entity entity = event.getRightClicked();
-            if (entity instanceof Player) return;
+            if ((entity.getType() != HideNSeekMiniGame.ENTITY_TYPE.get())) return;
 
             MobDisguise disguise = new MobDisguise(DisguiseType.getType(entity));
-            disguise.setViewSelfDisguise(false);
+            disguise.setViewSelfDisguise(HideNSeekMiniGame.VIEW_DISGUISE.get());
             DisguiseAPI.disguiseToAll(player, disguise);
         }
     }
@@ -53,11 +53,11 @@ public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGam
 
         if (assaulter instanceof Player player) {
 
-            if (game.isInTeam(player, GameTeams.SEEKERS)) {
+            if (minigame.isInTeam(player, MiniGameTeams.SEEKERS)) {
                 Entity victim = event.getEntity();
 
                 if (!(victim instanceof Player)) {
-                    player.damage(game.getDamagePenalty());
+                    player.damage(HideNSeekMiniGame.DAMAGE_PENALTY.get());
                 }
             }
         }
@@ -69,7 +69,7 @@ public class HideNSeekGameEventListener extends PluginEventListener<HideNSeekGam
 
         if (entity instanceof Player player) {
 
-            if (game.isInTeam(player, GameTeams.SEEKERS)) {
+            if (minigame.isInTeam(player, MiniGameTeams.SEEKERS)) {
                 event.setCancelled(true);
             }
         }

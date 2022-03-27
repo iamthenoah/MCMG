@@ -1,59 +1,46 @@
-package com.than00ber.mcmg.game.minigames;
+package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.MiniGame;
-import com.than00ber.mcmg.game.MiniGameEvent;
-import com.than00ber.mcmg.game.events.WerewolfGameEventListener;
-import com.than00ber.mcmg.init.GameTeams;
+import com.than00ber.mcmg.MiniGameEvent;
+import com.than00ber.mcmg.events.WerewolfMiniGameEventListener;
+import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
-import com.than00ber.mcmg.util.config.GameProperty;
+import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
 
-public class WerewolfGame extends MiniGame {
+public class WerewolfMiniGame extends MiniGame {
 
-    private final GameProperty.IntegerProperty aggroDistance = new GameProperty.IntegerProperty("aggro.distance", 10).validate(d -> d > 0);
-    private final GameProperty.IntegerProperty zombieSpawnCount = new GameProperty.IntegerProperty("spawn.count", 5).validate(d -> d > 0);
-    private final GameProperty.BooleanProperty deathSkull = new GameProperty.BooleanProperty("death.skull", true);
+    public static final MiniGameProperty.IntegerProperty AGGRO_DISTANCE = new MiniGameProperty.IntegerProperty("aggro.distance", 10).validate(d -> d > 0);
+    public static final MiniGameProperty.IntegerProperty ZOMBIE_COUNT = new MiniGameProperty.IntegerProperty("zombie.count", 5).validate(d -> d > 0);
+    public static final MiniGameProperty.BooleanProperty DEATH_SKULL = new MiniGameProperty.BooleanProperty("death.skull", true);
 
     private boolean isDaytime;
 
-    public WerewolfGame(Main instance, World world) {
+    public WerewolfMiniGame(Main instance, World world) {
         super(world);
-        setEventListener(new WerewolfGameEventListener(instance, this));
-        addProperties(aggroDistance, zombieSpawnCount, deathSkull);
-    }
-
-    public int getAggroDistance() {
-        return aggroDistance.get();
-    }
-
-    public int getZombieSpawnCount() {
-        return zombieSpawnCount.get() + getParticipants().size();
-    }
-
-    public boolean doesShowDeathSkull() {
-        return deathSkull.get();
+        setEventListener(new WerewolfMiniGameEventListener(instance, this));
+        addProperties(AGGRO_DISTANCE, ZOMBIE_COUNT, DEATH_SKULL);
     }
 
     @Override
-    public String getGameName() {
+    public String getMiniGameName() {
         return "Werewolf";
     }
 
     @Override
-    public ImmutableList<GameTeam> getGameTeams() {
+    public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
-                GameTeams.VILLAGERS,
-                GameTeams.WEREWOLVES,
-                GameTeams.TRAITORS,
-                GameTeams.VAMPIRES,
-                GameTeams.POSSESSED
+                MiniGameTeams.VILLAGERS,
+                MiniGameTeams.WEREWOLVES,
+                MiniGameTeams.TRAITORS,
+                MiniGameTeams.VAMPIRES,
+                MiniGameTeams.POSSESSED
         );
     }
 

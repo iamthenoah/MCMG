@@ -1,36 +1,40 @@
 package com.than00ber.mcmg.init;
 
-import com.than00ber.mcmg.objects.GameItem;
+import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
+import com.than00ber.mcmg.objects.MiniGameItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class GameItems {
+public class MiniGameItems {
 
     /**
      * Werewolf Items
      */
-    public static final GameItem SURVIVORS_WEAPON = new GameItem.Builder(Material.WOODEN_HOE)
+    public static final MiniGameItem SURVIVORS_WEAPON = new MiniGameItem.Builder(Material.WOODEN_HOE)
             .setName("Survivor's weapon")
             .addTooltip(ChatColor.ITALIC + "Who said you can't trust hoes?")
             .unbreakable()
             .build();
-    public static final GameItem SURVIVORS_FOOD = new GameItem.Builder(Material.COOKED_SALMON)
+    public static final MiniGameItem SURVIVORS_FOOD = new MiniGameItem.Builder(Material.COOKED_SALMON)
             .setName("Survivor's Fish")
             .setBuyStackSize(5)
             .setCost(1)
             .build();
-    public static final GameItem LIQUID_SUGAR_POTION = new GameItem.Builder(Material.POTION)
+    public static final MiniGameItem LIQUID_SUGAR_POTION = new MiniGameItem.Builder(Material.POTION)
             .setName("Liquid Sugar")
             .addTooltip(
                     "Gives a 2s speed boost.",
@@ -44,7 +48,7 @@ public class GameItems {
                 meta.addCustomEffect(effect, false);
                 return meta;
             }).build();
-    public static final GameItem RULE_BOOK = new GameItem.Builder(Material.WRITTEN_BOOK)
+    public static final MiniGameItem RULE_BOOK = new MiniGameItem.Builder(Material.WRITTEN_BOOK)
             .setName(ChatColor.YELLOW + "WWRPG Rule Book")
             .setMeta(() -> {
                 List<String> pages = new ArrayList<>();
@@ -60,36 +64,44 @@ public class GameItems {
     /**
      * PropHunt Items
      */
-    public static final GameItem HUNTERS_SWORD = new GameItem.Builder(Material.IRON_SWORD)
+    public static final MiniGameItem HUNTERS_SWORD = new MiniGameItem.Builder(Material.IRON_SWORD)
             .setName(ChatColor.AQUA + "Hunter's Sword")
             .unbreakable()
             .build();
-    public static final GameItem HUNTERS_BOW = new GameItem.Builder(Material.BOW)
+    public static final MiniGameItem HUNTERS_BOW = new MiniGameItem.Builder(Material.BOW)
             .setName(ChatColor.AQUA + "Hunter's Bow")
-            .setMeta(() -> {
-                ItemMeta meta = new ItemStack(Material.BOW).getItemMeta();
-                meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
-                return meta;
-            })
             .unbreakable()
             .build();
-    public static final GameItem HUNTERS_ARROWS = new GameItem.Builder(Material.TIPPED_ARROW)
-            .setName(ChatColor.AQUA + "Hunter's Bow")
+    public static final MiniGameItem HUNTERS_ARROWS = new MiniGameItem.Builder(Material.ARROW)
+            .setName(ChatColor.AQUA + "Hunter's Arrow")
             .build();
-    public static final GameItem HUNTERS_COMPASS = new GameItem.Builder(Material.COMPASS)
+    public static final MiniGameItem HUNTERS_COMPASS = new MiniGameItem.Builder(Material.COMPASS)
             .setName(ChatColor.AQUA + "Revelation Compass")
-            .setMeta(() -> new ItemStack(Material.COMPASS).getItemMeta()) // TODO - Hunter's Compass
+            .setMeta(() -> {
+                CompassMeta meta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
+                if (Main.MINIGAME_ENGINE.hasRunningGame()) {
+                    if (Main.MINIGAME_ENGINE.getCurrentGame() instanceof HideNSeekMiniGame game) {
+                        List<Player> players = new ArrayList<>();
+                        game.getCurrentPlayerRoles().forEach((p, t) -> {
+                            if (t.equals(MiniGameTeams.PROPS)) players.add(p);
+                        });
+                        Location location = players.get(new Random().nextInt(players.size() - 1)).getLocation();
+                        meta.setLodestone(location);
+                    }
+                }
+                return meta;
+            })
             .addTooltip("Reveals the general direction of the closest props to you for a brief moment.")
             .build();
 
     /**
      * HideNSeek Items
      */
-    public static final GameItem SEEKERS_AXE = new GameItem.Builder(Material.GOLDEN_AXE)
+    public static final MiniGameItem SEEKERS_AXE = new MiniGameItem.Builder(Material.GOLDEN_AXE)
             .setName(ChatColor.YELLOW + "Seeker's Axe")
             .unbreakable()
             .build();
-    public static final GameItem SEEKERS_BOW = new GameItem.Builder(Material.BOW)
+    public static final MiniGameItem SEEKERS_BOW = new MiniGameItem.Builder(Material.BOW)
             .setName(ChatColor.YELLOW + "Seeker's Bow")
             .unbreakable()
             .build();

@@ -1,13 +1,13 @@
 package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.MiniGame;
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
-import com.than00ber.mcmg.util.ConfigUtil;
 import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import com.than00ber.mcmg.util.config.ConfigProperty;
-import com.than00ber.mcmg.util.config.GameProperty;
+import com.than00ber.mcmg.util.config.ConfigUtil;
+import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,15 +25,15 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
 
     @Override
     public ActionResult execute(@NotNull CommandSender sender, String[] args) {
-        if (!Main.GAME_ENGINE.hasIdleGame()) {
-            return ActionResult.warn("Cannot update config at the moment.");
+        if (Main.MINIGAME_ENGINE.hasRunningGame()) {
+            return ActionResult.warn("Cannot update config while game running.");
         }
 
         if (sender instanceof Player player) {
-            MiniGame game = Main.GAME_ENGINE.getCurrentGame();
-            String propertyName = game.getGameName() + "#" + args[0];
+            MiniGame game = Main.MINIGAME_ENGINE.getCurrentGame();
+            String propertyName = game.getMiniGameName() + "#" + args[0];
 
-            GameProperty<?> property = (GameProperty<?>) game.getProperties().stream()
+            MiniGameProperty<?> property = (MiniGameProperty<?>) game.getProperties().stream()
                     .filter(p -> Objects.equals(p.getPath(), args[0]))
                     .findAny().orElse(null);
 
@@ -80,8 +80,8 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
-        if (args.length == 0 && Main.GAME_ENGINE.hasIdleGame()) {
-            List<? extends ConfigProperty<?>> properties = Main.GAME_ENGINE.getCurrentGame().getProperties();
+        if (args.length == 0) {
+            List<? extends ConfigProperty<?>> properties = Main.MINIGAME_ENGINE.getCurrentGame().getProperties();
             return TextUtil.getMatching(new String[] {option}, properties, ConfigProperty::getPath);
         }
         return List.of();

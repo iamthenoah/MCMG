@@ -4,31 +4,34 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
-public class GameProperty<V> extends ConfigProperty<V> {
+public class MiniGameProperty<V> extends ConfigProperty<V> {
 
     private final BiFunction<Player, String[], V> parser;
     private Predicate<V> validator;
 
-    public GameProperty(String name, V defaultValue, BiFunction<Player, String[], V> parser, Predicate<V> validator) {
+    public MiniGameProperty(String name, V defaultValue, BiFunction<Player, String[], V> parser, Predicate<V> validator) {
         super(name, defaultValue);
         this.parser = parser;
         this.validator = validator;
     }
 
-    public GameProperty(String name, V defaultValue) {
+    public MiniGameProperty(String name, V defaultValue) {
         this(name, defaultValue, (p, a) -> (V) a[0], b -> true);
     }
 
-    public GameProperty(String name) {
+    public MiniGameProperty(String name) {
         this(name, null);
     }
 
-    public <P extends GameProperty<V>> P validate(Predicate<V> predicate) {
+    public <P extends MiniGameProperty<V>> P validate(Predicate<V> predicate) {
         validator = predicate;
         return (P) this;
     }
@@ -44,7 +47,7 @@ public class GameProperty<V> extends ConfigProperty<V> {
     /**
      * BooleanProperty
      */
-    public static class BooleanProperty extends GameProperty<Boolean> {
+    public static class BooleanProperty extends MiniGameProperty<Boolean> {
 
         public BooleanProperty(String name, Boolean defaultValue) {
             super(name, defaultValue, (p, a) -> Boolean.valueOf(a[0]), b -> true);
@@ -58,7 +61,7 @@ public class GameProperty<V> extends ConfigProperty<V> {
     /**
      * StringProperty
      */
-    public static class StringProperty extends GameProperty<String> {
+    public static class StringProperty extends MiniGameProperty<String> {
 
         public StringProperty(String name, String defaultValue) {
             super(name, defaultValue, (p, a) -> a[0], s -> true);
@@ -72,10 +75,10 @@ public class GameProperty<V> extends ConfigProperty<V> {
     /**
      * IntegerProperty
      */
-    public static class IntegerProperty extends GameProperty<Integer> {
+    public static class IntegerProperty extends MiniGameProperty<Integer> {
 
         public IntegerProperty(String name, Integer defaultValue) {
-            super(name, defaultValue, (p, a) -> Integer.parseInt(a[0]), s -> true);
+            super(name, defaultValue, (p, a) -> Integer.parseInt(a[0]), i -> true);
         }
 
         public IntegerProperty(String name) {
@@ -86,10 +89,10 @@ public class GameProperty<V> extends ConfigProperty<V> {
     /**
      * DoubleProperty
      */
-    public static class DoubleProperty extends GameProperty<Double> {
+    public static class DoubleProperty extends MiniGameProperty<Double> {
 
         public DoubleProperty(String name, Double defaultValue) {
-            super(name, defaultValue, (p, a) -> Double.parseDouble(a[0]), s -> true);
+            super(name, defaultValue, (p, a) -> Double.parseDouble(a[0]), d -> true);
         }
 
         public DoubleProperty(String name) {
@@ -100,7 +103,7 @@ public class GameProperty<V> extends ConfigProperty<V> {
     /**
      * EnumProperty
      */
-    public static class EnumProperty<E extends Enum<E>> extends GameProperty<E> {
+    public static class EnumProperty<E extends Enum<E>> extends MiniGameProperty<E> {
 
         private final Class<E> enumClass;
 
@@ -110,11 +113,11 @@ public class GameProperty<V> extends ConfigProperty<V> {
         }
 
         public EnumProperty(String name, Class<E> enumClass, E defaultValue) {
-            this(name, defaultValue, (p, a) -> E.valueOf(enumClass, a[0]),s -> true, enumClass);
+            this(name, defaultValue, (p, a) -> safeValueOf(enumClass, a[0]), Objects::nonNull, enumClass);
         }
 
         public EnumProperty(String name, Class<E> enumClass) {
-            this(name, null, (p, a) -> E.valueOf(enumClass, a[0]),s -> true, enumClass);
+            this(name, null, (p, a) -> safeValueOf(enumClass, a[0]), Objects::nonNull, enumClass);
         }
 
         @Override
@@ -136,10 +139,10 @@ public class GameProperty<V> extends ConfigProperty<V> {
     /**
      * LocationProperty
      */
-    public static class LocationProperty extends GameProperty<Location> {
+    public static class LocationProperty extends MiniGameProperty<Location> {
 
         public LocationProperty(String name, Location defaultValue) {
-            super(name, defaultValue, LocationProperty::toLocation, s -> true);
+            super(name, defaultValue, LocationProperty::toLocation, l -> true);
         }
 
         public LocationProperty(String name) {
@@ -164,14 +167,14 @@ public class GameProperty<V> extends ConfigProperty<V> {
     /**
      * ChatColorProperty
      */
-    public static class ChatColorProperty extends GameProperty<ChatColor> {
+    public static class ChatColorProperty extends MiniGameProperty<ChatColor> {
 
         private ChatColorProperty(String name, ChatColor defaultValue, BiFunction<Player, String[], ChatColor> parser, Predicate<ChatColor> validator) {
             super(name, defaultValue, parser, validator);
         }
 
         public ChatColorProperty(String name, ChatColor defaultValue) {
-            this(name, defaultValue, ChatColorProperty::toChatColor,s -> true);
+            this(name, defaultValue, ChatColorProperty::toChatColor, Objects::nonNull);
         }
 
         @Override
@@ -188,11 +191,19 @@ public class GameProperty<V> extends ConfigProperty<V> {
         }
 
         private static ChatColor toChatColor(Player player, String[] args) {
-            try {
-                return ChatColor.valueOf(args[0]);
-            } catch (Exception e) {
-                return null;
-            }
+            return safeValueOf(ChatColor.class, args[0]);
         }
+    }
+
+    public static <E extends Enum<E>> @Nullable E safeValueOf(Class<E> enumClass, String string) {
+        try {
+            return E.valueOf(enumClass, string);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static <E extends Enum<E>> E safeValueOf(Class<E> enumClass, String string, E defaultValue) {
+        return Optional.ofNullable(safeValueOf(enumClass, string)).orElse(defaultValue);
     }
 }

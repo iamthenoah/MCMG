@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class GameItem {
+public class MiniGameItem {
 
     private final Material material;
     private final String name;
@@ -24,15 +24,15 @@ public class GameItem {
 
     // trading data
     private final Predicate<Player> canBuy;
-    private final List<GameTeam> blacklisted;
+    private final List<MiniGameTeam> blacklisted;
     private final int count;
     private final int cost;
 
-    public GameItem(
+    public MiniGameItem(
             Material material,
             String name,
             List<String> tooltips,
-            List<GameTeam> blacklisted,
+            List<MiniGameTeam> blacklisted,
             int cost,
             boolean unbreakable,
             boolean glowing,
@@ -72,7 +72,7 @@ public class GameItem {
 
         private final Material material;
         private final List<String> tooltips;
-        private final List<GameTeam> blacklisted;
+        private final List<MiniGameTeam> blacklisted;
         private String name;
         private int cost;
         private boolean unbreakable;
@@ -123,7 +123,7 @@ public class GameItem {
             return this;
         }
 
-        public Builder addBlackListed(GameTeam team) {
+        public Builder addBlackListed(MiniGameTeam team) {
             blacklisted.add(team);
             return this;
         }
@@ -138,11 +138,11 @@ public class GameItem {
             return this;
         }
 
-        public GameItem build() {
+        public MiniGameItem build() {
             if (meta == null) {
                 meta = new ItemStack(material).getItemMeta();
             }
-            return new GameItem(
+            return new MiniGameItem(
                     material,
                     name,
                     tooltips,

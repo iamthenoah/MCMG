@@ -1,7 +1,10 @@
 package com.than00ber.mcmg.init;
 
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
+import com.than00ber.mcmg.minigames.PropHuntMiniGame;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
@@ -17,25 +20,22 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.Random;
 
-public class GameTeams {
+public class MiniGameTeams {
 
     /**
      * Common Teams
      */
-    public static final GameTeam SPECTATORS = new GameTeam.Builder("spectators")
+    public static final MiniGameTeam SPECTATORS = new MiniGameTeam.Builder("spectators")
             .setDisplayName("Spectator")
             .setColor(ChatColor.BLUE)
             .setSpectator()
-            .prepare(player -> {
-                resetPlayer(player);
-                player.setGameMode(GameMode.SPECTATOR);
-            })
+            .prepare(MiniGameTeams::setSpectatorPlayer)
             .build();
 
     /**
      * Werewolf Teams
      */
-    public static final GameTeam VILLAGERS = new GameTeam.Builder("villagers")
+    public static final MiniGameTeam VILLAGERS = new MiniGameTeam.Builder("villagers")
             .setDisplayName("Villager")
             .setWeight(0.75)
             .setThreshold(0)
@@ -44,9 +44,9 @@ public class GameTeams {
             .setObjective("Simple, eliminate all werewolves.")
             .setCatchPhrase("Get rid of all Werewolves.")
             .setSound(Sound.ENTITY_VILLAGER_AMBIENT)
-            .prepare(GameTeams::setWerewolfPlayer)
+            .prepare(MiniGameTeams::setWerewolfPlayer)
             .build();
-    public static final GameTeam WEREWOLVES = new GameTeam.Builder("werewolves")
+    public static final MiniGameTeam WEREWOLVES = new MiniGameTeam.Builder("werewolves")
             .setDisplayName("Werewolf")
             .setWeight(0.15)
             .setThreshold(0)
@@ -55,10 +55,10 @@ public class GameTeams {
             .setObjective("Kill all villagers to declare victory.")
             .setCatchPhrase("Shh, they shouldn't suspect a thing...")
             .setSound(Sound.ENTITY_WOLF_GROWL)
-            .prepare(GameTeams::setWerewolfPlayer)
+            .prepare(MiniGameTeams::setWerewolfPlayer)
             .isRequired()
             .build();
-    public static final GameTeam TRAITORS = new GameTeam.Builder("traitors")
+    public static final MiniGameTeam TRAITORS = new MiniGameTeam.Builder("traitors")
             .setDisplayName("Traitor")
             .setWeight(0.05)
             .setThreshold(4)
@@ -67,9 +67,9 @@ public class GameTeams {
             .setObjective("Help werewolves by killing all villagers.")
             .setCatchPhrase("I like villagers. But I prefer werewolves.")
             .setSound(Sound.ENTITY_PILLAGER_CELEBRATE)
-            .prepare(GameTeams::setWerewolfPlayer)
+            .prepare(MiniGameTeams::setWerewolfPlayer)
             .build();
-    public static final GameTeam VAMPIRES = new GameTeam.Builder("vampires")
+    public static final MiniGameTeam VAMPIRES = new MiniGameTeam.Builder("vampires")
             .setDisplayName("Vampire")
             .setWeight(0.05)
             .setThreshold(9)
@@ -78,9 +78,9 @@ public class GameTeams {
             .setObjective("Win if either Villagers or Werewolves win.")
             .setCatchPhrase("I'll do anything to win.")
             .setSound(Sound.ENTITY_BAT_AMBIENT)
-            .prepare(GameTeams::setWerewolfPlayer)
+            .prepare(MiniGameTeams::setWerewolfPlayer)
             .build();
-    public static final GameTeam POSSESSED = new GameTeam.Builder("possessed")
+    public static final MiniGameTeam POSSESSED = new MiniGameTeam.Builder("possessed")
             .setDisplayName("Villager")
             .setWeight(0.05)
             .setThreshold(9)
@@ -89,13 +89,13 @@ public class GameTeams {
             .setObjective("Simple, eliminate all werewolves.")
             .setCatchPhrase("Get rid of all Werewolves.")
             .setSound(Sound.ENTITY_VILLAGER_AMBIENT)
-            .prepare(GameTeams::setWerewolfPlayer)
+            .prepare(MiniGameTeams::setWerewolfPlayer)
             .build();
 
     /**
      * Prophunt Teams
      */
-    public static final GameTeam PROPS = new GameTeam.Builder("props")
+    public static final MiniGameTeam PROPS = new MiniGameTeam.Builder("props")
             .setDisplayName("Prop")
             .setWeight(0.75)
             .setColor(ChatColor.YELLOW)
@@ -103,9 +103,9 @@ public class GameTeams {
             .setObjective("Hide and survive for as long as possible.")
             .setCatchPhrase("I've always wanted to be a pot.")
             .setSound(Sound.ENTITY_ARMOR_STAND_PLACE)
-            .prepare(GameTeams::setPropPlayer)
+            .prepare(MiniGameTeams::setPropPlayer)
             .build();
-    public static final GameTeam HUNTERS = new GameTeam.Builder("hunters")
+    public static final MiniGameTeam HUNTERS = new MiniGameTeam.Builder("hunters")
             .setDisplayName("Hunter")
             .setWeight(0.25)
             .setColor(ChatColor.BLUE)
@@ -113,7 +113,7 @@ public class GameTeams {
             .setObjective("Find and eliminate all props.")
             .setCatchPhrase("Something's not right. I can feel it.")
             .setSound(Sound.BLOCK_ANVIL_LAND)
-            .prepare(GameTeams::setHunterPlayer)
+            .prepare(MiniGameTeams::setHunterPlayer)
             .isRequired()
             .disableWhileInGrace()
             .build();
@@ -121,7 +121,7 @@ public class GameTeams {
     /**
      * HideNSeek Teams
      */
-    public static final GameTeam HIDERS = new GameTeam.Builder("hiders")
+    public static final MiniGameTeam HIDERS = new MiniGameTeam.Builder("hiders")
             .setDisplayName("Hider")
             .setWeight(0.75)
             .setColor(ChatColor.DARK_GREEN)
@@ -129,9 +129,9 @@ public class GameTeams {
             .setObjective("Hide and survive for as long as possible.")
             .setCatchPhrase("I've always wanted to be a pot.")
             .setSound(Sound.ENTITY_ARMOR_STAND_PLACE)
-            .prepare(GameTeams::setHiderPlayer)
+            .prepare(MiniGameTeams::setHiderPlayer)
             .build();
-    public static final GameTeam SEEKERS = new GameTeam.Builder("seekers")
+    public static final MiniGameTeam SEEKERS = new MiniGameTeam.Builder("seekers")
             .setDisplayName("Seeker")
             .setWeight(0.25)
             .setColor(ChatColor.DARK_RED)
@@ -139,13 +139,13 @@ public class GameTeams {
             .setObjective("Find and eliminate all hiders.")
             .setCatchPhrase("Something's not right. I can feel it.")
             .setSound(Sound.BLOCK_ANVIL_LAND)
-            .prepare(GameTeams::setSeekerPlayer)
+            .prepare(MiniGameTeams::setSeekerPlayer)
             .isRequired()
             .disableWhileInGrace()
             .build();
 
     /**
-     * GameTeam Player Preparation Helper Methods
+     * MiniGameTeam Player Preparation Helper Methods
      */
     public static void resetPlayer(Player player) {
         player.setCollidable(true);
@@ -165,19 +165,24 @@ public class GameTeams {
         }
     }
 
+    private static void setSpectatorPlayer(Player player) {
+        resetPlayer(player);
+        player.setGameMode(GameMode.SPECTATOR);
+    }
+
     private static void setWerewolfPlayer(Player player) {
         resetPlayer(player);
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
         player.setHealth(40);
-        ItemStack hoe = GameItems.SURVIVORS_WEAPON.get();
-        ItemStack food = GameItems.SURVIVORS_FOOD.get();
+        ItemStack hoe = MiniGameItems.SURVIVORS_WEAPON.get();
+        ItemStack food = MiniGameItems.SURVIVORS_FOOD.get();
         food.setAmount(5);
         player.getInventory().addItem(hoe, food);
     }
 
     private static void setPropPlayer(Player player) {
         resetPlayer(player);
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(10);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(PropHuntMiniGame.PROPS_MAX_HEALTH.get());
         player.setInvisible(true);
         int i = new Random().nextInt(Material.values().length - 1);
         Material randomMaterial = Material.values()[i];
@@ -187,24 +192,27 @@ public class GameTeams {
 
     private static void setHunterPlayer(Player player) {
         resetPlayer(player);
-        ItemStack axe = GameItems.HUNTERS_SWORD.get();
-        ItemStack bow = GameItems.HUNTERS_BOW.get();
-        ItemStack arrow = GameItems.HUNTERS_ARROWS.get();
+        ItemStack axe = MiniGameItems.HUNTERS_SWORD.get();
+        ItemStack bow = MiniGameItems.HUNTERS_BOW.get();
+        ItemStack arrow = MiniGameItems.HUNTERS_ARROWS.get();
         player.getInventory().addItem(axe, bow);
         player.getInventory().setItem(8, arrow);
     }
 
     private static void setHiderPlayer(Player player) {
         resetPlayer(player);
-        MobDisguise disguise = new MobDisguise(DisguiseType.VILLAGER);
-        disguise.setViewSelfDisguise(false);
-        DisguiseAPI.disguiseToAll(player, disguise);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HideNSeekMiniGame.HIDER_MAX_HEALTH.get());
+        DisguiseType disguiseType = DisguiseType.getType(HideNSeekMiniGame.ENTITY_TYPE.get());
+        Disguise disguise = disguiseType.isMob()
+                ? new MobDisguise(disguiseType)
+                : new MiscDisguise(disguiseType);
+        DisguiseAPI.disguiseToAll(player, disguise.setViewSelfDisguise(HideNSeekMiniGame.VIEW_DISGUISE.get()));
     }
 
     private static void setSeekerPlayer(Player player) {
         resetPlayer(player);
-        ItemStack axe = GameItems.SEEKERS_AXE.get();
-        ItemStack bow = GameItems.SEEKERS_BOW.get();
+        ItemStack axe = MiniGameItems.SEEKERS_AXE.get();
+        ItemStack bow = MiniGameItems.SEEKERS_BOW.get();
         player.getInventory().addItem(axe, bow);
     }
 }

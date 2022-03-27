@@ -1,19 +1,24 @@
-package com.than00ber.mcmg.game;
+package com.than00ber.mcmg.minigames;
 
+import com.than00ber.mcmg.MiniGameEvent;
 import com.than00ber.mcmg.objects.WinCondition;
+import org.bukkit.entity.Player;
 
-public interface GameLifeCycle {
+import java.util.List;
+
+public interface MiniGameLifeCycle {
     /**
-     * Called when the game has started.
+     * Called when the minigame has started.
      * Usually to set the environment.
+     * @param participants Participating players.
      */
-    void onGameStarted();
+    void onMinigameStarted(List<Player> participants);
 
     /**
-     * Called when the game has ended.
+     * Called when the minigame has ended.
      * Usually to reset the environment.
      */
-    void onGameEnded();
+    void onMinigameEnded();
 
     /**
      * Called when a round begins.

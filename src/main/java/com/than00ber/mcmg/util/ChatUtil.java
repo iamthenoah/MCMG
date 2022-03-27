@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.util;
 
 import com.google.common.collect.ImmutableMap;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,24 +27,24 @@ public class ChatUtil {
         }
     }
 
-    public static void showRoundStartScreen(ImmutableMap<Player, GameTeam> players) {
+    public static void showRoundStartScreen(ImmutableMap<Player, MiniGameTeam> players) {
         players.forEach((player, team) -> {
             ChatUtil.toSelf(player, "");
             ChatUtil.toSelf(player, TextUtil.formatObjective(team));
             ChatUtil.toSelf(player, "");
             String comment = ChatColor.ITALIC + team.getCatchPhrase();
-            player.sendTitle(TextUtil.formatGameTeam(team), comment, 5, 50, 15);
+            player.sendTitle(TextUtil.formatGameTeam(team), comment, 5, 100, 15);
             player.playSound(player.getLocation(), team.getSound(), 100, 1);
         });
     }
 
-    public static void showRoundEndScreen(ImmutableMap<Player, GameTeam> players, List<GameTeam> teams, WinCondition<?> condition) {
+    public static void showRoundEndScreen(ImmutableMap<Player, MiniGameTeam> players, List<MiniGameTeam> teams, WinCondition<?> condition) {
         players.forEach((player, role) -> {
             // scoreboard
             ChatUtil.toSelf(player, ChatColor.YELLOW + " ---------- Scoreboard ----------");
             ChatUtil.toSelf(player, "");
-            for (GameTeam team : teams) {
-                Map<Player, GameTeam> filtered = players.entrySet().stream()
+            for (MiniGameTeam team : teams) {
+                Map<Player, MiniGameTeam> filtered = players.entrySet().stream()
                         .filter(entry -> entry.getValue().equals(team))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
@@ -65,9 +65,7 @@ public class ChatUtil {
             String title = condition.getTitleFor(role);
             String sub = condition.getSubTitleFor(role);
             player.sendTitle(ChatColor.BOLD + title, sub,5, 100, 30);
-            Sound sound = won
-                    ? Sound.UI_TOAST_CHALLENGE_COMPLETE
-                    : Sound.ENTITY_CHICKEN_HURT;
+            Sound sound = won ? Sound.UI_TOAST_CHALLENGE_COMPLETE : Sound.ENTITY_CHICKEN_HURT;
 
             player.playSound(player.getLocation(), sound, 100, 1);
         });

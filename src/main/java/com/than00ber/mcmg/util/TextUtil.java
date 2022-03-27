@@ -1,8 +1,10 @@
 package com.than00ber.mcmg.util;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.objects.GameTeam;
+import com.than00ber.mcmg.minigames.MiniGame;
+import com.than00ber.mcmg.objects.MiniGameTeam;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -15,11 +17,11 @@ public class TextUtil {
         return ChatColor.GRAY + "[" + Main.PLUGIN_ID + "] " + ChatColor.RESET + message;
     }
 
-    public static  <T> List<String> getMatching(String[] args, List<T> list) {
+    public static <T> List<String> getMatching(String[] args, List<T> list) {
         return getMatching(args, list, s -> (String) s);
     }
 
-    public static  <T> List<String> getMatching(String[] args, List<T> list, Function<T, String> function) {
+    public static <T> List<String> getMatching(String[] args, List<T> list, Function<T, String> function) {
         if (args.length == 0) return list.stream().map(function).toList();
         String last = args[args.length - 1];
         ArrayList<String> matching = new ArrayList<>();
@@ -36,16 +38,28 @@ public class TextUtil {
         return matching;
     }
 
-    public static String formatGameTeam(GameTeam team) {
-        return team.getColor() + "" + ChatColor.BOLD + team.getDisplayName();
+    public static String formatPlayer(Player player) {
+        return ChatColor.AQUA + player.getDisplayName() + ChatColor.RESET;
     }
 
-    public static String[] formatObjective(GameTeam team) {
+    public static String formatGameTeam(MiniGameTeam team) {
+        return team.getColor() + "" + ChatColor.BOLD + team.getDisplayName() + ChatColor.RESET;
+    }
+
+    public static String[] formatObjective(MiniGameTeam team) {
         List<String> info = new ArrayList<>();
         info.add("> " + formatGameTeam(team));
         if (team.getObjective() != null) {
             info.add("\u0020\u0020Objective: " + team.getColor() + team.getObjective());
         }
         return info.toArray(new String[0]);
+    }
+
+    public static String formatMiniGame(MiniGame minigame) {
+        return formatMiniGame(minigame.getMiniGameName());
+    }
+
+    public static String formatMiniGame(String name) {
+        return ChatColor.BLUE + name + ChatColor.RESET;
     }
 }
