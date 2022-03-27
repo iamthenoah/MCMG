@@ -29,9 +29,11 @@ public class MiniGameEngine<G extends MiniGame> {
     private G minigame;
     private Supplier<MiniGameHandler> handlerSupplier;
     private MiniGameHandler currentHandler;
+    private MiniGameRoundState roundState;
 
     public MiniGameEngine(Main instance) {
         this.instance = instance;
+        roundState = MiniGameRoundState.NOT_RUNNING;
     }
 
     public G getCurrentGame() {
@@ -44,6 +46,10 @@ public class MiniGameEngine<G extends MiniGame> {
 
     public boolean hasRunningGame() {
         return currentHandler != null;
+    }
+
+    public MiniGameRoundState getRoundState() {
+        return roundState;
     }
 
     public ActionResult mount(G nextGame) {
@@ -61,6 +67,7 @@ public class MiniGameEngine<G extends MiniGame> {
 
             @Override
             public void onActivate() {
+                roundState = MiniGameRoundState.GRACE;
                 countdownGrace = minigame.getOptions().getDurationGrace();
                 countdownRound = minigame.getOptions().getDurationRound();
                 BossBar bar = Bukkit.createBossBar(null, BarColor.WHITE, BarStyle.SEGMENTED_10);
@@ -70,6 +77,7 @@ public class MiniGameEngine<G extends MiniGame> {
 
             @Override
             public void onDeactivate() {
+                roundState = MiniGameRoundState.NOT_RUNNING;
                 event.getBossBar().removeAll();
             }
 
@@ -97,6 +105,10 @@ public class MiniGameEngine<G extends MiniGame> {
                         }
                     }
                 } else {
+                    if (roundState != MiniGameRoundState.ONGOING) {
+                        roundState = MiniGameRoundState.ONGOING;
+                    }
+
                     WinCondition<?> condition =  minigame.getWinConditions().stream()
                             .filter(c -> c.check(minigame)).findAny().orElse(null);
 
@@ -263,5 +275,9 @@ public class MiniGameEngine<G extends MiniGame> {
         Integer getDurationGrace();
 
         Integer getDurationRound();
+    }
+
+    public enum MiniGameRoundState {
+        NOT_RUNNING, GRACE, ONGOING
     }
 }
