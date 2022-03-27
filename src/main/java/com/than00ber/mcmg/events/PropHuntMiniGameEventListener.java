@@ -51,8 +51,8 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
                 if (clickedBlock != null) {
                     Material material = clickedBlock.getType();
 
-                    if (!PropHuntMiniGame.ALLOW_BLOCKS.get() && !material.isBlock()) return;
-                    if (!PropHuntMiniGame.ALLOW_SPECIALS.get() && !material.isTransparent()) return;
+                    if (!PropHuntMiniGame.ALLOW_BLOCKS.get() && material.isBlock()) return;
+                    if (!PropHuntMiniGame.ALLOW_SPECIALS.get() && material.isTransparent()) return;
 
                     MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
                     DisguiseAPI.disguiseToAll(player, disguise);
