@@ -6,6 +6,7 @@ import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ActionResult;
+import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
@@ -27,11 +28,9 @@ public class MiniGameEngine<G extends MiniGame> {
     private G minigame;
     private Supplier<MiniGameHandler> handlerSupplier;
     private MiniGameHandler currentHandler;
-    private GameState gameState;
 
     public MiniGameEngine(Main instance) {
         this.instance = instance;
-        gameState = GameState.EMPTY;
     }
 
     public G getCurrentGame() {
@@ -42,18 +41,12 @@ public class MiniGameEngine<G extends MiniGame> {
         return minigame != null;
     }
 
-    public boolean hasIdleGame() {
-        return gameState.equals(GameState.IDLE);
-    }
-
     public boolean hasRunningGame() {
-        return gameState.equals(GameState.ONGOING);
+        return currentHandler != null;
     }
 
     public ActionResult mount(G nextGame) {
-        if (hasRunningGame()) {
-            return ActionResult.failure("Cannot mount a minigame while a minigame is running");
-        }
+        if (hasRunningGame()) return ActionResult.failure("A minigame is still running.");
 
         if (minigame != null && minigame.hasEventListener()) {
             minigame.getEventListener().unregister();
@@ -130,86 +123,66 @@ public class MiniGameEngine<G extends MiniGame> {
         };
 
         minigame = nextGame;
-        gameState = GameState.IDLE;
         return ActionResult.success();
     }
 
     public ActionResult startMiniGame(List<Player> participants, @Nullable String message) {
-        ActionResult invalid = validateOptions(participants);
+        ActionResult invalid = checkCanStart(participants);
         if (!invalid.isSuccessful()) return invalid;
 
         minigame.getWorld().getWorldBorder().setSize(minigame.getOptions().getPlaygroundRadius());
         minigame.getWorld().getWorldBorder().setCenter(minigame.getOptions().getPlaygroundSpawn());
 
         unregisterTeams();
-        registerTeams();
+        registerTeams(minigame);
         minigame.onMinigameStarted(participants);
         Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEventListener::register);
         for (Player player : minigame.getWorld().getPlayers()) {
-            if (!participants.contains(player)) MiniGameTeams.SPECTATORS.prepare(player);
+
+            if (!participants.contains(player)) {
+                MiniGameTeams.SPECTATORS.prepare(player);
+                String s = TextUtil.formatMiniGame(minigame) + ChatColor.GOLD;
+                ChatUtil.toSelf(player, s + " minigame started and you were not ready.");
+            }
         }
 
         currentHandler = handlerSupplier.get();
         currentHandler.activate();
 
-        gameState = GameState.ONGOING;
         return ActionResult.success(message);
     }
 
     public ActionResult endMiniGame(@Nullable String reason) {
-        if (currentHandler == null || minigame == null) {
-            return ActionResult.warn("No minigame is currently running.");
-        }
+        if (!hasGame()) return ActionResult.warn("No minigame is currently running.");
 
         minigame.getWorld().getWorldBorder().reset();
-
         minigame.onMinigameEnded();
+        currentHandler.deactivate();
+        currentHandler = null;
+
         unregisterTeams();
         Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEventListener::unregister);
 
-        currentHandler.deactivate();
-        currentHandler = null;
-        handlerSupplier = null;
-        minigame = null;
-
-        gameState = GameState.EMPTY;
         return ActionResult.success(reason);
     }
 
     public ActionResult restartMiniGame(@Nullable String reason) {
-        currentHandler.deactivate();
+        if (!hasGame()) return ActionResult.warn("No minigame is currently running.");
+
+        minigame.onMinigameEnded();
+        Optional.ofNullable(currentHandler).ifPresent(MiniGameHandler::deactivate);
+
         ActionResult startResult = startMiniGame(minigame.getParticipants().keySet().asList(), null);
         return !startResult.isSuccessful() ? startResult : ActionResult.success(reason);
     }
 
-    private void registerTeams() {
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-
-        if (manager != null) {
-            Scoreboard scoreboard = manager.getMainScoreboard();
-
-            for (MiniGameTeam miniGameTeam : minigame.getMiniGameTeams()) {
-                Team team = scoreboard.registerNewTeam(miniGameTeam.getTeamId());
-                team.setOption(Team.Option.NAME_TAG_VISIBILITY, miniGameTeam.getVisibility());
-            }
-        }
-    }
-
-    private void unregisterTeams() {
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-        if (manager != null) {
-            Scoreboard scoreboard = manager.getMainScoreboard();
-            scoreboard.getTeams().forEach(Team::unregister);
-        }
-    }
-
-    private ActionResult validateOptions(List<Player> participants) {
-        if (minigame == null) {
+    private ActionResult checkCanStart(List<Player> participants) {
+        if (!hasGame()) {
             return ActionResult.warn("No minigame is set.");
         }
         String name = TextUtil.formatMiniGame(minigame);
-        if (currentHandler != null) {
-            return ActionResult.warn("A minigame of " + name + " is already running.");
+        if (hasRunningGame()) {
+            return ActionResult.warn("A minigame of " + name + ChatColor.GOLD + " is already running.");
         }
         if (minigame.getOptions().getPlaygroundSpawn() == null) {
             return ActionResult.warn("No playground spawn set for minigame " + name);
@@ -225,10 +198,33 @@ public class MiniGameEngine<G extends MiniGame> {
         return ActionResult.success();
     }
 
+    private static void registerTeams(MiniGame game) {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+
+        if (manager != null) {
+            Scoreboard scoreboard = manager.getMainScoreboard();
+
+            for (MiniGameTeam miniGameTeam : game.getMiniGameTeams()) {
+                Team team = scoreboard.registerNewTeam(miniGameTeam.getTeamId());
+                team.setOption(Team.Option.NAME_TAG_VISIBILITY, miniGameTeam.getVisibility());
+            }
+        }
+    }
+
+    private static void unregisterTeams() {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+
+        if (manager != null) {
+            Scoreboard scoreboard = manager.getMainScoreboard();
+            scoreboard.getTeams().forEach(Team::unregister);
+        }
+    }
+
     private abstract static class MiniGameHandler implements Runnable {
 
         private final Main instance;
         private int id;
+//        private boolean isRunning;
 
         protected MiniGameHandler(Main instance) {
             this.instance = instance;
@@ -250,10 +246,6 @@ public class MiniGameEngine<G extends MiniGame> {
         public abstract void onActivate();
 
         public abstract void onDeactivate();
-    }
-
-    public enum GameState {
-        IDLE, ONGOING, EMPTY
     }
 
     public interface Options {
