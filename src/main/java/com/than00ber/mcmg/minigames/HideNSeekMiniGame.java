@@ -96,7 +96,6 @@ public class HideNSeekMiniGame extends MiniGame {
                 /**/ int professionIndex = new Random().nextInt(4);
                 /**/ String l = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
                 /**/ String cmd = "/summon minecraft:villager " + l + " {Profession:-" + professionIndex + "}";
-                System.out.println(cmd);
                 /**/ Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
                 /* END - ugly code */
             } else {

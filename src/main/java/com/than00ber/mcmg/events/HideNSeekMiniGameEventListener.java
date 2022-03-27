@@ -39,7 +39,7 @@ public class HideNSeekMiniGameEventListener extends MiniGameEventListener<HideNS
 
         if (minigame.isInTeam(player, MiniGameTeams.HIDERS)) {
             Entity entity = event.getRightClicked();
-            if (entity instanceof Player) return;
+            if ((entity.getType() != HideNSeekMiniGame.ENTITY_TYPE.get())) return;
 
             MobDisguise disguise = new MobDisguise(DisguiseType.getType(entity));
             disguise.setViewSelfDisguise(false);

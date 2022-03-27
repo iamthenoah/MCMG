@@ -174,7 +174,9 @@ public class MiniGameEngine<G extends MiniGame> {
 
         minigame.onMinigameEnded();
         Optional.ofNullable(currentHandler).ifPresent(MiniGameHandler::deactivate);
+        currentHandler = null;
 
+        if (participants == null) participants = Main.WORLD.getPlayers();
         ActionResult startResult = startMiniGame(participants, null);
         return !startResult.isSuccessful() ? startResult : ActionResult.success(reason);
     }

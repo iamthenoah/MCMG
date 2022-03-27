@@ -16,11 +16,11 @@ public class TextUtil {
         return ChatColor.GRAY + "[" + Main.PLUGIN_ID + "] " + ChatColor.RESET + message;
     }
 
-    public static  <T> List<String> getMatching(String[] args, List<T> list) {
+    public static <T> List<String> getMatching(String[] args, List<T> list) {
         return getMatching(args, list, s -> (String) s);
     }
 
-    public static  <T> List<String> getMatching(String[] args, List<T> list, Function<T, String> function) {
+    public static <T> List<String> getMatching(String[] args, List<T> list, Function<T, String> function) {
         if (args.length == 0) return list.stream().map(function).toList();
         String last = args[args.length - 1];
         ArrayList<String> matching = new ArrayList<>();

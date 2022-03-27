@@ -116,16 +116,21 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     }
 
     private void addToScoreboardTeam(Player player, MiniGameTeam newMiniGameTeam) {
-        MiniGameTeam currentMiniGameTeam = getCurrentPlayerRoles().get(player);
+        MiniGameTeam previousMiniGameTeam = getCurrentPlayerRoles().get(player);
+        if (previousMiniGameTeam == null) previousMiniGameTeam = MiniGameTeams.SPECTATORS;
         ScoreboardManager manager = Bukkit.getScoreboardManager();
 
         if (manager != null) {
             Scoreboard scoreboard = manager.getMainScoreboard();
-            Team currentTeam = scoreboard.getTeam(currentMiniGameTeam.getTeamId());
+            Team currentTeam = scoreboard.getTeam(previousMiniGameTeam.getTeamId());
             Team newTeam = scoreboard.getTeam(newMiniGameTeam.getTeamId());
 
-            if (currentTeam == null) Console.warn("Current player team not registered " + currentMiniGameTeam.getDisplayName());
-            if (newTeam == null) Console.warn("New player team not registered " + newMiniGameTeam.getDisplayName());
+            if (currentTeam == null) {
+                Console.warn("Current player team not registered " + previousMiniGameTeam.getDisplayName());
+            }
+            if (newTeam == null) {
+                Console.warn("New player team not registered " + newMiniGameTeam.getDisplayName());
+            }
             if (currentTeam == null || newTeam == null) return;
 
             if (currentTeam.hasEntry(player.getDisplayName())) {

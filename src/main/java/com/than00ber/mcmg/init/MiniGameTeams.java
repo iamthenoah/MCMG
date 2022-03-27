@@ -200,6 +200,7 @@ public class MiniGameTeams {
 
     private static void setHiderPlayer(Player player) {
         resetPlayer(player);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(10);
         DisguiseType disguiseType = DisguiseType.getType(HideNSeekMiniGame.ENTITY_TYPE.get());
         Disguise disguise = disguiseType.isMob()
                 ? new MobDisguise(disguiseType)
