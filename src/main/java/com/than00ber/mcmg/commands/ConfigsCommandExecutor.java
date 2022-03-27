@@ -25,7 +25,7 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
 
     @Override
     public ActionResult execute(@NotNull CommandSender sender, String[] args) {
-        if (!Main.MINIGAME_ENGINE.hasRunningGame()) {
+        if (Main.MINIGAME_ENGINE.hasRunningGame()) {
             return ActionResult.warn("Cannot update config while game running.");
         }
 
