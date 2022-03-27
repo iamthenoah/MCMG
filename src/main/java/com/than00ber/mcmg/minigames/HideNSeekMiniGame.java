@@ -25,7 +25,7 @@ public class HideNSeekMiniGame extends MiniGame {
 
     public static final MiniGameProperty.DoubleProperty DAMAGE_PENALTY = new MiniGameProperty.DoubleProperty("damage.penalty", .5).validate(d -> d <= 40);
     public static final MiniGameProperty.EnumProperty<EntityType> ENTITY_TYPE = new MiniGameProperty.EnumProperty<>("entity.type", EntityType.class, EntityType.VILLAGER);
-    public static final MiniGameProperty.BooleanProperty HIDE_DISGUISE = new MiniGameProperty.BooleanProperty("hide.disguise", true);
+    public static final MiniGameProperty.BooleanProperty VIEW_DISGUISE = new MiniGameProperty.BooleanProperty("view.disguise", true);
     public static final MiniGameProperty.IntegerProperty HIDER_MAX_HEALTH = new MiniGameProperty.IntegerProperty("health.hiders", 10).validate(i -> i <= 40);
 
     private final List<Entity> entities;
@@ -33,7 +33,7 @@ public class HideNSeekMiniGame extends MiniGame {
     public HideNSeekMiniGame(Main instance, World world) {
         super(world);
         setEventListener(new HideNSeekMiniGameEventListener(instance, this));
-        addProperties(DAMAGE_PENALTY, ENTITY_TYPE, HIDE_DISGUISE, HIDER_MAX_HEALTH);
+        addProperties(DAMAGE_PENALTY, ENTITY_TYPE, VIEW_DISGUISE, HIDER_MAX_HEALTH);
         entities = new ArrayList<>();
     }
 
