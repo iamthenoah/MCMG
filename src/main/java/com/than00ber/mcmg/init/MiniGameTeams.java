@@ -206,7 +206,7 @@ public class MiniGameTeams {
         Disguise disguise = disguiseType.isMob()
                 ? new MobDisguise(disguiseType)
                 : new MiscDisguise(disguiseType);
-        DisguiseAPI.disguiseToAll(player, disguise.setViewSelfDisguise(HideNSeekMiniGame.HIDE_DISGUISE.get()));
+        DisguiseAPI.disguiseToAll(player, disguise.setViewSelfDisguise(HideNSeekMiniGame.VIEW_DISGUISE.get()));
     }
 
     private static void setSeekerPlayer(Player player) {
