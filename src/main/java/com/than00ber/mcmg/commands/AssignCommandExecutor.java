@@ -24,7 +24,7 @@ public class AssignCommandExecutor extends PluginCommandExecutor {
 
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
-        if (Main.MINIGAME_ENGINE.hasGame()) {
+        if (Main.MINIGAME_ENGINE.hasRunningGame()) {
             MiniGame game = Main.MINIGAME_ENGINE.getCurrentGame();
             String playerName = args[0];
 
@@ -48,12 +48,12 @@ public class AssignCommandExecutor extends PluginCommandExecutor {
             }
             return ActionResult.failure("Could not find player " + playerName);
         }
-        return ActionResult.warn("No minigame currently selected");
+        return ActionResult.warn("No game currently running.");
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
-        if (Main.MINIGAME_ENGINE.hasGame() && args.length == 1) {
+        if (Main.MINIGAME_ENGINE.hasRunningGame() && args.length == 1) {
             ImmutableList<MiniGameTeam> teams = Main.MINIGAME_ENGINE.getCurrentGame().getMiniGameTeams();
             return teams.stream().map(MiniGameTeam::getDisplayName).toList();
         }
