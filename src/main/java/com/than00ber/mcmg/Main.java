@@ -1,13 +1,9 @@
 package com.than00ber.mcmg;
 
-import com.than00ber.mcmg.commands.AssignCommandExecutor;
-import com.than00ber.mcmg.commands.ConfigsCommandExecutor;
-import com.than00ber.mcmg.commands.GameCommandExecutor;
-import com.than00ber.mcmg.commands.ReadyCommandExecutor;
+import com.than00ber.mcmg.commands.*;
 import com.than00ber.mcmg.events.GlobalEventListener;
-import com.than00ber.mcmg.game.GameEngine;
-import com.than00ber.mcmg.game.MiniGame;
-import com.than00ber.mcmg.util.ConfigUtil;
+import com.than00ber.mcmg.minigames.MiniGame;
+import com.than00ber.mcmg.util.config.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin {
 
     public static final String PLUGIN_ID = "MCMG";
-    public static GameEngine<MiniGame> GAME_ENGINE;
+    public static MiniGameEngine<MiniGame> MINIGAME_ENGINE;
     public static Main INSTANCE;
     public static World WORLD;
 
@@ -25,23 +21,24 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         WORLD = Bukkit.getWorlds().get(0);
-        GAME_ENGINE = new GameEngine<>(this);
+        MINIGAME_ENGINE = new MiniGameEngine<>(this);
 
         Bukkit.getPluginManager().registerEvents(new GlobalEventListener(), this);
 
-        new GameCommandExecutor(this, WORLD);
+        new MiniGameCommandExecutor(this, WORLD);
         new ConfigsCommandExecutor(this, WORLD);
         new ReadyCommandExecutor(this, WORLD);
+        new VoteCommandExecutor(this, WORLD);
         new AssignCommandExecutor(this, WORLD);
     }
 
     @Override
     public void onDisable() {
-        if (GAME_ENGINE != null && GAME_ENGINE.hasGame()) {
-            ConfigUtil.saveConfigs(this, GAME_ENGINE.getCurrentGame());
+        if (MINIGAME_ENGINE != null && MINIGAME_ENGINE.hasGame()) {
+            ConfigUtil.saveConfigs(this, MINIGAME_ENGINE.getCurrentGame());
 
-            if (GAME_ENGINE.hasRunningGame()) {
-                GAME_ENGINE.endGame("Game ending caused by plugin disabling.");
+            if (MINIGAME_ENGINE.hasRunningGame()) {
+                MINIGAME_ENGINE.endMiniGame("Minigame ending caused by plugin disabling.");
             }
         }
     }

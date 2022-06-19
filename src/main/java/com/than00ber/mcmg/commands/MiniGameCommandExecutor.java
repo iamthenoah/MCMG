@@ -1,13 +1,12 @@
 package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.game.MiniGame;
 import com.than00ber.mcmg.init.MiniGames;
+import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
-import com.than00ber.mcmg.util.ConfigUtil;
 import com.than00ber.mcmg.util.TextUtil;
-import org.bukkit.Bukkit;
+import com.than00ber.mcmg.util.config.ConfigUtil;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -17,19 +16,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class GameCommandExecutor extends PluginCommandExecutor {
+public class MiniGameCommandExecutor extends PluginCommandExecutor {
 
-    public GameCommandExecutor(Main instance, World world) {
-        super("game", instance, world);
+    public MiniGameCommandExecutor(Main instance, World world) {
+        super("minigame", instance, world);
     }
 
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
         ActionResult result = switch (args[0]) {
             case "play"     -> handleGameMount(args);
-            case "start"    -> Main.GAME_ENGINE.startGame(getReason(sender, args, "started"));
-            case "end"      -> Main.GAME_ENGINE.endGame(getReason(sender, args, "ended"));
-            case "restart"  -> Main.GAME_ENGINE.restartGame(getReason(sender, args, "restarted"));
+            case "start"    -> Main.MINIGAME_ENGINE.startMiniGame(Main.WORLD.getPlayers(), getReason(sender, args, "started"));
+            case "end"      -> Main.MINIGAME_ENGINE.endMiniGame(getReason(sender, args, "ended"));
+            case "restart"  -> Main.MINIGAME_ENGINE.restartMiniGame(getReason(sender, args, "restarted"));
             default         -> PluginCommandExecutor.INVALID_COMMAND;
         };
 
@@ -49,28 +48,24 @@ public class GameCommandExecutor extends PluginCommandExecutor {
     }
 
     private ActionResult handleGameMount(String[] args) {
-        if (args.length == 0) {
-            return PluginCommandExecutor.INVALID_COMMAND;
-        }
+        if (args.length == 0) return PluginCommandExecutor.INVALID_COMMAND;
 
         Supplier<? extends MiniGame> supplier = MiniGames.MINI_GAMES.getOrDefault(args[1].toLowerCase(), null);
 
         if (supplier != null) {
             MiniGame game = supplier.get();
+
+            ActionResult result = Main.MINIGAME_ENGINE.mount(game);
+            if (!result.isSuccessful()) return result;
             ConfigUtil.loadConfigs(instance, game);
 
-            ActionResult result = Main.GAME_ENGINE.mount(game);
-            if (!result.isSuccessful()) return result;
-
-            ReadyCommandExecutor.setVote(game.getGameName(), Bukkit.getOnlinePlayers().size());
-
-            return ActionResult.success();
+            return ActionResult.info("Minigame set to " + TextUtil.formatMiniGame(game));
         }
-        return ActionResult.failure("Game '" + args[1] + "' not found.");
+        return ActionResult.failure("Minigame '" + args[1] + "' not found.");
     }
 
     private static String getReason(CommandSender sender, String[] args, String action) {
-        String message = "Game was " + action + " by " + sender.getName();
+        String message = "Minigame was " + action + " by " + sender.getName();
         if (args.length > 2) {
             String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
             message += " (" + reason + ")";
