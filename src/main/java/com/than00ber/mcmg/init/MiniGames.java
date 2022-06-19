@@ -21,6 +21,6 @@ public class MiniGames {
     }
 
     private static void register(Supplier<? extends MiniGame> minigame) {
-        MINI_GAMES.put(minigame.get().getMiniGameName().toLowerCase(Locale.ENGLISH), minigame);
+        MINI_GAMES.put(minigame.get().getMiniGameName().toLowerCase(), minigame);
     }
 }

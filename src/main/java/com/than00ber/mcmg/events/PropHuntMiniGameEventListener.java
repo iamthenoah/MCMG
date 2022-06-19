@@ -36,13 +36,17 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         minigame.switchTeam(player, MiniGameTeams.SPECTATORS);
+
         AtomicInteger count = new AtomicInteger();
         minigame.getCurrentPlayerRoles().values().forEach(t -> {
             if (t == MiniGameTeams.PROPS) count.getAndIncrement();
         });
-        String remaining = ChatColor.YELLOW + String.valueOf(count) + ChatColor.RESET;
-        ChatUtil.toAll(TextUtil.formatPlayer(player) + " has been eliminated.");
-        ChatUtil.toAll(remaining + " props remaining.");
+
+        if (count.get() > 0) {
+            String remaining = ChatColor.YELLOW + String.valueOf(count) + ChatColor.RESET;
+            ChatUtil.toAll(TextUtil.formatPlayer(player) + " has been eliminated.");
+            ChatUtil.toAll(remaining + " props remaining.");
+        }
     }
 
     @EventHandler
@@ -51,9 +55,8 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
 
         if (minigame.isInTeam(player, MiniGameTeams.PROPS) && !player.isSneaking()) {
             Action action = event.getAction();
-            boolean rightClicked = action == Action.RIGHT_CLICK_BLOCK;
 
-            if (rightClicked) {
+            if (action == Action.RIGHT_CLICK_BLOCK) {
                 Block clickedBlock = event.getClickedBlock();
 
                 if (clickedBlock != null) {
