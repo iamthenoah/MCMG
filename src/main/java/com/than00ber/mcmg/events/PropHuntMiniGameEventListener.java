@@ -3,15 +3,13 @@ package com.than00ber.mcmg.events;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.init.MiniGameItems;
 import com.than00ber.mcmg.init.MiniGameTeams;
-import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
+import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.TextUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,6 +23,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHuntMiniGame> {
@@ -35,7 +34,15 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        minigame.switchTeam(event.getEntity(), MiniGameTeams.SPECTATORS);
+        Player player = event.getEntity();
+        minigame.switchTeam(player, MiniGameTeams.SPECTATORS);
+        AtomicInteger count = new AtomicInteger();
+        minigame.getCurrentPlayerRoles().values().forEach(t -> {
+            if (t == MiniGameTeams.PROPS) count.getAndIncrement();
+        });
+        String remaining = ChatColor.YELLOW + String.valueOf(count) + ChatColor.RESET;
+        ChatUtil.toAll(TextUtil.formatPlayer(player) + " has been eliminated.");
+        ChatUtil.toAll(remaining + " props remaining.");
     }
 
     @EventHandler

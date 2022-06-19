@@ -29,6 +29,10 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
             return ActionResult.warn("Cannot update config while game running.");
         }
 
+        if (!Main.MINIGAME_ENGINE.hasGame()) {
+            return ActionResult.warn("No minigame set.");
+        }
+
         if (sender instanceof Player player) {
             MiniGame game = Main.MINIGAME_ENGINE.getCurrentGame();
             String propertyName = game.getMiniGameName() + "#" + args[0];
@@ -75,12 +79,12 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
             }
             return ActionResult.failure("Property '" + propertyName + "' does not exist.");
         }
-        return PluginCommandExecutor.INVALID_COMMAND;
+        return PluginCommandExecutor.NOT_A_PLAYER;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
-        if (args.length == 0) {
+        if (args.length == 0 && Main.MINIGAME_ENGINE.hasGame()) {
             List<? extends ConfigProperty<?>> properties = Main.MINIGAME_ENGINE.getCurrentGame().getProperties();
             return TextUtil.getMatching(new String[] {option}, properties, ConfigProperty::getPath);
         }
