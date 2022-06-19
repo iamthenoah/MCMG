@@ -3,6 +3,8 @@ package com.than00ber.mcmg.util;
 import com.google.common.collect.ImmutableMap;
 import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.objects.WinCondition;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -25,6 +27,12 @@ public class ChatUtil {
         for (String message : messages) {
             Bukkit.broadcastMessage(TextUtil.addPluginPrefix(message));
         }
+    }
+
+    public static void toActionBar(Player player, String message) {
+        TextComponent component = new TextComponent();
+        component.setText(message);
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
     }
 
     public static void showRoundStartScreen(ImmutableMap<Player, MiniGameTeam> players) {

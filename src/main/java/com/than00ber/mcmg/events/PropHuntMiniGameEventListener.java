@@ -67,6 +67,12 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
 
                     MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
                     DisguiseAPI.disguiseToAll(player, disguise);
+                    DisguiseAPI.setActionBarShown(player, false);
+
+                    String name = ChatColor.YELLOW + material.name().replace('_', ' ');
+                    String message = ChatColor.RESET + "You are disguised as a " + name;
+                    ChatUtil.toActionBar(player, message);
+
                     event.setCancelled(true);
                 }
             } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
