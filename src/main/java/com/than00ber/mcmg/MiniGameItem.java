@@ -1,69 +1,83 @@
 package com.than00ber.mcmg;
 
+import com.than00ber.mcmg.util.ScheduleUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class MiniGameItem {
+
+    public static final Map<String, MiniGameItem> TOGGLEABLE_ITEMS = new HashMap<>();
 
     private final Material material;
     private final String name;
     private final List<String> tooltips;
     private final boolean unbreakable;
-    private final boolean glowing;
     private final ItemMeta meta;
 
-    // trading data
-    private final Predicate<Player> canBuy;
-    private final List<MiniGameTeam> blacklisted;
-    private final int count;
-    private final int cost;
+    // toggle data
+    private final @Nullable Supplier<Integer> toggleDuration;
+    private final @Nullable Supplier<Integer> toggleCooldown;
+    private final @Nullable Consumer<PlayerInteractEvent> toggleConsumer;
 
     public MiniGameItem(
             Material material,
             String name,
             List<String> tooltips,
-            List<MiniGameTeam> blacklisted,
-            int cost,
             boolean unbreakable,
-            boolean glowing,
-            int count,
             ItemMeta meta,
-            Predicate<Player> canBuy
+            @Nullable Supplier<Integer> toggleDuration,
+            @Nullable Supplier<Integer> toggleCooldown,
+            @Nullable Consumer<PlayerInteractEvent> toggleConsumer
     ) {
         this.material = material;
         this.name = name;
         this.tooltips = tooltips;
-        this.blacklisted = blacklisted;
-        this.cost = cost;
         this.unbreakable = unbreakable;
-        this.glowing = glowing;
-        this.count = count;
         this.meta = meta;
-        this.canBuy = canBuy;
+
+        this.toggleDuration = toggleDuration;
+        this.toggleCooldown = toggleCooldown;
+        this.toggleConsumer = toggleConsumer;
+
+        if (toggleConsumer != null) {
+            TOGGLEABLE_ITEMS.put(ChatColor.stripColor(name), this);
+        }
     }
 
-    public boolean canBuy(Player player) {
-        return canBuy(player);
+    public void onClick(PlayerInteractEvent event) {
+        if (toggleConsumer != null && toggleDuration != null && toggleCooldown != null) {
+            Player player = event.getPlayer();
+
+            if (!player.hasCooldown(material)) {
+                int delay = toggleDuration.get() * 20;
+                int cooldown = toggleCooldown.get() * 20;
+                toggleConsumer.accept(event);
+                ScheduleUtil.doDelayed(delay, () -> player.setCooldown(material, cooldown));
+            }
+        }
     }
 
     public ItemStack get() {
-        ItemStack item = new ItemStack(this.material);
-        meta.setDisplayName(this.name);
-        meta.setUnbreakable(this.unbreakable);
-        meta.setLore(tooltips);
-        if (glowing) {
-            item.addUnsafeEnchantment(Enchantment.LOYALTY, 1);
+        ItemStack item = new ItemStack(material);
+        if (toggleConsumer != null) {
+            tooltips.add(ChatColor.RESET + "Duration: " + ChatColor.YELLOW + toggleDuration);
+            tooltips.add(ChatColor.RESET + "Cooldown: " + ChatColor.YELLOW + toggleCooldown);
         }
+        meta.setLore(tooltips);
+        meta.setDisplayName(name);
+        meta.setUnbreakable(unbreakable);
         item.setItemMeta(meta);
         return item;
     }
@@ -71,25 +85,21 @@ public class MiniGameItem {
     public static class Builder {
 
         private final Material material;
-        private final List<String> tooltips;
-        private final List<MiniGameTeam> blacklisted;
         private String name;
-        private int cost;
+        private final List<String> tooltips;
         private boolean unbreakable;
-        private boolean glowing;
-        private int count;
-        private @Nullable ItemMeta meta;
-        private Predicate<Player> canBuy;
+        private ItemMeta meta;
+
+        // toggle data
+        private @Nullable Supplier<Integer> toggleDuration;
+        private @Nullable Supplier<Integer> toggleCooldown;
+        private @Nullable Consumer<PlayerInteractEvent> toggleConsumer;
 
         public Builder(Material material) {
             this.material = material;
-            this.name = material.name();
-            this.tooltips = new ArrayList<>();
-            this.blacklisted = new ArrayList<>();
-            this.unbreakable = false;
-            this.glowing = false;
-            this.count = 1;
-            this.cost = 1;
+            name = material.name();
+            tooltips = new ArrayList<>();
+            unbreakable = false;
         }
 
         public Builder setName(String name) {
@@ -98,23 +108,8 @@ public class MiniGameItem {
             return this;
         }
 
-        public Builder setCost(int cost) {
-            this.cost = cost;
-            return this;
-        }
-
-        public Builder setBuyStackSize(int count) {
-            this.count = count;
-            return this;
-        }
-
         public Builder unbreakable() {
             unbreakable = true;
-            return this;
-        }
-
-        public Builder glowing() {
-            glowing = true;
             return this;
         }
 
@@ -123,36 +118,34 @@ public class MiniGameItem {
             return this;
         }
 
-        public Builder addBlackListed(MiniGameTeam team) {
-            blacklisted.add(team);
-            return this;
-        }
-
         public Builder setMeta(Supplier<ItemMeta> supplier) {
             meta = supplier.get();
             return this;
         }
 
-        public Builder canBuy(Predicate<Player> canBuy) {
-            this.canBuy = canBuy;
+        public Builder onToggled(
+                Supplier<Integer> duration,
+                Supplier<Integer> cooldown,
+                Consumer<PlayerInteractEvent> consumer
+        ) {
+            // providing supplier in case config changes during runtime
+            toggleDuration = duration;
+            toggleCooldown = cooldown;
+            toggleConsumer = consumer;
             return this;
         }
 
         public MiniGameItem build() {
-            if (meta == null) {
-                meta = new ItemStack(material).getItemMeta();
-            }
+            if (meta == null) meta = new ItemStack(material).getItemMeta();
             return new MiniGameItem(
                     material,
                     name,
                     tooltips,
-                    blacklisted,
-                    cost,
                     unbreakable,
-                    glowing,
-                    count,
                     meta,
-                    canBuy
+                    toggleDuration,
+                    toggleCooldown,
+                    toggleConsumer
             );
         }
     }
