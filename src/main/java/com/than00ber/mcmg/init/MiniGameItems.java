@@ -2,11 +2,9 @@ package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
+import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.objects.MiniGameItem;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -79,16 +77,8 @@ public class MiniGameItems {
             .setName(ChatColor.AQUA + "Revelation Compass")
             .setMeta(() -> {
                 CompassMeta meta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
-                if (Main.MINIGAME_ENGINE.hasRunningGame()) {
-                    if (Main.MINIGAME_ENGINE.getCurrentGame() instanceof HideNSeekMiniGame game) {
-                        List<Player> players = new ArrayList<>();
-                        game.getCurrentPlayerRoles().forEach((p, t) -> {
-                            if (t.equals(MiniGameTeams.PROPS)) players.add(p);
-                        });
-                        Location location = players.get(new Random().nextInt(players.size() - 1)).getLocation();
-                        meta.setLodestone(location);
-                    }
-                }
+                meta.setLodestone(null);
+                meta.setLodestoneTracked(false);
                 return meta;
             })
             .addTooltip("Reveals the general direction of the closest props to you for a brief moment.")
