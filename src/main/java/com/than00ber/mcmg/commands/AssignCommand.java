@@ -16,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public class AssignCommandExecutor extends PluginCommandExecutor {
+public class AssignCommand extends PluginCommand {
 
-    public AssignCommandExecutor(Main instance, World world) {
+    public AssignCommand(Main instance, World world) {
         super("assign", instance, world);
     }
 

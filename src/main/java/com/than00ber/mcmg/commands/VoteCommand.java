@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class VoteCommandExecutor extends PluginCommandExecutor {
+public class VoteCommand extends PluginCommand {
 
     private static final List<Player> QUEUED_PLAYERS = new ArrayList<>();
     private static Integer VOTING_POOL_ID = null;
     private static Integer REMINDER_ID = null;
 
-    public VoteCommandExecutor(Main instance, World world) {
+    public VoteCommand(Main instance, World world) {
         super("vote", instance, world);
     }
 

@@ -10,18 +10,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ReadyCommandExecutor extends PluginCommandExecutor {
+public class ReadyCommand extends PluginCommand {
 
-    public ReadyCommandExecutor(Main instance, World world) {
+    public ReadyCommand(Main instance, World world) {
         super("ready", instance, world);
     }
 
     @Override
     protected ActionResult execute(@NotNull CommandSender sender, @Nullable String[] args) {
         if (sender instanceof Player player) {
-            return VoteCommandExecutor.voteIsReady(player);
+            return VoteCommand.voteIsReady(player);
         }
-        return PluginCommandExecutor.NOT_A_PLAYER;
+        return PluginCommand.NOT_A_PLAYER;
     }
 
     @Override

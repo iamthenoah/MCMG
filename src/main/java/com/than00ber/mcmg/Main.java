@@ -25,11 +25,11 @@ public class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new GlobalEvents(), this);
 
-        new MiniGameCommandExecutor(this, WORLD);
-        new ConfigsCommandExecutor(this, WORLD);
-        new ReadyCommandExecutor(this, WORLD);
-        new VoteCommandExecutor(this, WORLD);
-        new AssignCommandExecutor(this, WORLD);
+        new MiniGameCommand(this, WORLD);
+        new ConfigsCommand(this, WORLD);
+        new ReadyCommand(this, WORLD);
+        new VoteCommand(this, WORLD);
+        new AssignCommand(this, WORLD);
     }
 
     @Override

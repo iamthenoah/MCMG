@@ -17,9 +17,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ConfigsCommandExecutor extends PluginCommandExecutor {
+public class ConfigsCommand extends PluginCommand {
 
-    public ConfigsCommandExecutor(Main instance, World world) {
+    public ConfigsCommand(Main instance, World world) {
         super("configs", instance, world);
     }
 
@@ -74,12 +74,12 @@ public class ConfigsCommandExecutor extends PluginCommandExecutor {
                             "- Property:  " + propertyName,
                             "- Arguments: " + arguments
                     );
-                    return PluginCommandExecutor.INVALID_COMMAND;
+                    return PluginCommand.INVALID_COMMAND;
                 }
             }
             return ActionResult.failure("Property '" + propertyName + "' does not exist.");
         }
-        return PluginCommandExecutor.NOT_A_PLAYER;
+        return PluginCommand.NOT_A_PLAYER;
     }
 
     @Override

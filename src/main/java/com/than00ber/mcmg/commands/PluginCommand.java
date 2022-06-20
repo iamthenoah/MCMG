@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class PluginCommandExecutor implements CommandExecutor, TabCompleter {
+public abstract class PluginCommand implements CommandExecutor, TabCompleter {
 
     protected static final ActionResult INVALID_COMMAND = ActionResult.failure("Invalid command format.");
     protected static final ActionResult NOT_A_PLAYER = ActionResult.failure("This command can only be run by a player.");
@@ -24,7 +24,7 @@ public abstract class PluginCommandExecutor implements CommandExecutor, TabCompl
     protected final Main instance;
     protected final World world;
 
-    protected PluginCommandExecutor(String name, Main instance, World world) {
+    protected PluginCommand(String name, Main instance, World world) {
         instance.getCommand(name).setExecutor(this);
         instance.getCommand(name).setTabCompleter(this);
         this.instance = instance;
