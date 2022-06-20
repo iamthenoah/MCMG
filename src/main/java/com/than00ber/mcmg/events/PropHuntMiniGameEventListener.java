@@ -105,22 +105,35 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
         Material material = item.getType();
 
         if (material == Material.COMPASS) {
-            Player prop = getNearestProp(player);
             CompassMeta meta = (CompassMeta) item.getItemMeta();
 
             if (!player.hasCooldown(material) && !meta.hasLodestone()) {
+                Player prop = getNearestProp(player);
                 event.setCancelled(true);
 
-                int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.INSTANCE, () -> {
+                // TODO - add schedule util class
+
+                int chatId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.INSTANCE, () -> {
+                    String title = ChatColor.BOLD + "A Hunter sees you!";
+                    prop.sendTitle(ChatColor.GOLD + title, "", 0, 5, 5);
+                }, 0, 10);
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
+                    Bukkit.getScheduler().cancelTask(chatId);
+                }, 100);
+
+                int compassId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.INSTANCE, () -> {
                     meta.setLodestone(prop.getLocation());
                     item.setItemMeta(meta);
+                    ChatUtil.toActionBar(prop, ChatColor.GOLD + "Your position is compromised!");
                 }, 0, 5);
 
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
-                    Bukkit.getScheduler().cancelTask(id);
+                    Bukkit.getScheduler().cancelTask(compassId);
                     player.setCooldown(material, PropHuntMiniGame.COMPASS_COOLDOWN.get() * 20);
                     meta.setLodestone(null);
                     item.setItemMeta(meta);
+                    ChatUtil.toActionBar(prop, ChatColor.GREEN + "You are now hidden again...");
                 }, PropHuntMiniGame.COMPASS_DURATION.get() * 20);
             }
         }
