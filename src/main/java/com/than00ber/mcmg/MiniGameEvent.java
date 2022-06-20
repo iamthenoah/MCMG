@@ -1,6 +1,5 @@
-package com.than00ber.mcmg.events;
+package com.than00ber.mcmg;
 
-import com.than00ber.mcmg.objects.WinCondition;
 import org.bukkit.boss.BossBar;
 
 public class MiniGameEvent {

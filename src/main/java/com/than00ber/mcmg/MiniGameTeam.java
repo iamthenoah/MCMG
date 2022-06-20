@@ -1,4 +1,4 @@
-package com.than00ber.mcmg.objects;
+package com.than00ber.mcmg;
 
 import com.than00ber.mcmg.util.config.Configurable;
 import com.than00ber.mcmg.util.config.MiniGameProperty;

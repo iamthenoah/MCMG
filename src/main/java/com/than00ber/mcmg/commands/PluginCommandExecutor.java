@@ -27,7 +27,6 @@ public abstract class PluginCommandExecutor implements CommandExecutor, TabCompl
     protected PluginCommandExecutor(String name, Main instance, World world) {
         instance.getCommand(name).setExecutor(this);
         instance.getCommand(name).setTabCompleter(this);
-
         this.instance = instance;
         this.world = world;
     }

@@ -1,11 +1,8 @@
 package com.than00ber.mcmg;
 
-import com.than00ber.mcmg.events.MiniGameEvent;
 import com.than00ber.mcmg.events.MiniGameEventListener;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.objects.MiniGameTeam;
-import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
@@ -238,32 +235,6 @@ public class MiniGameEngine<G extends MiniGame> {
         }
     }
 
-    private abstract static class MiniGameHandler implements Runnable {
-
-        private final Main instance;
-        private int id;
-
-        protected MiniGameHandler(Main instance) {
-            this.instance = instance;
-        }
-
-        public void activate() {
-            onActivate();
-            id = Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, this, 0, 20);
-        }
-
-        public void deactivate() {
-            onDeactivate();
-            Bukkit.getScheduler().cancelTask(id);
-        }
-
-        @Override
-        public abstract void run();
-
-        public abstract void onActivate();
-
-        public abstract void onDeactivate();
-    }
 
     public interface Options {
 

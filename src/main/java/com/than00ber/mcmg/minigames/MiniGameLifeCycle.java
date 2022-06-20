@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.minigames;
 
-import com.than00ber.mcmg.events.MiniGameEvent;
-import com.than00ber.mcmg.objects.WinCondition;
+import com.than00ber.mcmg.MiniGameEvent;
+import com.than00ber.mcmg.WinCondition;
 import org.bukkit.entity.Player;
 
 import java.util.List;

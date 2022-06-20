@@ -1,6 +1,6 @@
 package com.than00ber.mcmg.init;
 
-import com.than00ber.mcmg.objects.MiniGameItem;
+import com.than00ber.mcmg.MiniGameItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;

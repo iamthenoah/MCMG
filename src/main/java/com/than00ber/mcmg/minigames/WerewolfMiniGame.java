@@ -2,12 +2,12 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.events.MiniGameEvent;
+import com.than00ber.mcmg.MiniGameEvent;
+import com.than00ber.mcmg.MiniGameTeam;
+import com.than00ber.mcmg.WinCondition;
 import com.than00ber.mcmg.events.WerewolfMiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
-import com.than00ber.mcmg.objects.MiniGameTeam;
-import com.than00ber.mcmg.objects.WinCondition;
 import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.World;

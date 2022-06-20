@@ -1,8 +1,8 @@
 package com.than00ber.mcmg.util;
 
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.MiniGameTeam;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.objects.MiniGameTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;

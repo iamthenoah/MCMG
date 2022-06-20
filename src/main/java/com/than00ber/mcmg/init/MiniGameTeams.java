@@ -1,9 +1,9 @@
 package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.MiniGameTeam;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
-import com.than00ber.mcmg.objects.MiniGameTeam;
 import com.than00ber.mcmg.util.ChatUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
@@ -20,8 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Team;
-
-import java.util.Random;
 
 public class MiniGameTeams {
 
