@@ -1,16 +1,20 @@
 package com.than00ber.mcmg.events;
 
+import com.google.common.collect.ImmutableSet;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.init.MiniGameItems;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -19,9 +23,14 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -53,33 +62,10 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (minigame.isInTeam(player, MiniGameTeams.PROPS) && !player.isSneaking()) {
-            Action action = event.getAction();
-
-            if (action == Action.RIGHT_CLICK_BLOCK) {
-                Block clickedBlock = event.getClickedBlock();
-
-                if (clickedBlock != null) {
-                    Material material = clickedBlock.getType();
-
-                    if (!PropHuntMiniGame.ALLOW_BLOCKS.get() && material.isBlock()) return;
-                    if (!PropHuntMiniGame.ALLOW_SPECIALS.get() && material.isTransparent()) return;
-
-                    MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
-                    DisguiseAPI.disguiseToAll(player, disguise);
-                    DisguiseAPI.setActionBarShown(player, false);
-
-                    String name = ChatColor.YELLOW + material.name().replace('_', ' ');
-                    String message = ChatColor.RESET + "You are disguised as a " + name;
-                    ChatUtil.toActionBar(player, message);
-
-                    event.setCancelled(true);
-                }
-            } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-                Supplier<Integer> delta = () -> new Random().nextInt(4) - 2;
-                Location loc = player.getLocation().add(delta.get(), delta.get(), delta.get());
-                minigame.getCurrentPlayerRoles().keySet().forEach(p -> p.playSound(loc, Sound.ENTITY_CAT_AMBIENT, 1, 1));
-            }
+        if (minigame.isInTeam(player, MiniGameTeams.HUNTERS)) {
+            hunterInteract(player, event);
+        } else if (minigame.isInTeam(player, MiniGameTeams.PROPS)) {
+            propInteract(player, event);
         }
     }
 
@@ -116,5 +102,70 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
                 player.setHealth(0);
             }
         }
+    }
+
+
+    private void hunterInteract(Player player, PlayerInteractEvent event) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (item.getType() == Material.COMPASS) {
+            Player prop = getNearestProp(player);
+            CompassMeta meta = (CompassMeta) item.getItemMeta();
+
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.INSTANCE, () -> {
+                meta.setLodestone(prop.getLocation());
+                item.setItemMeta(meta);
+            }, 0, 5);
+
+//            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
+//                Bukkit.getScheduler().cancelTask(id);
+//                meta.setLodestone(null);
+//                item.setItemMeta(meta);
+//            }, 200);
+        }
+    }
+
+    private void propInteract(Player player, PlayerInteractEvent event) {
+        if (player.isSneaking()) return;
+        Action action = event.getAction();
+
+        if (action == Action.RIGHT_CLICK_BLOCK) {
+            Block clickedBlock = event.getClickedBlock();
+
+            if (clickedBlock != null) {
+                Material material = clickedBlock.getType();
+
+                if (!PropHuntMiniGame.ALLOW_BLOCKS.get() && material.isBlock()) return;
+                if (!PropHuntMiniGame.ALLOW_SPECIALS.get() && material.isTransparent()) return;
+
+                MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
+                DisguiseAPI.disguiseToAll(player, disguise);
+
+                String name = material.name().replace('_', ' ');
+                String formatted = ChatColor.ITALIC + WordUtils.capitalize(name.toLowerCase());
+                String message = ChatColor.RESET + "You are disguised as a " + ChatColor.YELLOW + formatted;
+                ChatUtil.toActionBar(player, message);
+
+                event.setCancelled(true);
+            }
+        } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+            Supplier<Integer> delta = () -> new Random().nextInt(4) - 2;
+            Location loc = player.getLocation().add(delta.get(), delta.get(), delta.get());
+            minigame.getCurrentPlayerRoles().keySet().forEach(p -> p.playSound(loc, Sound.ENTITY_CAT_AMBIENT, 1, 1));
+        }
+    }
+
+    private Player getNearestProp(Player player) {
+        double range = (double) PropHuntMiniGame.PLAYGROUND_RADIUS.get() * 2;
+        double distance = Double.POSITIVE_INFINITY;
+        Player target = null;
+        for (Entity entity : player.getNearbyEntities(range, range, range)) {
+            if (!(entity instanceof Player)) continue;
+            double to = player.getLocation().distance(entity.getLocation());
+            if (to > distance) continue;
+            if (!minigame.isInTeam((Player) entity, MiniGameTeams.PROPS)) continue;
+            distance = to;
+            target = (Player) entity;
+        }
+        return target;
     }
 }
