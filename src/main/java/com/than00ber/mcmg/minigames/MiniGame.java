@@ -232,7 +232,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
             if (team.disableWhileGrace()) {
                 int duration = DURATION_GRACE.get() * 20;
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 100));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration + 20, 100));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 10));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, duration, 250));
             }

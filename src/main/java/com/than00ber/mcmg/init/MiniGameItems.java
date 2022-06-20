@@ -123,6 +123,24 @@ public class MiniGameItems {
                 }
             })
             .build();
+    public static final MiniGameItem STUN_INK = new MiniGameItem.Builder(Material.INK_SAC)
+            .setName("Stun Juice")
+            .addTooltip("Blinds any nearby hunter for a brief moment.")
+            .onToggled(() -> 0, PropHuntMiniGame.STUN_JUICE_COOLDOWN::get, event -> {
+                event.setCancelled(true);
+                Player player = event.getPlayer();
+                double range = PropHuntMiniGame.STUN_JUICE_RANGE.get();
+                for (Entity entity : player.getNearbyEntities(range, range, range)) {
+                    if (entity instanceof Player victim) {
+                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(victim, MiniGameTeams.HUNTERS)) {
+                            int duration = PropHuntMiniGame.STUN_JUICE_DURATION.get() * 20;
+                            victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration + 20, 5));
+                            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 5));
+                        }
+                    }
+                }
+            })
+            .build();
 
     /**
      * HideNSeek Items

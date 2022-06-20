@@ -25,6 +25,9 @@ public class PropHuntMiniGame extends MiniGame {
     public static final MiniGameProperty.IntegerProperty COMPASS_COOLDOWN_START = new MiniGameProperty.IntegerProperty("compass.startingCooldown", 30).validate(i -> i >= Main.MINIGAME_ENGINE.getCurrentGame().getOptions().getDurationGrace());
     public static final MiniGameProperty.IntegerProperty COMPASS_COOLDOWN = new MiniGameProperty.IntegerProperty("compass.cooldown", 10).validate(i -> i > 0);
     public static final MiniGameProperty.IntegerProperty COMPASS_DURATION = new MiniGameProperty.IntegerProperty("compass.duration", 10).validate(i -> i > 0);
+    public static final MiniGameProperty.IntegerProperty STUN_JUICE_COOLDOWN = new MiniGameProperty.IntegerProperty("stunJuice.cooldown", 30).validate(i -> i > 0);
+    public static final MiniGameProperty.IntegerProperty STUN_JUICE_DURATION = new MiniGameProperty.IntegerProperty("stunJuice.duration", 2).validate(i -> i > 0);
+    public static final MiniGameProperty.IntegerProperty STUN_JUICE_RANGE = new MiniGameProperty.IntegerProperty("stunJuice.range", 5).validate(i -> i > 0);
 
     public PropHuntMiniGame(Main instance, World world) {
         super(world);
@@ -37,7 +40,10 @@ public class PropHuntMiniGame extends MiniGame {
                 ALLOW_SPECIALS,
                 COMPASS_COOLDOWN_START,
                 COMPASS_COOLDOWN,
-                COMPASS_DURATION
+                COMPASS_DURATION,
+                STUN_JUICE_COOLDOWN,
+                STUN_JUICE_DURATION,
+                STUN_JUICE_RANGE
         );
     }
 
