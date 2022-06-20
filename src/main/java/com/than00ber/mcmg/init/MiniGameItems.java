@@ -8,6 +8,7 @@ import com.than00ber.mcmg.util.ScheduleUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -102,13 +103,15 @@ public class MiniGameItems {
                     Player prop = target;
                     ItemStack item = player.getInventory().getItemInMainHand();
                     CompassMeta meta = (CompassMeta) item.getItemMeta();
+                    int duration = PropHuntMiniGame.COMPASS_DURATION.get() * 20;
+                    prop.playSound(prop.getLocation(), Sound.ENTITY_ENDERMAN_STARE, 1, 1);
 
-                    ScheduleUtil.doWhile(100, 10, () -> {
+                    ScheduleUtil.doWhile(duration, 10, () -> {
                         String title = ChatColor.BOLD + "A Hunter sees you!";
                         prop.sendTitle(ChatColor.GOLD + title, "", 0, 5, 5);
                     });
 
-                    ScheduleUtil.doWhile(PropHuntMiniGame.COMPASS_DURATION.get() * 20, 5, () -> {
+                    ScheduleUtil.doWhile(duration, 5, () -> {
                         ChatUtil.toActionBar(prop, ChatColor.GOLD + "Your position is compromised!");
                         meta.setLodestone(prop.getLocation());
                         item.setItemMeta(meta);
