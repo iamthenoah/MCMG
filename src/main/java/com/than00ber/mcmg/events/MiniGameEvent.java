@@ -1,4 +1,4 @@
-package com.than00ber.mcmg;
+package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.objects.WinCondition;
 import org.bukkit.boss.BossBar;

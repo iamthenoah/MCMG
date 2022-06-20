@@ -1,5 +1,6 @@
 package com.than00ber.mcmg;
 
+import com.than00ber.mcmg.events.MiniGameEvent;
 import com.than00ber.mcmg.events.MiniGameEventListener;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.MiniGame;

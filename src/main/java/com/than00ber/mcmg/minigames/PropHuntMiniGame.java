@@ -2,7 +2,7 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGameEvent;
+import com.than00ber.mcmg.events.MiniGameEvent;
 import com.than00ber.mcmg.events.PropHuntMiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
