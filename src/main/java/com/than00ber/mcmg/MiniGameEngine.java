@@ -175,6 +175,7 @@ public class MiniGameEngine<G extends MiniGame> {
 
         unregisterTeams();
         Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEventListener::unregister);
+        Bukkit.getScheduler().cancelTasks(instance);
 
         return ActionResult.success(reason);
     }
