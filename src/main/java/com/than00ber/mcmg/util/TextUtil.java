@@ -46,13 +46,10 @@ public class TextUtil {
         return team.getColor() + "" + ChatColor.BOLD + team.getDisplayName() + ChatColor.RESET;
     }
 
-    public static String[] formatObjective(MiniGameTeam team) {
-        List<String> info = new ArrayList<>();
-        info.add("> " + formatGameTeam(team));
-        if (team.getObjective() != null) {
-            info.add("\u0020\u0020Objective: " + team.getColor() + team.getObjective());
-        }
-        return info.toArray(new String[0]);
+    public static String formatObjective(MiniGameTeam team) {
+        return team.getObjective() != null
+                ? formatGameTeam(team) + ChatColor.RESET + ": " + team.getObjective()
+                : "You are in the " + formatGameTeam(team) + " team.";
     }
 
     public static String formatMiniGame(MiniGame minigame) {
