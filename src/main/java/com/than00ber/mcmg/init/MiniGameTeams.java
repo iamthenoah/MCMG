@@ -203,6 +203,8 @@ public class MiniGameTeams {
         ItemStack bow = MiniGameItems.HUNTERS_BOW.get();
         ItemStack arrow = MiniGameItems.HUNTERS_ARROWS.get();
         ItemStack compass = MiniGameItems.HUNTERS_COMPASS.get();
+        int cooldown = PropHuntMiniGame.COMPASS_COOLDOWN_START.get() * 20;
+        player.setCooldown(compass.getType(), cooldown);
         player.getInventory().addItem(axe, bow, compass);
         player.getInventory().setItem(8, arrow);
     }
