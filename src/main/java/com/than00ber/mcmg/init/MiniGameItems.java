@@ -1,11 +1,9 @@
 package com.than00ber.mcmg.init;
 
-import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
-import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.objects.MiniGameItem;
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.CompassMeta;
@@ -15,7 +13,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MiniGameItems {
 

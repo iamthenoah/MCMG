@@ -7,7 +7,6 @@ import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.minigames.WerewolfMiniGame;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.function.Supplier;
 
 public class MiniGames {

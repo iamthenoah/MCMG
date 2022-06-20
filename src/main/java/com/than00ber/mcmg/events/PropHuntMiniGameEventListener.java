@@ -1,12 +1,10 @@
 package com.than00ber.mcmg.events;
 
-import com.google.common.collect.ImmutableSet;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.init.MiniGameItems;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
-import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -28,9 +26,6 @@ import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
