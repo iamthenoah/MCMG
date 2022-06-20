@@ -26,6 +26,7 @@ import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -165,7 +166,19 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
         } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
             Supplier<Integer> delta = () -> new Random().nextInt(4) - 2;
             Location loc = player.getLocation().add(delta.get(), delta.get(), delta.get());
-            minigame.getCurrentPlayerRoles().keySet().forEach(p -> p.playSound(loc, Sound.ENTITY_CAT_AMBIENT, 1, 1));
+            List<Sound> sounds = List.of(
+                    Sound.ENTITY_CAT_AMBIENT,
+                    Sound.ENTITY_COW_AMBIENT,
+                    Sound.ENTITY_CAT_AMBIENT,
+                    Sound.ENTITY_PIG_AMBIENT,
+                    Sound.ENTITY_BAT_AMBIENT,
+                    Sound.ENTITY_WOLF_AMBIENT,
+                    Sound.ENTITY_CHICKEN_AMBIENT,
+                    Sound.ENTITY_SHEEP_AMBIENT,
+                    Sound.ENTITY_VILLAGER_AMBIENT
+            );
+            Sound sound = sounds.get(new Random().nextInt(sounds.size() - 1));
+            minigame.getCurrentPlayerRoles().keySet().forEach(p -> p.playSound(loc, sound, 1, 1));
         }
     }
 
