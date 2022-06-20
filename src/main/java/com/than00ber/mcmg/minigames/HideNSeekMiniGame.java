@@ -3,7 +3,7 @@ package com.than00ber.mcmg.minigames;
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameEvent;
-import com.than00ber.mcmg.events.HideNSeekMiniGameEventListener;
+import com.than00ber.mcmg.events.HideNSeekMiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.MiniGameTeam;
@@ -32,7 +32,7 @@ public class HideNSeekMiniGame extends MiniGame {
 
     public HideNSeekMiniGame(Main instance, World world) {
         super(world);
-        setEventListener(new HideNSeekMiniGameEventListener(instance, this));
+        setEventListener(new HideNSeekMiniGameEvents(instance, this));
         addProperties(DAMAGE_PENALTY, ENTITY_TYPE, VIEW_DISGUISE, HIDER_MAX_HEALTH);
         entities = new ArrayList<>();
     }

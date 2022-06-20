@@ -3,7 +3,7 @@ package com.than00ber.mcmg.minigames;
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameEvent;
-import com.than00ber.mcmg.events.PropHuntMiniGameEventListener;
+import com.than00ber.mcmg.events.PropHuntMiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.MiniGameTeam;
@@ -28,7 +28,7 @@ public class PropHuntMiniGame extends MiniGame {
 
     public PropHuntMiniGame(Main instance, World world) {
         super(world);
-        setEventListener(new PropHuntMiniGameEventListener(instance, this));
+        setEventListener(new PropHuntMiniGameEvents(instance, this));
         addProperties(
                 PROPS_IN_WATER,
                 PROPS_MAX_HEALTH,

@@ -1,7 +1,7 @@
 package com.than00ber.mcmg;
 
 import com.than00ber.mcmg.commands.*;
-import com.than00ber.mcmg.events.GlobalEventListener;
+import com.than00ber.mcmg.events.GlobalEvents;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.config.ConfigUtil;
 import org.bukkit.Bukkit;
@@ -23,7 +23,7 @@ public class Main extends JavaPlugin {
         WORLD = Bukkit.getWorlds().get(0);
         MINIGAME_ENGINE = new MiniGameEngine<>(this);
 
-        Bukkit.getPluginManager().registerEvents(new GlobalEventListener(), this);
+        Bukkit.getPluginManager().registerEvents(new GlobalEvents(), this);
 
         new MiniGameCommandExecutor(this, WORLD);
         new ConfigsCommandExecutor(this, WORLD);

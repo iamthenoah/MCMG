@@ -3,7 +3,7 @@ package com.than00ber.mcmg.minigames;
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameEvent;
-import com.than00ber.mcmg.events.WerewolfMiniGameEventListener;
+import com.than00ber.mcmg.events.WerewolfMiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.objects.MiniGameTeam;
@@ -24,7 +24,7 @@ public class WerewolfMiniGame extends MiniGame {
 
     public WerewolfMiniGame(Main instance, World world) {
         super(world);
-        setEventListener(new WerewolfMiniGameEventListener(instance, this));
+        setEventListener(new WerewolfMiniGameEvents(instance, this));
         addProperties(AGGRO_DISTANCE, ZOMBIE_COUNT, DEATH_SKULL);
     }
 

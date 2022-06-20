@@ -14,9 +14,9 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-public class HideNSeekMiniGameEventListener extends MiniGameEventListener<HideNSeekMiniGame> {
+public class HideNSeekMiniGameEvents extends MiniGameEventListener<HideNSeekMiniGame> {
 
-    public HideNSeekMiniGameEventListener(Main instance, HideNSeekMiniGame game) {
+    public HideNSeekMiniGameEvents(Main instance, HideNSeekMiniGame game) {
         super(instance, game);
     }
 

@@ -31,9 +31,9 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHuntMiniGame> {
+public class PropHuntMiniGameEvents extends MiniGameEventListener<PropHuntMiniGame> {
 
-    public PropHuntMiniGameEventListener(Main instance, PropHuntMiniGame game) {
+    public PropHuntMiniGameEvents(Main instance, PropHuntMiniGame game) {
         super(instance, game);
     }
 
