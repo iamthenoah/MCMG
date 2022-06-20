@@ -43,7 +43,6 @@ public class MiniGameItem {
     ) {
         this.material = material;
         this.name = name;
-        this.tooltips = tooltips;
         this.unbreakable = unbreakable;
         this.meta = meta;
 
@@ -51,9 +50,14 @@ public class MiniGameItem {
         this.toggleCooldown = toggleCooldown;
         this.toggleConsumer = toggleConsumer;
 
-        if (toggleConsumer != null) {
+        if (toggleConsumer != null && toggleDuration != null && toggleCooldown != null) {
             TOGGLEABLE_ITEMS.put(ChatColor.stripColor(name), this);
+            tooltips.add(ChatColor.GRAY + "Duration: " + ChatColor.YELLOW + toggleDuration.get() + "s");
+            tooltips.add(ChatColor.GRAY + "Cooldown: " + ChatColor.YELLOW + toggleCooldown.get() + "s");
         }
+
+        // lore has dark purple color set by default
+        this.tooltips = tooltips.stream().map(s -> ChatColor.WHITE + s).toList();
     }
 
     public void onClick(PlayerInteractEvent event) {
@@ -71,10 +75,6 @@ public class MiniGameItem {
 
     public ItemStack get() {
         ItemStack item = new ItemStack(material);
-        if (toggleConsumer != null) {
-            tooltips.add(ChatColor.RESET + "Duration: " + ChatColor.YELLOW + toggleDuration);
-            tooltips.add(ChatColor.RESET + "Cooldown: " + ChatColor.YELLOW + toggleCooldown);
-        }
         meta.setLore(tooltips);
         meta.setDisplayName(name);
         meta.setUnbreakable(unbreakable);
