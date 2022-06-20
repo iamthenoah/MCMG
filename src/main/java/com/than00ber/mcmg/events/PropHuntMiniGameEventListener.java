@@ -107,20 +107,27 @@ public class PropHuntMiniGameEventListener extends MiniGameEventListener<PropHun
 
     private void hunterInteract(Player player, PlayerInteractEvent event) {
         ItemStack item = player.getInventory().getItemInMainHand();
-        if (item.getType() == Material.COMPASS) {
+        Material material = item.getType();
+
+        if (material == Material.COMPASS) {
             Player prop = getNearestProp(player);
             CompassMeta meta = (CompassMeta) item.getItemMeta();
 
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.INSTANCE, () -> {
-                meta.setLodestone(prop.getLocation());
-                item.setItemMeta(meta);
-            }, 0, 5);
+            if (!player.hasCooldown(material) && !meta.hasLodestone()) {
+                event.setCancelled(true);
 
-//            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
-//                Bukkit.getScheduler().cancelTask(id);
-//                meta.setLodestone(null);
-//                item.setItemMeta(meta);
-//            }, 200);
+                int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.INSTANCE, () -> {
+                    meta.setLodestone(prop.getLocation());
+                    item.setItemMeta(meta);
+                }, 0, 5);
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.INSTANCE, () -> {
+                    Bukkit.getScheduler().cancelTask(id);
+                    player.setCooldown(material, PropHuntMiniGame.COMPASS_COOLDOWN.get() * 20);
+                    meta.setLodestone(null);
+                    item.setItemMeta(meta);
+                }, PropHuntMiniGame.COMPASS_DURATION.get() * 20);
+            }
         }
     }
 
