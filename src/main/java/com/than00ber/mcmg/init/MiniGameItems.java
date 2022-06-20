@@ -78,7 +78,10 @@ public class MiniGameItems {
                 meta.setLodestoneTracked(false);
                 return meta;
             })
-            .addTooltip("Reveals the general direction of the closest props to you for a brief moment.")
+            .addTooltip(
+                    "Reveals the general direction of the closest",
+                    "props to you for a brief moment."
+            )
             .build();
 
     /**
