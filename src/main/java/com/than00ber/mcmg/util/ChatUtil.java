@@ -50,7 +50,6 @@ public class ChatUtil {
         players.forEach((player, role) -> {
             // scoreboard
             ChatUtil.toSelf(player, ChatColor.YELLOW + " ---------- Scoreboard ----------");
-            ChatUtil.toSelf(player, "");
             for (MiniGameTeam team : teams) {
                 Map<Player, MiniGameTeam> filtered = players.entrySet().stream()
                         .filter(entry -> entry.getValue().equals(team))
@@ -58,15 +57,16 @@ public class ChatUtil {
 
                 if (!filtered.isEmpty()) {
                     String names = "\u0020\u0020" + team.getColor() + filtered.keySet().stream()
-                            .map(Player::getDisplayName)
+                            .map(TextUtil::formatPlayer)
                             .collect(Collectors.joining(", "));
 
-                    String s = "> In the " + TextUtil.formatGameTeam(team).toUpperCase() + ChatColor.RESET + " team was...";
-                    ChatUtil.toSelf(player, s);
+                    String status = condition.getWinners().contains(team)
+                            ? ChatColor.GREEN + " [won] "
+                            : ChatColor.RED + " [lost] ";
+                    ChatUtil.toSelf(player, TextUtil.formatGameTeam(team) + status);
                     ChatUtil.toSelf(player, String.join(", ", names));
                 }
             }
-            ChatUtil.toSelf(player, "");
 
             // title
             boolean won = condition.getWinners().contains(role);

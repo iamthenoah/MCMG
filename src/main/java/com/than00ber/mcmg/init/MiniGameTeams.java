@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.init;
 
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
@@ -150,6 +151,7 @@ public class MiniGameTeams {
      * MiniGameTeam Player Preparation Helper Methods
      */
     public static void resetPlayer(Player player) {
+        DisguiseAPI.undisguiseToAll(player);
         player.setCollidable(true);
         player.setInvisible(false);
         player.setGlowing(false);
@@ -161,7 +163,6 @@ public class MiniGameTeams {
         player.getInventory().clear();
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
         player.setHealth(20);
-        DisguiseAPI.undisguiseToAll(player);
         for (PotionEffect potion : player.getActivePotionEffects()) {
             player.removePotionEffect(potion.getType());
         }
@@ -186,12 +187,11 @@ public class MiniGameTeams {
         resetPlayer(player);
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(PropHuntMiniGame.PROPS_MAX_HEALTH.get());
         player.setInvisible(true);
-        int i = new Random().nextInt(Material.values().length - 1);
-        Material randomMaterial = Material.values()[i];
-        MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, randomMaterial);
+        Material material = Main.WORLD.getBlockAt(player.getLocation().add(0, -1, 0)).getType();
+        MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
         DisguiseAPI.disguiseToAll(player, disguise);
         DisguiseAPI.setActionBarShown(player, false);
-        String name = randomMaterial.name().replace('_', ' ');
+        String name = material.name().replace('_', ' ');
         String formatted = ChatColor.ITALIC + WordUtils.capitalize(name.toLowerCase());
         String message = ChatColor.RESET + "You are disguised as a " + ChatColor.YELLOW + formatted;
         ChatUtil.toActionBar(player, message);
