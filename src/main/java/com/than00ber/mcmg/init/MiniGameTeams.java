@@ -3,11 +3,13 @@ package com.than00ber.mcmg.init;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.objects.MiniGameTeam;
+import com.than00ber.mcmg.util.ChatUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -188,6 +190,11 @@ public class MiniGameTeams {
         Material randomMaterial = Material.values()[i];
         MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, randomMaterial);
         DisguiseAPI.disguiseToAll(player, disguise);
+        DisguiseAPI.setActionBarShown(player, false);
+        String name = randomMaterial.name().replace('_', ' ');
+        String formatted = ChatColor.ITALIC + WordUtils.capitalize(name.toLowerCase());
+        String message = ChatColor.RESET + "You are disguised as a " + ChatColor.YELLOW + formatted;
+        ChatUtil.toActionBar(player, message);
     }
 
     private static void setHunterPlayer(Player player) {
@@ -195,7 +202,8 @@ public class MiniGameTeams {
         ItemStack axe = MiniGameItems.HUNTERS_SWORD.get();
         ItemStack bow = MiniGameItems.HUNTERS_BOW.get();
         ItemStack arrow = MiniGameItems.HUNTERS_ARROWS.get();
-        player.getInventory().addItem(axe, bow);
+        ItemStack compass = MiniGameItems.HUNTERS_COMPASS.get();
+        player.getInventory().addItem(axe, bow, compass);
         player.getInventory().setItem(8, arrow);
     }
 
@@ -207,6 +215,7 @@ public class MiniGameTeams {
                 ? new MobDisguise(disguiseType)
                 : new MiscDisguise(disguiseType);
         DisguiseAPI.disguiseToAll(player, disguise.setViewSelfDisguise(HideNSeekMiniGame.VIEW_DISGUISE.get()));
+        DisguiseAPI.setActionBarShown(player, false);
     }
 
     private static void setSeekerPlayer(Player player) {
