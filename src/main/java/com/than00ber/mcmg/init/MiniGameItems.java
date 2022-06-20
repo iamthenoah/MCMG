@@ -1,9 +1,15 @@
 package com.than00ber.mcmg.init;
 
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameItem;
+import com.than00ber.mcmg.minigames.PropHuntMiniGame;
+import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.ScheduleUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.CompassMeta;
@@ -26,8 +32,6 @@ public class MiniGameItems {
             .build();
     public static final MiniGameItem SURVIVORS_FOOD = new MiniGameItem.Builder(Material.COOKED_SALMON)
             .setName("Survivor's Fish")
-            .setBuyStackSize(5)
-            .setCost(1)
             .build();
     public static final MiniGameItem LIQUID_SUGAR_POTION = new MiniGameItem.Builder(Material.POTION)
             .setName("Liquid Sugar")
@@ -35,7 +39,6 @@ public class MiniGameItems {
                     "Gives a 2s speed boost.",
                     "Triggers a very short, but really fast sugar rush!"
             )
-            .setCost(1)
             .setMeta(() -> {
                 PotionMeta meta = (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
                 meta.setColor(Color.WHITE);
@@ -72,16 +75,50 @@ public class MiniGameItems {
             .build();
     public static final MiniGameItem HUNTERS_COMPASS = new MiniGameItem.Builder(Material.COMPASS)
             .setName(ChatColor.AQUA + "Revelation Compass")
+            .addTooltip("Reveals the location of the closest props.")
             .setMeta(() -> {
                 CompassMeta meta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
                 meta.setLodestone(null);
                 meta.setLodestoneTracked(false);
                 return meta;
             })
-            .addTooltip(
-                    "Reveals the general direction of the closest",
-                    "props to you for a brief moment."
-            )
+            .onToggled(PropHuntMiniGame.COMPASS_DURATION::get, PropHuntMiniGame.COMPASS_COOLDOWN::get, event -> {
+                event.setCancelled(true);
+                Player player = event.getPlayer();
+
+                double range = (double) PropHuntMiniGame.PLAYGROUND_RADIUS.get() * 2;
+                double distance = Double.POSITIVE_INFINITY;
+                Player target = null;
+                for (Entity entity : player.getNearbyEntities(range, range, range)) {
+                    if (!(entity instanceof Player)) continue;
+                    double to = player.getLocation().distance(entity.getLocation());
+                    if (to > distance) continue;
+                    if (!Main.MINIGAME_ENGINE.getCurrentGame().isInTeam((Player) entity, MiniGameTeams.PROPS)) continue;
+                    distance = to;
+                    target = (Player) entity;
+                }
+
+                if (target != null) {
+                    Player prop = target;
+                    ItemStack item = player.getInventory().getItemInMainHand();
+                    CompassMeta meta = (CompassMeta) item.getItemMeta();
+
+                    ScheduleUtil.doWhile(100, 10, () -> {
+                        String title = ChatColor.BOLD + "A Hunter sees you!";
+                        prop.sendTitle(ChatColor.GOLD + title, "", 0, 5, 5);
+                    });
+
+                    ScheduleUtil.doWhile(PropHuntMiniGame.COMPASS_DURATION.get() * 20, 5, () -> {
+                        ChatUtil.toActionBar(prop, ChatColor.GOLD + "Your position is compromised!");
+                        meta.setLodestone(prop.getLocation());
+                        item.setItemMeta(meta);
+                    }, () -> {
+                        ChatUtil.toActionBar(prop, ChatColor.GREEN + "You are now hidden again...");
+                        meta.setLodestone(null);
+                        item.setItemMeta(meta);
+                    });
+                }
+            })
             .build();
 
     /**
