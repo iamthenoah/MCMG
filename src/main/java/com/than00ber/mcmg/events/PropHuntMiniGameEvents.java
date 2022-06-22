@@ -5,13 +5,16 @@ import com.than00ber.mcmg.init.MiniGameItems;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.ScheduleUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.*;
-import org.bukkit.block.Block;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -53,18 +56,19 @@ public class PropHuntMiniGameEvents extends MiniGameEventListener<PropHuntMiniGa
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.isCancelled()) return;
         Player player = event.getPlayer();
+        Action action = event.getAction();
 
         if (minigame.isInTeam(player, MiniGameTeams.PROPS)) {
             if (player.isSneaking()) return;
-            Action action = event.getAction();
+            boolean isHoldItem = player.getInventory().getItemInMainHand().getType() != Material.AIR;
 
-            if (action == Action.RIGHT_CLICK_BLOCK) {
-                Block clickedBlock = event.getClickedBlock();
+            if (action == Action.RIGHT_CLICK_BLOCK && !isHoldItem) {
+                if (event.getClickedBlock() != null) {
+                    event.setCancelled(true);
 
-                if (clickedBlock != null) {
-                    Material material = clickedBlock.getType();
-
+                    Material material = event.getClickedBlock().getType();
                     if (!PropHuntMiniGame.ALLOW_BLOCKS.get() && material.isBlock()) return;
                     if (!PropHuntMiniGame.ALLOW_SPECIALS.get() && material.isTransparent()) return;
 
@@ -75,12 +79,12 @@ public class PropHuntMiniGameEvents extends MiniGameEventListener<PropHuntMiniGa
                     String formatted = ChatColor.ITALIC + WordUtils.capitalize(name.toLowerCase());
                     String message = ChatColor.RESET + "You are disguised as a " + ChatColor.YELLOW + formatted;
                     ChatUtil.toActionBar(player, message);
-
-                    event.setCancelled(true);
                 }
             } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+                event.setCancelled(true);
+
                 Supplier<Integer> delta = () -> new Random().nextInt(4) - 2;
-                Location loc = player.getLocation().add(delta.get(), delta.get(), delta.get());
+                Location location = player.getLocation().add(delta.get(), delta.get(), delta.get());
                 List<Sound> sounds = List.of(
                         Sound.ENTITY_CAT_AMBIENT,
                         Sound.ENTITY_COW_AMBIENT,
@@ -92,8 +96,9 @@ public class PropHuntMiniGameEvents extends MiniGameEventListener<PropHuntMiniGa
                         Sound.ENTITY_SHEEP_AMBIENT,
                         Sound.ENTITY_VILLAGER_AMBIENT
                 );
+
                 Sound sound = sounds.get(new Random().nextInt(sounds.size() - 1));
-                minigame.getCurrentPlayerRoles().keySet().forEach(p -> p.playSound(loc, sound, 1, 1));
+                minigame.getCurrentPlayerRoles().keySet().forEach(p -> p.playSound(location, sound, 1, 1));
             }
         }
     }
@@ -112,13 +117,16 @@ public class PropHuntMiniGameEvents extends MiniGameEventListener<PropHuntMiniGa
     @EventHandler
     public void onEntityShootBow(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player player) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> {
+            int cooldown = PropHuntMiniGame.ARROW_REPLENISH_COOLDOWN.get() * 20;
+            player.setCooldown(event.getBow().getType(), cooldown);
+
+            ScheduleUtil.doDelayed(cooldown, () -> {
                 boolean hasArrow = player.getInventory().contains(MiniGameItems.HUNTERS_ARROWS.get());
 
                 if (Main.MINIGAME_ENGINE.hasRunningGame() && !hasArrow) {
                     player.getInventory().setItem(8, MiniGameItems.HUNTERS_ARROWS.get());
                 }
-            }, 20L * PropHuntMiniGame.ARROW_REPLENISH_COOLDOWN.get());
+            });
         }
     }
 
