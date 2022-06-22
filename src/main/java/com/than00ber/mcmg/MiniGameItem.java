@@ -29,7 +29,7 @@ public class MiniGameItem {
     private final ItemMeta meta;
     private final @Nullable Action action;
 
-    public MiniGameItem(Material material, String name, List<String> tooltips, boolean unbreakable, ItemMeta meta, @Nullable Action action) {
+    private MiniGameItem(Material material, String name, List<String> tooltips, boolean unbreakable, ItemMeta meta, @Nullable Action action) {
         this.material = material;
         this.name = name;
         this.unbreakable = unbreakable;

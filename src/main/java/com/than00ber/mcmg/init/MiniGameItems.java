@@ -6,13 +6,15 @@ import com.than00ber.mcmg.MiniGameItem;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.CompassMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
@@ -34,19 +36,6 @@ public class MiniGameItems {
     public static final MiniGameItem SURVIVORS_FOOD = new MiniGameItem.Builder(Material.COOKED_SALMON)
             .setName("Survivor's Fish")
             .build();
-    public static final MiniGameItem LIQUID_SUGAR_POTION = new MiniGameItem.Builder(Material.POTION)
-            .setName("Liquid Sugar")
-            .addTooltip(
-                    "Gives a 2s speed boost.",
-                    "Triggers a very short, but really fast sugar rush!"
-            )
-            .setMeta(() -> {
-                PotionMeta meta = (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
-                meta.setColor(Color.WHITE);
-                PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 40, 10);
-                meta.addCustomEffect(effect, false);
-                return meta;
-            }).build();
     public static final MiniGameItem RULE_BOOK = new MiniGameItem.Builder(Material.WRITTEN_BOOK)
             .setName(ChatColor.YELLOW + "WWRPG Rule Book")
             .setMeta(() -> {
@@ -75,7 +64,7 @@ public class MiniGameItems {
             .setName(ChatColor.AQUA + "Hunter's Arrow")
             .build();
     public static final MiniGameItem PROP_COMPASS = new MiniGameItem.Builder(Material.COMPASS)
-            .setName(ChatColor.AQUA + "Prop Compass")
+            .setName(ChatColor.DARK_AQUA + "Prop Compass")
             .addTooltip("Reveals the location of the closest props.")
             .setMeta(() -> {
                 CompassMeta meta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
@@ -123,7 +112,7 @@ public class MiniGameItems {
             })
             .build();
     public static final MiniGameItem STUN_INK = new MiniGameItem.Builder(Material.INK_SAC)
-            .setName(ChatColor.DARK_PURPLE + "Stun Juice")
+            .setName(ChatColor.DARK_AQUA + "Stun Juice")
             .addTooltip("Blinds any nearby hunter for a brief moment.")
             .onTrigger(PropHuntMiniGame.STUN_JUICE_COOLDOWN::get, event -> {
                 Player player = event.getPlayer();
@@ -189,6 +178,15 @@ public class MiniGameItems {
                         player.teleport(destination.add(0.5, 0, 0.5).setDirection(eyeDirection));
                     }
                 }
+            })
+            .build();
+    public static final MiniGameItem PROP_COCAINE = new MiniGameItem.Builder(Material.SUGAR)
+            .setName(ChatColor.BLUE + "Prop Cocaine")
+            .addTooltip("Gives you extreme speed for a brief moment.")
+            .onToggled(() -> 3, () -> 3, event -> {
+                Player player = event.getPlayer();
+                PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, 3 * 20, 10);
+                player.addPotionEffect(potion);
             })
             .build();
 

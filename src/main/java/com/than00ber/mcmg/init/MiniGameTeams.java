@@ -187,7 +187,8 @@ public class MiniGameTeams {
         player.setInvisible(true);
         ItemStack stunInk = MiniGameItems.STUN_INK.get();
         ItemStack glowDust = MiniGameItems.GLOW_DUST.get();
-        player.getInventory().addItem(stunInk, glowDust);
+        ItemStack propCocaine = MiniGameItems.PROP_COCAINE.get();
+        player.getInventory().addItem(stunInk, glowDust, propCocaine);
         Material material = Main.WORLD.getBlockAt(player.getLocation().add(0, -1, 0)).getType();
         MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
         DisguiseAPI.disguiseToAll(player, disguise);
