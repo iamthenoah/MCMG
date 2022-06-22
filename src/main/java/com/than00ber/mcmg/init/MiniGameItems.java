@@ -141,6 +141,17 @@ public class MiniGameItems {
                 }
             })
             .build();
+    public static final MiniGameItem GLOW = new MiniGameItem.Builder(Material.GLOWSTONE)
+            .setName("Mabite")
+            .onToggled(() -> 10, () -> 3, event -> {
+                event.setCancelled(true);
+                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getCurrentPlayerRoles().keySet()) {
+                    if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.HUNTERS)) {
+                        player.setGlowing(true);
+                    }
+                }
+            })
+            .build();
 
     /**
      * HideNSeek Items
