@@ -45,7 +45,7 @@ public class GlobalEvents implements Listener {
             String name = ChatColor.stripColor(meta.getDisplayName());
 
             if (MiniGameItem.TOGGLEABLE_ITEMS.containsKey(name)) {
-                MiniGameItem.TOGGLEABLE_ITEMS.get(name).onClick(event);
+                MiniGameItem.TOGGLEABLE_ITEMS.get(name).getAction().onClick(event);
             }
         }
     }
