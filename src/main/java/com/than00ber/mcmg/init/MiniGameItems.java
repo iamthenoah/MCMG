@@ -84,12 +84,11 @@ public class MiniGameItems {
                 return meta;
             })
             .onToggled(PropHuntMiniGame.COMPASS_DURATION::get, PropHuntMiniGame.COMPASS_COOLDOWN::get, event -> {
-                event.setCancelled(true);
                 Player player = event.getPlayer();
-
                 double range = (double) PropHuntMiniGame.PLAYGROUND_RADIUS.get() * 2;
                 double distance = Double.POSITIVE_INFINITY;
                 Player target = null;
+
                 for (Entity entity : player.getNearbyEntities(range, range, range)) {
                     if (!(entity instanceof Player)) continue;
                     double to = player.getLocation().distance(entity.getLocation());
@@ -124,12 +123,12 @@ public class MiniGameItems {
             })
             .build();
     public static final MiniGameItem STUN_INK = new MiniGameItem.Builder(Material.INK_SAC)
-            .setName("Stun Juice")
+            .setName(ChatColor.DARK_PURPLE + "Stun Juice")
             .addTooltip("Blinds any nearby hunter for a brief moment.")
-            .onToggled(() -> 0, PropHuntMiniGame.STUN_JUICE_COOLDOWN::get, event -> {
-                event.setCancelled(true);
+            .onTrigger(PropHuntMiniGame.STUN_JUICE_COOLDOWN::get, event -> {
                 Player player = event.getPlayer();
                 double range = PropHuntMiniGame.STUN_JUICE_RANGE.get();
+
                 for (Entity entity : player.getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player victim) {
                         if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(victim, MiniGameTeams.HUNTERS)) {
@@ -141,13 +140,19 @@ public class MiniGameItems {
                 }
             })
             .build();
-    public static final MiniGameItem GLOW = new MiniGameItem.Builder(Material.GLOWSTONE)
-            .setName("Mabite")
+    public static final MiniGameItem GLOW_DUST = new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
+            .setName(ChatColor.YELLOW + "Glow Dust")
+            .addTooltip("Reveals all hunters in the game for a brief moment.")
             .onToggled(() -> 10, () -> 3, event -> {
-                event.setCancelled(true);
                 for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getCurrentPlayerRoles().keySet()) {
                     if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.HUNTERS)) {
                         player.setGlowing(true);
+                    }
+                }
+            }, event -> {
+                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getCurrentPlayerRoles().keySet()) {
+                    if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.HUNTERS)) {
+                        player.setGlowing(false);
                     }
                 }
             })

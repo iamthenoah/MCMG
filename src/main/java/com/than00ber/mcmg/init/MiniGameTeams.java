@@ -185,7 +185,9 @@ public class MiniGameTeams {
         resetPlayer(player);
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(PropHuntMiniGame.PROPS_MAX_HEALTH.get());
         player.setInvisible(true);
-        player.getInventory().addItem(MiniGameItems.STUN_INK.get(), MiniGameItems.GLOW.get());
+        ItemStack stunInk = MiniGameItems.STUN_INK.get();
+        ItemStack glowDust = MiniGameItems.GLOW_DUST.get();
+        player.getInventory().addItem(stunInk, glowDust);
         Material material = Main.WORLD.getBlockAt(player.getLocation().add(0, -1, 0)).getType();
         MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
         DisguiseAPI.disguiseToAll(player, disguise);
