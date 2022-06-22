@@ -1,6 +1,6 @@
 package com.than00ber.mcmg;
 
-import com.than00ber.mcmg.events.MiniGameEventListener;
+import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
@@ -149,7 +149,7 @@ public class MiniGameEngine<G extends MiniGame> {
         unregisterTeams();
         registerTeams(minigame);
         minigame.onMinigameStarted(participants);
-        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEventListener::register);
+        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEvents::register);
         for (Player player : minigame.getWorld().getPlayers()) {
 
             if (!participants.contains(player)) {
@@ -177,7 +177,7 @@ public class MiniGameEngine<G extends MiniGame> {
         }
 
         unregisterTeams();
-        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEventListener::unregister);
+        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEvents::unregister);
         Bukkit.getScheduler().cancelTasks(instance);
 
         return ActionResult.success(reason);

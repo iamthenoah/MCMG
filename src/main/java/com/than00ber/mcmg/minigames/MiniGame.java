@@ -6,7 +6,7 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameEngine;
 import com.than00ber.mcmg.MiniGameTeam;
 import com.than00ber.mcmg.WinCondition;
-import com.than00ber.mcmg.events.MiniGameEventListener;
+import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.Console;
@@ -37,7 +37,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     protected final HashMap<Player, MiniGameTeam> currentPlayerRoles;
     private final List<MiniGameProperty<?>> properties;
     private final World world;
-    private MiniGameEventListener<?> listener;
+    private MiniGameEvents<?> listener;
 
     public MiniGame(World world) {
         this.world = world;
@@ -66,11 +66,11 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         return ImmutableMap.copyOf(originalPlayerRoles);
     }
 
-    public MiniGameEventListener<?> getEventListener() {
+    public MiniGameEvents<?> getEventListener() {
         return listener;
     }
 
-    protected final void setEventListener(MiniGameEventListener<?> eventListener) {
+    protected final void setEventListener(MiniGameEvents<?> eventListener) {
         listener = eventListener;
     }
 

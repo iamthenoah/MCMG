@@ -10,18 +10,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
-public abstract class MiniGameEventListener<G extends MiniGame> implements Listener {
+public abstract class MiniGameEvents<G extends MiniGame> implements Listener {
 
-    protected final G minigame;
     protected final Main instance;
+    protected final G minigame;
 
-    protected MiniGameEventListener(Main instance, G minigame) {
+    protected MiniGameEvents(Main instance, G minigame) {
         this.instance = instance;
         this.minigame = minigame;
     }
 
     public void unregister() {
-        HandlerList.unregisterAll(this);
+        HandlerList.unregisterAll(minigame.getEventListener());
     }
 
     public void register() {

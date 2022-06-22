@@ -28,10 +28,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-public class PropHuntMiniGameEvents extends MiniGameEventListener<PropHuntMiniGame> {
+public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
 
     public PropHuntMiniGameEvents(Main instance, PropHuntMiniGame game) {
         super(instance, game);
@@ -42,12 +41,12 @@ public class PropHuntMiniGameEvents extends MiniGameEventListener<PropHuntMiniGa
         Player player = event.getEntity();
         minigame.switchTeam(player, MiniGameTeams.SPECTATORS);
 
-        AtomicInteger count = new AtomicInteger();
-        minigame.getCurrentPlayerRoles().values().forEach(t -> {
-            if (t == MiniGameTeams.PROPS) count.getAndIncrement();
-        });
+        int count = 0;
+        for (Player p : minigame.getCurrentPlayerRoles().keySet()) {
+            if (minigame.isInTeam(p, MiniGameTeams.PROPS)) count++;
+        }
 
-        if (count.get() > 0) {
+        if (count > 0) {
             String remaining = ChatColor.YELLOW + String.valueOf(count) + ChatColor.RESET;
             ChatUtil.toAll(TextUtil.formatPlayer(player) + " has been eliminated.");
             ChatUtil.toAll(remaining + " props remaining.");

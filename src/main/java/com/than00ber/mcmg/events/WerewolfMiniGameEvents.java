@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Random;
 
-public class WerewolfMiniGameEvents extends MiniGameEventListener<WerewolfMiniGame> {
+public class WerewolfMiniGameEvents extends MiniGameEvents<WerewolfMiniGame> {
 
     public WerewolfMiniGameEvents(Main instance, WerewolfMiniGame game) {
         super(instance, game);
