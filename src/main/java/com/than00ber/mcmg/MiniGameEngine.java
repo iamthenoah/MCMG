@@ -170,8 +170,11 @@ public class MiniGameEngine<G extends MiniGame> {
 
         minigame.getWorld().getWorldBorder().reset();
         minigame.onMinigameEnded();
-        currentHandler.deactivate();
-        currentHandler = null;
+
+        if (currentHandler != null) {
+            currentHandler.deactivate();
+            currentHandler = null;
+        }
 
         unregisterTeams();
         Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEventListener::unregister);
