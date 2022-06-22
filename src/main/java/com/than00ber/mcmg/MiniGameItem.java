@@ -1,8 +1,11 @@
 package com.than00ber.mcmg;
 
+import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,38 +25,48 @@ public class MiniGameItem {
 
     private final Material material;
     private final String name;
+    private final @Nullable String message;
     private final List<String> tooltips;
     private final boolean unbreakable;
     private final ItemMeta meta;
 
     // toggle data
-    private final @Nullable Supplier<Integer> toggleDuration;
-    private final @Nullable Supplier<Integer> toggleCooldown;
-    private final @Nullable Consumer<PlayerInteractEvent> toggleConsumer;
+    private final @Nullable Consumer<PlayerInteractEvent> onActionStart;
+    private final @Nullable Consumer<PlayerInteractEvent> onActionEnd;
+    // providing supplier in case config changes during runtime
+    private final @Nullable Supplier<Integer> actionDuration;
+    private final @Nullable Supplier<Integer> actionCooldown;
 
     public MiniGameItem(
             Material material,
             String name,
+            @Nullable String message,
             List<String> tooltips,
             boolean unbreakable,
             ItemMeta meta,
-            @Nullable Supplier<Integer> toggleDuration,
-            @Nullable Supplier<Integer> toggleCooldown,
-            @Nullable Consumer<PlayerInteractEvent> toggleConsumer
-    ) {
+            @Nullable Supplier<Integer> actionDuration,
+            @Nullable Supplier<Integer> actionCooldown,
+            @Nullable Consumer<PlayerInteractEvent> onActionStart,
+            @Nullable Consumer<PlayerInteractEvent> onActionEnd)
+    {
         this.material = material;
         this.name = name;
+        this.message = message;
         this.unbreakable = unbreakable;
         this.meta = meta;
+        this.actionDuration = actionDuration;
+        this.actionCooldown = actionCooldown;
+        this.onActionStart = onActionStart;
+        this.onActionEnd = onActionEnd;
 
-        this.toggleDuration = toggleDuration;
-        this.toggleCooldown = toggleCooldown;
-        this.toggleConsumer = toggleConsumer;
-
-        if (toggleConsumer != null && toggleDuration != null && toggleCooldown != null) {
+        if (onActionStart != null) {
             TOGGLEABLE_ITEMS.put(ChatColor.stripColor(name), this);
-            tooltips.add(ChatColor.GRAY + "Duration: " + ChatColor.YELLOW + toggleDuration.get() + "s");
-            tooltips.add(ChatColor.GRAY + "Cooldown: " + ChatColor.YELLOW + toggleCooldown.get() + "s");
+        }
+        if (actionDuration != null) {
+            tooltips.add(ChatColor.GRAY + "Duration: " + ChatColor.YELLOW + actionDuration.get() + "s");
+        }
+        if (actionCooldown != null) {
+            tooltips.add(ChatColor.GRAY + "Cooldown: " + ChatColor.YELLOW + actionCooldown.get() + "s");
         }
 
         // lore has dark purple color set by default
@@ -61,14 +74,30 @@ public class MiniGameItem {
     }
 
     public void onClick(PlayerInteractEvent event) {
-        if (toggleConsumer != null && toggleDuration != null && toggleCooldown != null) {
+        if (onActionStart != null && actionDuration != null && actionCooldown != null) {
             Player player = event.getPlayer();
+            ItemStack item = event.getItem();
 
-            if (!player.hasCooldown(material)) {
-                int delay = toggleDuration.get() * 20;
-                int cooldown = toggleCooldown.get() * 20;
-                toggleConsumer.accept(event);
-                ScheduleUtil.doDelayed(delay, () -> player.setCooldown(material, cooldown));
+            if (!player.hasCooldown(material) && !item.containsEnchantment(Enchantment.LOYALTY)) {
+                event.setCancelled(true);
+                int delay = actionDuration.get() * 20;
+                int cooldown = actionCooldown.get() * 20;
+
+                onActionStart.accept(event);
+                item.addUnsafeEnchantment(Enchantment.LOYALTY, 1);
+
+                if (delay != 0) player.playEffect(player.getLocation(), Effect.CLICK1, null);
+                if (message != null) ScheduleUtil.doWhile(delay, 5, () -> ChatUtil.toActionBar(player, message));
+
+                ScheduleUtil.doDelayed(delay, () -> {
+                    item.removeEnchantment(Enchantment.LOYALTY);
+                    player.playEffect(player.getLocation(), Effect.CLICK2, null);
+                    player.setCooldown(material, cooldown);
+
+                    if (onActionEnd != null) {
+                        onActionEnd.accept(event);
+                    }
+                });
             }
         }
     }
@@ -86,17 +115,20 @@ public class MiniGameItem {
 
         private final Material material;
         private String name;
+        private String message;
         private final List<String> tooltips;
         private boolean unbreakable;
         private ItemMeta meta;
 
         // toggle data
-        private @Nullable Supplier<Integer> toggleDuration;
-        private @Nullable Supplier<Integer> toggleCooldown;
-        private @Nullable Consumer<PlayerInteractEvent> toggleConsumer;
+        private @Nullable Supplier<Integer> actionDuration;
+        private @Nullable Supplier<Integer> actionCooldown;
+        private @Nullable Consumer<PlayerInteractEvent> onActionStart;
+        private @Nullable Consumer<PlayerInteractEvent> onActionEnd;
 
         public Builder(Material material) {
             this.material = material;
+            meta = new ItemStack(material).getItemMeta();
             name = material.name();
             tooltips = new ArrayList<>();
             unbreakable = false;
@@ -105,6 +137,11 @@ public class MiniGameItem {
         public Builder setName(String name) {
             // custom names are in italic by default
             this.name = ChatColor.RESET + name;
+            return this;
+        }
+
+        public Builder addMessage(String message) {
+            this.message = message;
             return this;
         }
 
@@ -126,27 +163,46 @@ public class MiniGameItem {
         public Builder onToggled(
                 Supplier<Integer> duration,
                 Supplier<Integer> cooldown,
-                Consumer<PlayerInteractEvent> consumer
-        ) {
-            // providing supplier in case config changes during runtime
-            toggleDuration = duration;
-            toggleCooldown = cooldown;
-            toggleConsumer = consumer;
+                Consumer<PlayerInteractEvent> start) {
+            actionDuration = duration;
+            actionCooldown = cooldown;
+            onActionStart = start;
+            return this;
+        }
+
+        public Builder onToggled(
+                Supplier<Integer> duration,
+                Supplier<Integer> cooldown,
+                Consumer<PlayerInteractEvent> start,
+                Consumer<PlayerInteractEvent> end) {
+            actionDuration = duration;
+            actionCooldown = cooldown;
+            onActionStart = start;
+            onActionEnd = end;
+            return this;
+        }
+
+        public Builder onTrigger(
+                Supplier<Integer> cooldown,
+                Consumer<PlayerInteractEvent> start) {
+            actionDuration = () -> 0;
+            actionCooldown = cooldown;
+            onActionStart = start;
             return this;
         }
 
         public MiniGameItem build() {
-            if (meta == null) meta = new ItemStack(material).getItemMeta();
             return new MiniGameItem(
                     material,
                     name,
+                    message,
                     tooltips,
                     unbreakable,
                     meta,
-                    toggleDuration,
-                    toggleCooldown,
-                    toggleConsumer
-            );
+                    actionDuration,
+                    actionCooldown,
+                    onActionStart,
+                    onActionEnd);
         }
     }
 }
