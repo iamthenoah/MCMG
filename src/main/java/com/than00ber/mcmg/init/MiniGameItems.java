@@ -1,14 +1,12 @@
 package com.than00ber.mcmg.init;
 
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.MiniGameEngine;
 import com.than00ber.mcmg.MiniGameItem;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +15,8 @@ import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +74,8 @@ public class MiniGameItems {
     public static final MiniGameItem HUNTERS_ARROWS = new MiniGameItem.Builder(Material.ARROW)
             .setName(ChatColor.AQUA + "Hunter's Arrow")
             .build();
-    public static final MiniGameItem HUNTERS_COMPASS = new MiniGameItem.Builder(Material.COMPASS)
-            .setName(ChatColor.AQUA + "Revelation Compass")
+    public static final MiniGameItem PROP_COMPASS = new MiniGameItem.Builder(Material.COMPASS)
+            .setName(ChatColor.AQUA + "Prop Compass")
             .addTooltip("Reveals the location of the closest props.")
             .setMeta(() -> {
                 CompassMeta meta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
@@ -153,6 +153,40 @@ public class MiniGameItems {
                 for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getCurrentPlayerRoles().keySet()) {
                     if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.HUNTERS)) {
                         player.setGlowing(false);
+                    }
+                }
+            })
+            .build();
+    public static final MiniGameItem TELEPORTER = new MiniGameItem.Builder(Material.ENDER_EYE)
+            .setName(ChatColor.DARK_PURPLE + "Teleporter")
+            .addTooltip("Teleports you straight to the pointed direction.")
+            .onTrigger(() -> 3, event -> {
+                Player player = event.getPlayer();
+                Location eyeLoc = player.getEyeLocation();
+                Vector eyeDirection = eyeLoc.getDirection();
+
+                RayTraceResult ray = Main.WORLD.rayTraceBlocks(eyeLoc, eyeDirection, 100);
+
+                if (ray != null && ray.getHitBlock() != null) {
+                    Location destination = ray.getHitBlock().getLocation().add(0, 1, 0);
+
+                    MiniGameEngine.Options options = Main.MINIGAME_ENGINE.getCurrentGame().getOptions();
+                    Location spawn = options.getPlaygroundSpawn();
+                    int r = options.getPlaygroundRadius() / 2 + 1;
+                    Location p1 = new Location(Main.WORLD, spawn.getBlockX() - r, 0, spawn.getBlockZ() - r);
+                    Location p2 = new Location(Main.WORLD, spawn.getBlockX() + r, 0, spawn.getBlockZ() + r);
+                    int x = destination.getBlockX();
+                    int z = destination.getBlockZ();
+
+                    if (x > p1.getBlockX() && x < p2.getBlockX() && z > p1.getBlockZ() && z < p2.getBlockZ()) {
+                        int count = 3;
+                        while (player.getWorld().getBlockAt(destination).getType() != Material.AIR) {
+                            if (count == 0) return;
+                            destination.add(0, 1, 0);
+                            count--;
+                        }
+
+                        player.teleport(destination.add(0.5, 0, 0.5).setDirection(eyeDirection));
                     }
                 }
             })

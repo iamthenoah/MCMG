@@ -203,10 +203,11 @@ public class MiniGameTeams {
         ItemStack axe = MiniGameItems.HUNTERS_SWORD.get();
         ItemStack bow = MiniGameItems.HUNTERS_BOW.get();
         ItemStack arrow = MiniGameItems.HUNTERS_ARROWS.get();
-        ItemStack compass = MiniGameItems.HUNTERS_COMPASS.get();
+        ItemStack compass = MiniGameItems.PROP_COMPASS.get();
+        ItemStack teleporter = MiniGameItems.TELEPORTER.get();
         int cooldown = PropHuntMiniGame.COMPASS_COOLDOWN_START.get() * 20;
         player.setCooldown(compass.getType(), cooldown);
-        player.getInventory().addItem(axe, bow, compass);
+        player.getInventory().addItem(axe, bow, compass, teleporter);
         player.getInventory().setItem(8, arrow);
     }
 
