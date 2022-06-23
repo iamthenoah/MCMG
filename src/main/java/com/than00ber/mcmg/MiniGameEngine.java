@@ -188,6 +188,7 @@ public class MiniGameEngine<G extends MiniGame> {
 
         minigame.onMinigameEnded();
         Optional.ofNullable(currentHandler).ifPresent(MiniGameHandler::deactivate);
+        Bukkit.getScheduler().cancelTasks(instance);
         currentHandler = null;
 
         if (participants == null) participants = Main.WORLD.getPlayers();
@@ -238,7 +239,6 @@ public class MiniGameEngine<G extends MiniGame> {
             scoreboard.getTeams().forEach(Team::unregister);
         }
     }
-
 
     public interface Options {
 
