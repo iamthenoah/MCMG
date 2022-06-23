@@ -211,7 +211,8 @@ public class MiniGameItems {
             .addTooltip("Gives you extreme speed for a brief moment.")
             .onToggled(PropHuntMiniGame.COCAINE_DURATION, PropHuntMiniGame.COCAINE_COOLDOWN, event -> {
                 Player player = event.getPlayer();
-                PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, 3 * 20, 10);
+                int duration = PropHuntMiniGame.COCAINE_DURATION.get() * 20;
+                PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, duration, 10);
                 player.addPotionEffect(potion);
             })
             .build();
@@ -230,7 +231,7 @@ public class MiniGameItems {
                             maxCount--;
                             int x = loc.getBlockX() + r.nextInt(4) - 2;
                             int y = loc.getBlockY() + r.nextInt(2);
-                            int z = loc.getBlockZ() +  r.nextInt(4) - 2;
+                            int z = loc.getBlockZ() + r.nextInt(4) - 2;
                             Location pos = new Location(player.getWorld(), x, y, z);
                             material = Main.WORLD.getBlockAt(pos).getType();
                             if (maxCount == 0) return;
