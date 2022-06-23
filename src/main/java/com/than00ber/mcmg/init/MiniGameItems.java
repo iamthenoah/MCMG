@@ -6,6 +6,9 @@ import com.than00ber.mcmg.MiniGameItem;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,6 +25,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MiniGameItems {
 
@@ -180,13 +184,44 @@ public class MiniGameItems {
                 }
             })
             .build();
-    public static final MiniGameItem PROP_COCAINE = new MiniGameItem.Builder(Material.SUGAR)
-            .setName(ChatColor.BLUE + "Prop Cocaine")
+    public static final MiniGameItem COCAINE = new MiniGameItem.Builder(Material.SUGAR)
+            .setName(ChatColor.BLUE + "Cocaine")
             .addTooltip("Gives you extreme speed for a brief moment.")
             .onToggled(() -> 3, () -> 3, event -> {
                 Player player = event.getPlayer();
                 PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, 3 * 20, 10);
                 player.addPotionEffect(potion);
+            })
+            .build();
+    public static final MiniGameItem PROP_RANDOMIZER = new MiniGameItem.Builder(Material.FLOWER_POT)
+            .setName(ChatColor.LIGHT_PURPLE + "Prop Randomizer")
+            .addTooltip("Changes the appears of all props with any random nearby block.")
+            .onTrigger(() -> 1, event -> {
+                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getCurrentPlayerRoles().keySet()) {
+                    if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.PROPS)) {
+                        Random r = new Random();
+                        Material material = Material.AIR;
+                        Location loc = player.getLocation();
+
+                        int maxCount = 32;
+                        while (material == Material.AIR || material == Material.VOID_AIR) {
+                            maxCount--;
+                            int x = loc.getBlockX() + r.nextInt(4) - 2;
+                            int y = loc.getBlockY() + r.nextInt(2);
+                            int z = loc.getBlockZ() +  r.nextInt(4) - 2;
+                            Location pos = new Location(player.getWorld(), x, y, z);
+                            material = Main.WORLD.getBlockAt(pos).getType();
+                            if (maxCount == 0) return;
+                        }
+
+                        MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
+                        DisguiseAPI.disguiseToAll(player, disguise);
+                        DisguiseAPI.setActionBarShown(player, false);
+                        String title = ChatColor.GOLD + "Your appearance changed!";
+                        String subtitle = "A hunter has changed your appearance";
+                        player.sendTitle(title, subtitle, 0, 30, 5);
+                    }
+                }
             })
             .build();
 

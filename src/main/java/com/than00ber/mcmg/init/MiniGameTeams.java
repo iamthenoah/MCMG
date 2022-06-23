@@ -187,7 +187,7 @@ public class MiniGameTeams {
         player.setInvisible(true);
         ItemStack stunInk = MiniGameItems.STUN_INK.get();
         ItemStack glowDust = MiniGameItems.GLOW_DUST.get();
-        ItemStack propCocaine = MiniGameItems.PROP_COCAINE.get();
+        ItemStack propCocaine = MiniGameItems.COCAINE.get();
         player.getInventory().addItem(stunInk, glowDust, propCocaine);
         Material material = Main.WORLD.getBlockAt(player.getLocation().add(0, -1, 0)).getType();
         MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
@@ -206,9 +206,10 @@ public class MiniGameTeams {
         ItemStack arrow = MiniGameItems.HUNTERS_ARROWS.get();
         ItemStack compass = MiniGameItems.PROP_COMPASS.get();
         ItemStack teleporter = MiniGameItems.TELEPORTER.get();
+        ItemStack propRandomizer = MiniGameItems.PROP_RANDOMIZER.get();
         int cooldown = PropHuntMiniGame.COMPASS_COOLDOWN_START.get() * 20;
         player.setCooldown(compass.getType(), cooldown);
-        player.getInventory().addItem(axe, bow, compass, teleporter);
+        player.getInventory().addItem(axe, bow, compass, teleporter, propRandomizer);
         player.getInventory().setItem(8, arrow);
     }
 
