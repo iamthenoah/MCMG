@@ -22,12 +22,26 @@ public class PropHuntMiniGame extends MiniGame {
     public static final MiniGameProperty.IntegerProperty ARROW_REPLENISH_COOLDOWN = new MiniGameProperty.IntegerProperty("replenish.seconds", 10).validate(i -> i <= Main.MINIGAME_ENGINE.getCurrentGame().getOptions().getDurationRound());
     public static final MiniGameProperty.BooleanProperty ALLOW_BLOCKS = new MiniGameProperty.BooleanProperty("allow.solids", true);
     public static final MiniGameProperty.BooleanProperty ALLOW_SPECIALS = new MiniGameProperty.BooleanProperty("allow.specials", true);
-    public static final MiniGameProperty.IntegerProperty COMPASS_COOLDOWN_START = new MiniGameProperty.IntegerProperty("compass.startingCooldown", 30).validate(i -> i >= Main.MINIGAME_ENGINE.getCurrentGame().getOptions().getDurationGrace());
-    public static final MiniGameProperty.IntegerProperty COMPASS_COOLDOWN = new MiniGameProperty.IntegerProperty("compass.cooldown", 10).validate(i -> i > 0);
-    public static final MiniGameProperty.IntegerProperty COMPASS_DURATION = new MiniGameProperty.IntegerProperty("compass.duration", 10).validate(i -> i > 0);
-    public static final MiniGameProperty.IntegerProperty STUN_JUICE_COOLDOWN = new MiniGameProperty.IntegerProperty("stunJuice.cooldown", 30).validate(i -> i > 0);
-    public static final MiniGameProperty.IntegerProperty STUN_JUICE_DURATION = new MiniGameProperty.IntegerProperty("stunJuice.duration", 2).validate(i -> i > 0);
-    public static final MiniGameProperty.IntegerProperty STUN_JUICE_RANGE = new MiniGameProperty.IntegerProperty("stunJuice.range", 5).validate(i -> i > 0);
+    // PROP_COMPASS
+    public static final MiniGameProperty.IntegerProperty PROP_COMPASS_COOLDOWN_START = new MiniGameProperty.IntegerProperty("propCompass.startingCooldown", 30).validate(i -> i >= Main.MINIGAME_ENGINE.getCurrentGame().getOptions().getDurationGrace());
+    public static final MiniGameProperty.IntegerProperty PROP_COMPASS_COOLDOWN = new MiniGameProperty.IntegerProperty("propCompass.cooldown", 10).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    public static final MiniGameProperty.IntegerProperty PROP_COMPASS_DURATION = new MiniGameProperty.IntegerProperty("propCompass.duration", 10).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    // STUN_INK
+    public static final MiniGameProperty.IntegerProperty STUN_JUICE_COOLDOWN = new MiniGameProperty.IntegerProperty("stunJuice.cooldown", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    public static final MiniGameProperty.IntegerProperty STUN_JUICE_DURATION = new MiniGameProperty.IntegerProperty("stunJuice.duration", 2).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    public static final MiniGameProperty.IntegerProperty STUN_JUICE_RANGE = new MiniGameProperty.IntegerProperty("stunJuice.range", 5).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    // GLOW_DUST
+    public static final MiniGameProperty.IntegerProperty GLOW_DUST_COOLDOWN = new MiniGameProperty.IntegerProperty("glowDust.cooldown", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    public static final MiniGameProperty.IntegerProperty GLOW_DUST_DURATION = new MiniGameProperty.IntegerProperty("glowDust.duration", 2).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    public static final MiniGameProperty.IntegerProperty GLOW_DUST_RANGE = new MiniGameProperty.IntegerProperty("glowDust.range", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    // TELEPORTER
+    public static final MiniGameProperty.IntegerProperty TELEPORTER_COOLDOWN = new MiniGameProperty.IntegerProperty("teleporter.cooldown", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    public static final MiniGameProperty.IntegerProperty TELEPORTER_RANGE = new MiniGameProperty.IntegerProperty("teleporter.range", 100).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    // COCAINE
+    public static final MiniGameProperty.IntegerProperty COCAINE_COOLDOWN = new MiniGameProperty.IntegerProperty("cocaine.cooldown", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    public static final MiniGameProperty.IntegerProperty COCAINE_DURATION = new MiniGameProperty.IntegerProperty("cocaine.duration", 2).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+    // PROP_RANDOMIZER
+    public static final MiniGameProperty.IntegerProperty PROP_RANDOMIZER_COOLDOWN = new MiniGameProperty.IntegerProperty("propRandomizer.cooldown", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
 
     public PropHuntMiniGame(Main instance, World world) {
         super(world);
@@ -38,12 +52,20 @@ public class PropHuntMiniGame extends MiniGame {
                 ARROW_REPLENISH_COOLDOWN,
                 ALLOW_BLOCKS,
                 ALLOW_SPECIALS,
-                COMPASS_COOLDOWN_START,
-                COMPASS_COOLDOWN,
-                COMPASS_DURATION,
+                PROP_COMPASS_COOLDOWN_START,
+                PROP_COMPASS_COOLDOWN,
+                PROP_COMPASS_DURATION,
                 STUN_JUICE_COOLDOWN,
                 STUN_JUICE_DURATION,
-                STUN_JUICE_RANGE
+                STUN_JUICE_RANGE,
+                GLOW_DUST_COOLDOWN,
+                GLOW_DUST_DURATION,
+                GLOW_DUST_RANGE,
+                TELEPORTER_COOLDOWN,
+                TELEPORTER_RANGE,
+                COCAINE_COOLDOWN,
+                COCAINE_DURATION,
+                PROP_RANDOMIZER_COOLDOWN
         );
     }
 

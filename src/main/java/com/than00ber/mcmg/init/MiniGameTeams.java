@@ -207,7 +207,7 @@ public class MiniGameTeams {
         ItemStack compass = MiniGameItems.PROP_COMPASS.get();
         ItemStack teleporter = MiniGameItems.TELEPORTER.get();
         ItemStack propRandomizer = MiniGameItems.PROP_RANDOMIZER.get();
-        int cooldown = PropHuntMiniGame.COMPASS_COOLDOWN_START.get() * 20;
+        int cooldown = PropHuntMiniGame.PROP_COMPASS_COOLDOWN_START.get() * 20;
         player.setCooldown(compass.getType(), cooldown);
         player.getInventory().addItem(axe, bow, compass, teleporter, propRandomizer);
         player.getInventory().setItem(8, arrow);

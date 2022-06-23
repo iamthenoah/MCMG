@@ -77,6 +77,9 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
      */
     public static class IntegerProperty extends MiniGameProperty<Integer> {
 
+        public static final Predicate<Integer> POSITIVE = i -> i >= 0;
+        public static final Predicate<Integer> NEGATIVE = i -> i <= 0;
+
         public IntegerProperty(String name, Integer defaultValue) {
             super(name, defaultValue, (p, a) -> Integer.parseInt(a[0]), i -> true);
         }

@@ -3,8 +3,9 @@ package com.than00ber.mcmg.util.config;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
-public class ConfigProperty<V> {
+public class ConfigProperty<V> implements Supplier<V> {
 
     private final String path;
     protected final V defaultValue;
@@ -33,6 +34,7 @@ public class ConfigProperty<V> {
         return value;
     }
 
+    @Override
     public V get() {
         return Optional.ofNullable(value).orElse(defaultValue);
     }
