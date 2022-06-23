@@ -171,7 +171,7 @@ public class MiniGameItems {
                 }
             })
             .build();
-    public static final MiniGameItem TELEPORTER = new MiniGameItem.Builder(Material.ENDER_EYE)
+    public static final MiniGameItem TELEPORTER = new MiniGameItem.Builder(Material.FEATHER)
             .setName(ChatColor.DARK_PURPLE + "Teleporter")
             .addTooltip("Teleports you straight to the pointed direction.")
             .onTrigger(PropHuntMiniGame.TELEPORTER_COOLDOWN, event -> {
