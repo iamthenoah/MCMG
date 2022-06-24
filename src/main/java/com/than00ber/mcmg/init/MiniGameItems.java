@@ -131,7 +131,7 @@ public class MiniGameItems {
     public static final MiniGameItem STUN_INK = new MiniGameItem.Builder(Material.INK_SAC)
             .setName(ChatColor.DARK_AQUA + "Stun Juice")
             .addTooltip("Blinds any nearby hunter for a brief moment.")
-            .onTrigger(PropHuntMiniGame.STUN_JUICE_COOLDOWN, event -> {
+            .onTriggered(PropHuntMiniGame.STUN_JUICE_COOLDOWN, event -> {
                 Player player = event.getPlayer();
                 double range = PropHuntMiniGame.STUN_JUICE_RANGE.get();
 
@@ -174,7 +174,7 @@ public class MiniGameItems {
     public static final MiniGameItem TELEPORTER = new MiniGameItem.Builder(Material.FEATHER)
             .setName(ChatColor.DARK_PURPLE + "Teleporter")
             .addTooltip("Teleports you straight to the pointed direction.")
-            .onTrigger(PropHuntMiniGame.TELEPORTER_COOLDOWN, event -> {
+            .onTriggered(PropHuntMiniGame.TELEPORTER_COOLDOWN, event -> {
                 Player player = event.getPlayer();
                 Location eyeLoc = player.getEyeLocation();
                 Vector eyeDirection = eyeLoc.getDirection();
@@ -219,7 +219,7 @@ public class MiniGameItems {
     public static final MiniGameItem PROP_RANDOMIZER = new MiniGameItem.Builder(Material.FLOWER_POT)
             .setName(ChatColor.LIGHT_PURPLE + "Prop Randomizer")
             .addTooltip("Changes the appears of all props with any random nearby block.")
-            .onTrigger(PropHuntMiniGame.PROP_RANDOMIZER_COOLDOWN, event -> {
+            .onTriggered(PropHuntMiniGame.PROP_RANDOMIZER_COOLDOWN, event -> {
                 for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getCurrentPlayerRoles().keySet()) {
                     if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.PROPS)) {
                         Random r = new Random();

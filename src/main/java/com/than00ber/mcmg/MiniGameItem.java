@@ -112,7 +112,7 @@ public class MiniGameItem {
             return this;
         }
 
-        public Builder onTrigger(
+        public Builder onTriggered(
                 Supplier<Integer> cooldown,
                 Consumer<PlayerInteractEvent> start) {
             action = new Action(material, () -> 0, cooldown, start, null);
