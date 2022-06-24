@@ -10,6 +10,7 @@ import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.Console;
+import com.than00ber.mcmg.util.ScheduleUtil;
 import com.than00ber.mcmg.util.config.ConfigProperty;
 import com.than00ber.mcmg.util.config.Configurable;
 import com.than00ber.mcmg.util.config.MiniGameProperty;
@@ -19,9 +20,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.*;
 
 import java.util.*;
 
@@ -195,6 +194,9 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     @Override
     public void onRoundWon(WinCondition<?> condition) {
         ChatUtil.showRoundEndScreen(getOriginalPlayerRoles(), getMiniGameTeams(), condition);
+        getCurrentPlayerRoles().keySet().forEach(player -> {
+            Main.MINIGAME_ENGINE.getScoreboard().setPlayerScore(player, this, 100);
+        });
     }
 
     private void assignRandomRoles(List<Player> participants) {

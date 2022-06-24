@@ -1,19 +1,19 @@
 package com.than00ber.mcmg;
 
+import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 public class MiniGameEngine<G extends MiniGame> {
 
     private final Main instance;
+    private final MiniGameScoreboard scoreboard;
     private List<Player> participants; // TODO - revisit how players are queued
     private G minigame;
     private Supplier<MiniGameHandler> handlerSupplier;
@@ -31,7 +32,12 @@ public class MiniGameEngine<G extends MiniGame> {
 
     public MiniGameEngine(Main instance) {
         this.instance = instance;
+        scoreboard = new MiniGameScoreboard(instance);
         roundState = MiniGameRoundState.NOT_RUNNING;
+    }
+
+    public MiniGameScoreboard getScoreboard() {
+        return scoreboard;
     }
 
     public G getCurrentGame() {
@@ -148,10 +154,11 @@ public class MiniGameEngine<G extends MiniGame> {
 
         unregisterTeams();
         registerTeams(minigame);
+        scoreboard.hideScoreboard(participants);
         minigame.onMinigameStarted(participants);
         Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEvents::register);
-        for (Player player : minigame.getWorld().getPlayers()) {
 
+        for (Player player : minigame.getWorld().getPlayers()) {
             if (!participants.contains(player)) {
                 MiniGameTeams.SPECTATORS.prepare(player);
                 String s = TextUtil.formatMiniGame(minigame) + ChatColor.GOLD;
@@ -169,6 +176,7 @@ public class MiniGameEngine<G extends MiniGame> {
         if (!hasGame()) return ActionResult.warn("No minigame is currently running.");
 
         minigame.getWorld().getWorldBorder().reset();
+        scoreboard.showSideboard(participants);
         minigame.onMinigameEnded();
 
         if (currentHandler != null) {

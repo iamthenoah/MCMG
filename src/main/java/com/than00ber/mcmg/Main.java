@@ -11,11 +11,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin {
 
     public static final String PLUGIN_ID = "MCMG";
-    public static MiniGameEngine<MiniGame> MINIGAME_ENGINE;
+
     public static Main INSTANCE;
     public static World WORLD;
 
-    // 6033393598488652660 -2000 ~ 1000
+    public static MiniGameEngine<MiniGame> MINIGAME_ENGINE;
 
     @Override
     public void onEnable() {
