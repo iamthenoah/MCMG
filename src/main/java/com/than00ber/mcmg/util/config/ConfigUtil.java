@@ -10,22 +10,28 @@ import java.io.IOException;
 
 public final class ConfigUtil {
 
-    private static YamlConfiguration load(Main instance, String name) {
+    public static YamlConfiguration load(Main instance, String name) {
         name += ".yml";
         YamlConfiguration configs = new YamlConfiguration();
         try {
-            File file = new File(instance.getDataFolder(), name);
-            if (!file.exists() && file.getParentFile().mkdirs() && file.createNewFile()) {
-                instance.saveResource(name, true);
-            }
-            configs.load(file);
+            configs.load(new File(instance.getDataFolder(), name));
         } catch (IOException | InvalidConfigurationException e) {
-            Console.error("Error loading " + name + " file: " + e.getMessage());
+            Console.warn("Config File '" + name + "' not found. Generating new one.");
+
+            try {
+                File file = new File(instance.getDataFolder(), name);
+                if (!file.exists() && file.getParentFile().mkdirs() && file.createNewFile()) {
+                    instance.saveResource(name, true);
+                }
+            } catch (IOException exception) {
+                Console.error("Could not create '" + name + "' file. ");
+                Console.error(exception);
+            }
         }
         return configs;
     }
 
-    private static void save(Main instance, String name, YamlConfiguration configs) {
+    public static void save(Main instance, String name, YamlConfiguration configs) {
         name += ".yml";
         try {
             File file = new File(instance.getDataFolder(), name);
