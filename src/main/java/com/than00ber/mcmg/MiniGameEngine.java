@@ -1,6 +1,5 @@
 package com.than00ber.mcmg;
 
-import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.TextUtil;
@@ -125,6 +124,7 @@ public class MiniGameEngine<G extends MiniGame> {
                     } else {
                         countdownRound--;
                         event.getBossBar().setProgress((float) countdownRound / minigame.getOptions().getDurationRound());
+                        minigame.onMiniGameTick(event);
                     }
                 }
             }
@@ -144,7 +144,9 @@ public class MiniGameEngine<G extends MiniGame> {
         unregisterTeams();
         registerTeams(minigame);
         minigame.onMinigameStarted(players);
-        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEvents::register);
+        if (minigame.hasEventListener()) {
+            minigame.getEventListener().unregister();
+        }
 
         currentHandler = handlerSupplier.get();
         currentHandler.activate();
@@ -155,17 +157,18 @@ public class MiniGameEngine<G extends MiniGame> {
     public ActionResult endMiniGame(@Nullable String reason) {
         if (!hasGame()) return ActionResult.warn("No minigame is currently running.");
 
-        minigame.getWorld().getWorldBorder().reset();
         minigame.onMinigameEnded();
+        minigame.getWorld().getWorldBorder().reset();
+        Bukkit.getScheduler().cancelTasks(instance);
+        unregisterTeams();
 
         if (currentHandler != null) {
             currentHandler.deactivate();
             currentHandler = null;
         }
-
-        unregisterTeams();
-        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEvents::unregister);
-        Bukkit.getScheduler().cancelTasks(instance);
+        if (minigame.hasEventListener()) {
+            minigame.getEventListener().unregister();
+        }
 
         return ActionResult.success(reason);
     }
