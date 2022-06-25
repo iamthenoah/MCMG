@@ -34,11 +34,7 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         minigame.switchTeam(player, MiniGameTeams.SPECTATORS);
-
-        int count = 0;
-        for (Player p : minigame.getCurrentPlayerRoles().keySet()) {
-            if (minigame.isInTeam(p, MiniGameTeams.PROPS)) count++;
-        }
+        int count = minigame.getAllInTeam(MiniGameTeams.PROPS).size();
 
         if (count > 0) {
             String remaining = ChatColor.YELLOW + String.valueOf(count) + ChatColor.RESET;

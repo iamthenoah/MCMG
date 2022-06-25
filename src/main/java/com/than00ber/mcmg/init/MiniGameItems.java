@@ -220,30 +220,28 @@ public class MiniGameItems {
             .setName(ChatColor.LIGHT_PURPLE + "Prop Randomizer")
             .addTooltip("Changes the appears of all props with any random nearby block.")
             .onTriggered(PropHuntMiniGame.PROP_RANDOMIZER_COOLDOWN, event -> {
-                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getCurrentPlayerRoles().keySet()) {
-                    if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.PROPS)) {
-                        Random r = new Random();
-                        Material material = Material.AIR;
-                        Location loc = player.getLocation();
+                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getAllInTeam(MiniGameTeams.PROPS)) {
+                    Random r = new Random();
+                    Material material = Material.AIR;
+                    Location loc = player.getLocation();
 
-                        int maxCount = 32;
-                        while (material == Material.AIR || material == Material.VOID_AIR) {
-                            maxCount--;
-                            int x = loc.getBlockX() + r.nextInt(4) - 2;
-                            int y = loc.getBlockY() + r.nextInt(2);
-                            int z = loc.getBlockZ() + r.nextInt(4) - 2;
-                            Location pos = new Location(player.getWorld(), x, y, z);
-                            material = Main.WORLD.getBlockAt(pos).getType();
-                            if (maxCount == 0) return;
-                        }
-
-                        MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
-                        DisguiseAPI.disguiseToAll(player, disguise);
-                        DisguiseAPI.setActionBarShown(player, false);
-                        String title = ChatColor.GOLD + "Your appearance changed!";
-                        String subtitle = "A hunter has changed your appearance";
-                        player.sendTitle(title, subtitle, 0, 30, 5);
+                    int maxCount = 32;
+                    while (material == Material.AIR || material == Material.VOID_AIR) {
+                        maxCount--;
+                        int x = loc.getBlockX() + r.nextInt(4) - 2;
+                        int y = loc.getBlockY() + r.nextInt(2);
+                        int z = loc.getBlockZ() + r.nextInt(4) - 2;
+                        Location pos = new Location(player.getWorld(), x, y, z);
+                        material = Main.WORLD.getBlockAt(pos).getType();
+                        if (maxCount == 0) return;
                     }
+
+                    MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
+                    DisguiseAPI.disguiseToAll(player, disguise);
+                    DisguiseAPI.setActionBarShown(player, false);
+                    String title = ChatColor.GOLD + "Your appearance changed!";
+                    String subtitle = "A hunter has changed your appearance";
+                    player.sendTitle(title, subtitle, 0, 30, 5);
                 }
             })
             .build();
