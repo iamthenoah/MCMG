@@ -23,7 +23,10 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
@@ -198,32 +201,44 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     }
 
     private void assignRandomRoles(List<Player> participants) {
-        originalPlayerRoles.clear();
-        List<Player> queued = new ArrayList<>(participants);
-        int total = queued.size();
-        Random random = new Random();
-
-        do {
-            int i = random.nextInt(getMiniGameTeams().size());
-            MiniGameTeam team = getMiniGameTeams().get(i);
-
-            if (!team.isSpectator() && total >= team.getThreshold()) {
-                int frequency = Collections.frequency(originalPlayerRoles.values(), team);
-
-                if (frequency / (float) total <= team.getWeight()) {
-                    Player player = queued.get(random.nextInt(queued.size()));
-                    originalPlayerRoles.put(player, team);
-                    queued.remove(player);
-                }
-            }
-        } while (!queued.isEmpty());
+        Collections.shuffle(participants);
+        int totalParticipants = participants.size();
 
         for (MiniGameTeam team : getMiniGameTeams()) {
-            if (team.isRequired() && !originalPlayerRoles.containsValue(team)) {
-                assignRandomRoles(queued);
-                break;
+            if (totalParticipants < team.getThreshold()) continue;
+            int count = (int) Math.min(participants.size(), Math.ceil(team.getWeight() * totalParticipants));
+
+            for (int i = 0; i < count; i++) {
+                originalPlayerRoles.put(participants.remove(i), team);
             }
         }
+
+//        originalPlayerRoles.clear();
+//        List<Player> queued = new ArrayList<>(participants);
+//        int total = queued.size();
+//        Random random = new Random();
+//
+//        do {
+//            int i = random.nextInt(getMiniGameTeams().size());
+//            MiniGameTeam team = getMiniGameTeams().get(i);
+//
+//            if (!team.isSpectator() && total >= team.getThreshold()) {
+//                int frequency = Collections.frequency(originalPlayerRoles.values(), team);
+//
+//                if (frequency / (float) total <= team.getWeight()) {
+//                    Player player = queued.get(random.nextInt(queued.size()));
+//                    originalPlayerRoles.put(player, team);
+//                    queued.remove(player);
+//                }
+//            }
+//        } while (!queued.isEmpty());
+//
+//        for (MiniGameTeam team : getMiniGameTeams()) {
+//            if (team.isRequired() && !originalPlayerRoles.containsValue(team)) {
+//                assignRandomRoles(queued);
+//                break;
+//            }
+//        }
 
         currentPlayerRoles.putAll(originalPlayerRoles);
         originalPlayerRoles.forEach((player, team) -> {
