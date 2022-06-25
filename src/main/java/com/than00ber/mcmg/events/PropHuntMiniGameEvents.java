@@ -12,9 +12,7 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -25,10 +23,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
 
 public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
 
@@ -79,25 +73,6 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
                     String message = ChatColor.RESET + "You are disguised as a " + ChatColor.YELLOW + formatted;
                     ChatUtil.toActionBar(player, message);
                 }
-            } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-                event.setCancelled(true);
-
-                Supplier<Integer> delta = () -> new Random().nextInt(4) - 2;
-                Location location = player.getLocation().add(delta.get(), delta.get(), delta.get());
-                List<Sound> sounds = List.of(
-                        Sound.ENTITY_CAT_AMBIENT,
-                        Sound.ENTITY_COW_AMBIENT,
-                        Sound.ENTITY_CAT_AMBIENT,
-                        Sound.ENTITY_PIG_AMBIENT,
-                        Sound.ENTITY_BAT_AMBIENT,
-                        Sound.ENTITY_WOLF_AMBIENT,
-                        Sound.ENTITY_CHICKEN_AMBIENT,
-                        Sound.ENTITY_SHEEP_AMBIENT,
-                        Sound.ENTITY_VILLAGER_AMBIENT
-                );
-
-                Sound sound = sounds.get(new Random().nextInt(sounds.size() - 1));
-                minigame.getCurrentPlayerRoles().keySet().forEach(p -> p.playSound(location, sound, 1, 1));
             }
         }
     }
