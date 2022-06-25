@@ -4,12 +4,16 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameItem;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDropItemEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -53,5 +57,20 @@ public class GlobalEvents implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onEntityPickupItemEvent(EntityPickupItemEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityDropItemEvent(EntityDropItemEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerDropItemEvent(PlayerDropItemEvent event) {
+        event.setCancelled(true);
     }
 }
