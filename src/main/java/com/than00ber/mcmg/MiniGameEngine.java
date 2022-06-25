@@ -124,6 +124,7 @@ public class MiniGameEngine<G extends MiniGame> {
                     } else {
                         countdownRound--;
                         event.getBossBar().setProgress((float) countdownRound / minigame.getOptions().getDurationRound());
+                        event.setTick(minigame.getOptions().getDurationRound() - countdownRound);
                         minigame.onMiniGameTick(event);
                     }
                 }

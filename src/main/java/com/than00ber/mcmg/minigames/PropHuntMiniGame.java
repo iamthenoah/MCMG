@@ -8,12 +8,15 @@ import com.than00ber.mcmg.WinCondition;
 import com.than00ber.mcmg.events.PropHuntMiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
+import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PropHuntMiniGame extends MiniGame {
 
@@ -44,6 +47,8 @@ public class PropHuntMiniGame extends MiniGame {
     // PROP_RANDOMIZER
     public static final MiniGameProperty.IntegerProperty PROP_RANDOMIZER_COOLDOWN_START = new MiniGameProperty.IntegerProperty("propRandomizer.startingCooldown", 30).validate(i -> i >= Main.MINIGAME_ENGINE.getCurrentGame().getOptions().getDurationGrace());
     public static final MiniGameProperty.IntegerProperty PROP_RANDOMIZER_COOLDOWN = new MiniGameProperty.IntegerProperty("propRandomizer.cooldown", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
+
+    public final List<Integer> DROP_EVENTS = new ArrayList<>();
 
     public PropHuntMiniGame(Main instance, World world) {
         super(world);
@@ -98,13 +103,22 @@ public class PropHuntMiniGame extends MiniGame {
     public void onMinigameStarted(List<Player> participants) {
         super.onMinigameStarted(participants);
         getWorld().setDifficulty(Difficulty.PEACEFUL);
-    }
 
-    @Override
-    public void onRoundStarted(MiniGameEvent event) { }
+        Random random = new Random();
+        for (int i = 0; i < 3; i++) {
+            DROP_EVENTS.add(random.nextInt(getOptions().getDurationRound()));
+        }
+        Console.debug(DROP_EVENTS);
+        Console.debug(getOptions().getDurationGrace());
+    }
 
     @Override
     public void onRoundCycled(MiniGameEvent event) {
         event.setWinCondition(WinConditions.PROPS_SURVIVED);
+    }
+
+    @Override
+    public void onMiniGameTick(MiniGameEvent event) {
+        Console.debug(event.getCurrentTick());
     }
 }
