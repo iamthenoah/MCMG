@@ -146,7 +146,7 @@ public class MiniGameEngine<G extends MiniGame> {
         registerTeams(minigame);
         minigame.onMinigameStarted(players);
         if (minigame.hasEventListener()) {
-            minigame.getEventListener().unregister();
+            minigame.getEventListener().register();
         }
 
         currentHandler = handlerSupplier.get();
