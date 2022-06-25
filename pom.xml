@@ -55,4 +55,8 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <directory>/Users/noahgreff/Documents/repos/mc/servers/spigot/1.18.1/plugins</directory>
+    </build>
+
 </project>
