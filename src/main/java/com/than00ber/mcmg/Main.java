@@ -1,6 +1,8 @@
 package com.than00ber.mcmg;
 
-import com.than00ber.mcmg.commands.*;
+import com.than00ber.mcmg.commands.AssignCommand;
+import com.than00ber.mcmg.commands.ConfigsCommand;
+import com.than00ber.mcmg.commands.MiniGameCommand;
 import com.than00ber.mcmg.events.GlobalEvents;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.config.ConfigUtil;
@@ -15,8 +17,6 @@ public class Main extends JavaPlugin {
     public static Main INSTANCE;
     public static World WORLD;
 
-    // 6033393598488652660 -2000 ~ 1000
-
     @Override
     public void onEnable() {
         INSTANCE = this;
@@ -27,8 +27,6 @@ public class Main extends JavaPlugin {
 
         new MiniGameCommand(this, WORLD);
         new ConfigsCommand(this, WORLD);
-        new ReadyCommand(this, WORLD);
-        new VoteCommand(this, WORLD);
         new AssignCommand(this, WORLD);
     }
 

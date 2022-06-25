@@ -1,10 +1,8 @@
 package com.than00ber.mcmg;
 
 import com.than00ber.mcmg.events.MiniGameEvents;
-import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
-import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
@@ -23,7 +21,6 @@ import java.util.function.Supplier;
 public class MiniGameEngine<G extends MiniGame> {
 
     private final Main instance;
-    private List<Player> participants; // TODO - revisit how players are queued
     private G minigame;
     private Supplier<MiniGameHandler> handlerSupplier;
     private MiniGameHandler currentHandler;
@@ -133,7 +130,6 @@ public class MiniGameEngine<G extends MiniGame> {
             }
         };
 
-        participants = null;
         minigame = nextGame;
         return ActionResult.success();
     }
@@ -142,22 +138,13 @@ public class MiniGameEngine<G extends MiniGame> {
         ActionResult invalid = checkCanStart(players);
         if (!invalid.isSuccessful()) return invalid;
 
-        participants = players;
         minigame.getWorld().getWorldBorder().setSize(minigame.getOptions().getPlaygroundRadius());
         minigame.getWorld().getWorldBorder().setCenter(minigame.getOptions().getPlaygroundSpawn());
 
         unregisterTeams();
         registerTeams(minigame);
-        minigame.onMinigameStarted(participants);
+        minigame.onMinigameStarted(players);
         Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEvents::register);
-        for (Player player : minigame.getWorld().getPlayers()) {
-
-            if (!participants.contains(player)) {
-                MiniGameTeams.SPECTATORS.prepare(player);
-                String s = TextUtil.formatMiniGame(minigame) + ChatColor.GOLD;
-                ChatUtil.toSelf(player, s + " minigame started and you were not ready.");
-            }
-        }
 
         currentHandler = handlerSupplier.get();
         currentHandler.activate();
@@ -191,8 +178,7 @@ public class MiniGameEngine<G extends MiniGame> {
         Bukkit.getScheduler().cancelTasks(instance);
         currentHandler = null;
 
-        if (participants == null) participants = Main.WORLD.getPlayers();
-        ActionResult startResult = startMiniGame(participants, null);
+        ActionResult startResult = startMiniGame(Main.WORLD.getPlayers(), null);
         return !startResult.isSuccessful() ? startResult : ActionResult.success(reason);
     }
 
