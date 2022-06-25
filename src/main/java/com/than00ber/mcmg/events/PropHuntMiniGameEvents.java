@@ -5,6 +5,7 @@ import com.than00ber.mcmg.init.MiniGameItems;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.ScheduleUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -13,6 +14,8 @@ import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -58,6 +61,9 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
                     event.setCancelled(true);
 
                     Material material = event.getClickedBlock().getType();
+                    Sound sound = event.getClickedBlock().getBlockData().getSoundGroup().getPlaceSound();
+                    player.playSound(player.getLocation(), sound, 1, 1);
+
                     if (!PropHuntMiniGame.ALLOW_BLOCKS.get() && material.isBlock()) return;
                     if (!PropHuntMiniGame.ALLOW_SPECIALS.get() && material.isTransparent()) return;
 

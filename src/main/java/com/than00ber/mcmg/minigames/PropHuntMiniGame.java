@@ -9,10 +9,14 @@ import com.than00ber.mcmg.events.PropHuntMiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.util.Console;
+import com.than00ber.mcmg.util.ScheduleUtil;
 import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.Difficulty;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,12 +108,13 @@ public class PropHuntMiniGame extends MiniGame {
         super.onMinigameStarted(participants);
         getWorld().setDifficulty(Difficulty.PEACEFUL);
 
+        DROP_EVENTS.clear();
         Random random = new Random();
         for (int i = 0; i < 3; i++) {
             DROP_EVENTS.add(random.nextInt(getOptions().getDurationRound()));
         }
         Console.debug(DROP_EVENTS);
-        Console.debug(getOptions().getDurationGrace());
+        Console.debug(getOptions().getDurationRound());
     }
 
     @Override
@@ -119,6 +124,16 @@ public class PropHuntMiniGame extends MiniGame {
 
     @Override
     public void onMiniGameTick(MiniGameEvent event) {
-        Console.debug(event.getCurrentTick());
+//        ImmutableList<Player> players = getAllInTeam(MiniGameTeams.PROPS);
+//        Player prop = players.get(new Random().nextInt(players.size()));
+//        Console.warn("data + " + getWorld().getBlockData(prop.getLocation().add(0, -1, 0)));
+//
+//        if (DROP_EVENTS.contains(event.getCurrentTick())) {
+//            FallingBlock entity = getWorld().spawnFallingBlock(prop.getLocation().add(0, 1, 0), Material.ACACIA_BOAT, (byte) 0);
+//            ScheduleUtil.doDelayed(60, entity::remove);
+//            entity.addPassenger(prop);
+//            entity.setVelocity(new Vector(0, 0, 0));
+//            entity.setGlowing(true);
+//        }
     }
 }
