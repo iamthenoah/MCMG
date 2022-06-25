@@ -35,12 +35,14 @@ public class PropHuntMiniGame extends MiniGame {
     public static final MiniGameProperty.IntegerProperty GLOW_DUST_DURATION = new MiniGameProperty.IntegerProperty("glowDust.duration", 2).validate(MiniGameProperty.IntegerProperty.POSITIVE);
     public static final MiniGameProperty.IntegerProperty GLOW_DUST_RANGE = new MiniGameProperty.IntegerProperty("glowDust.range", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
     // TELEPORTER
+    public static final MiniGameProperty.IntegerProperty TELEPORTER_COOLDOWN_START = new MiniGameProperty.IntegerProperty("teleporter.startingCooldown", 30).validate(i -> i >= Main.MINIGAME_ENGINE.getCurrentGame().getOptions().getDurationGrace());
     public static final MiniGameProperty.IntegerProperty TELEPORTER_COOLDOWN = new MiniGameProperty.IntegerProperty("teleporter.cooldown", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
     public static final MiniGameProperty.IntegerProperty TELEPORTER_RANGE = new MiniGameProperty.IntegerProperty("teleporter.range", 100).validate(MiniGameProperty.IntegerProperty.POSITIVE);
     // COCAINE
     public static final MiniGameProperty.IntegerProperty COCAINE_COOLDOWN = new MiniGameProperty.IntegerProperty("cocaine.cooldown", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
     public static final MiniGameProperty.IntegerProperty COCAINE_DURATION = new MiniGameProperty.IntegerProperty("cocaine.duration", 2).validate(MiniGameProperty.IntegerProperty.POSITIVE);
     // PROP_RANDOMIZER
+    public static final MiniGameProperty.IntegerProperty PROP_RANDOMIZER_COOLDOWN_START = new MiniGameProperty.IntegerProperty("propRandomizer.startingCooldown", 30).validate(i -> i >= Main.MINIGAME_ENGINE.getCurrentGame().getOptions().getDurationGrace());
     public static final MiniGameProperty.IntegerProperty PROP_RANDOMIZER_COOLDOWN = new MiniGameProperty.IntegerProperty("propRandomizer.cooldown", 30).validate(MiniGameProperty.IntegerProperty.POSITIVE);
 
     public PropHuntMiniGame(Main instance, World world) {
@@ -61,10 +63,12 @@ public class PropHuntMiniGame extends MiniGame {
                 GLOW_DUST_COOLDOWN,
                 GLOW_DUST_DURATION,
                 GLOW_DUST_RANGE,
+                TELEPORTER_COOLDOWN_START,
                 TELEPORTER_COOLDOWN,
                 TELEPORTER_RANGE,
                 COCAINE_COOLDOWN,
                 COCAINE_DURATION,
+                PROP_RANDOMIZER_COOLDOWN_START,
                 PROP_RANDOMIZER_COOLDOWN
         );
     }
