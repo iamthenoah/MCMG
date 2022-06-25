@@ -2,10 +2,7 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGameEngine;
-import com.than00ber.mcmg.MiniGameTeam;
-import com.than00ber.mcmg.WinCondition;
+import com.than00ber.mcmg.*;
 import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.util.ChatUtil;
@@ -23,15 +20,13 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
     public static final MiniGameProperty.LocationProperty PLAYGROUND_SPAWN = new MiniGameProperty.LocationProperty("playground.spawn", Main.WORLD.getSpawnLocation());
-    public static final MiniGameProperty.IntegerProperty PLAYGROUND_RADIUS = new MiniGameProperty.IntegerProperty("playground.radius", 100).validate(i -> i > 0);
+    public static final MiniGameProperty.IntegerProperty PLAYGROUND_RADIUS = new MiniGameProperty.IntegerProperty("playground.radius", 100).validate(MiniGameProperty.IntegerProperty.POSITIVE);
     public static final MiniGameProperty.IntegerProperty DURATION_GRACE = new MiniGameProperty.IntegerProperty("duration.grace", 30).validate(i -> i > 0 && i < 86400);
     public static final MiniGameProperty.IntegerProperty DURATION_ROUND = new MiniGameProperty.IntegerProperty("duration.round", 120).validate(i -> i > 0 && i < 84600);
     public static final MiniGameProperty.IntegerProperty PLAYER_MINIMUM = new MiniGameProperty.IntegerProperty("player.minimum", 2).validate(i -> i > 1 && i <= Main.WORLD.getPlayers().size());
@@ -39,8 +34,8 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     protected final HashMap<Player, MiniGameTeam> originalPlayerRoles;
     protected final HashMap<Player, MiniGameTeam> currentPlayerRoles;
     private final List<MiniGameProperty<?>> properties;
-    private final World world;
     private MiniGameEvents<?> listener;
+    private final World world;
 
     public MiniGame(World world) {
         this.world = world;
@@ -100,7 +95,14 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     }
 
     public final boolean isInTeam(Player player, MiniGameTeam team) {
-        return isParticipant(player) && getCurrentPlayerRoles().get(player).equals(team);
+        return isParticipant(player) && Objects.equals(getCurrentPlayerRoles().get(player), team);
+    }
+
+    public final ImmutableList<Player> getAllInTeam(MiniGameTeam team) {
+        Map<Player, MiniGameTeam> filtered = currentPlayerRoles.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(team))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return ImmutableList.copyOf(filtered.keySet());
     }
 
     public final void switchTeam(Player player, MiniGameTeam team) {
@@ -129,14 +131,14 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
             Team currentTeam = scoreboard.getTeam(previousMiniGameTeam.getTeamId());
             Team newTeam = scoreboard.getTeam(newMiniGameTeam.getTeamId());
 
-            if (currentTeam == null) {
+            if (!previousMiniGameTeam.isSpectator() && currentTeam == null) {
                 Console.warn("Current player team not registered " + previousMiniGameTeam.getDisplayName());
             }
-            if (newTeam == null) {
+            if (!newMiniGameTeam.isSpectator() && newTeam == null) {
                 Console.warn("New player team not registered " + newMiniGameTeam.getDisplayName());
             }
-            if (currentTeam == null || newTeam == null) return;
 
+            if (currentTeam == null || newTeam == null) return;
             if (currentTeam.hasEntry(player.getDisplayName())) {
                 currentTeam.removeEntry(player.getDisplayName());
             }
@@ -196,6 +198,12 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     }
 
     @Override
+    public void onMiniGameTick(MiniGameEvent event) { }
+
+    @Override
+    public void onRoundStarted(MiniGameEvent event) { }
+
+    @Override
     public void onRoundWon(WinCondition<?> condition) {
         ChatUtil.showRoundEndScreen(getOriginalPlayerRoles(), getMiniGameTeams(), condition);
     }
@@ -205,7 +213,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         int totalParticipants = participants.size();
 
         for (MiniGameTeam team : getMiniGameTeams()) {
-            if (totalParticipants < team.getThreshold()) continue;
+            if (!team.isSpectator() && totalParticipants < team.getThreshold()) continue;
             int count = (int) Math.min(participants.size(), Math.ceil(team.getWeight() * totalParticipants));
 
             for (int i = 0; i < count; i++) {

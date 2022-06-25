@@ -34,6 +34,12 @@ public interface MiniGameLifeCycle {
     void onRoundCycled(MiniGameEvent event);
 
     /**
+     * Called on every minigame tick (not necessarily Minecraft ticks).
+     * @param event MiniGameEvent event.
+     */
+    void onMiniGameTick(MiniGameEvent event);
+
+    /**
      * Called when a round finishes along with the winning reason.
      * @param condition Win condition met.
      */

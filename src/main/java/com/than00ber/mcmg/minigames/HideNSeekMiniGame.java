@@ -79,9 +79,6 @@ public class HideNSeekMiniGame extends MiniGame {
     }
 
     @Override
-    public void onRoundStarted(MiniGameEvent event) { }
-
-    @Override
     public void onRoundCycled(MiniGameEvent event) {
         event.setWinCondition(WinConditions.HIDERS_SURVIVED);
     }
