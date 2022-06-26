@@ -3,6 +3,7 @@ package com.than00ber.mcmg.registries;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.MiniGameEngine;
 import com.than00ber.mcmg.core.MiniGameItem;
+import com.than00ber.mcmg.core.Registry;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;

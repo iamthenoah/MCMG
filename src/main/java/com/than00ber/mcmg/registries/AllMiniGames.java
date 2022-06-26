@@ -1,6 +1,7 @@
 package com.than00ber.mcmg.registries;
 
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.core.Registry;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;

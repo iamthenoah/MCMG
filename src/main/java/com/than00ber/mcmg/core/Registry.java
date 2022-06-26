@@ -1,4 +1,4 @@
-package com.than00ber.mcmg.registries;
+package com.than00ber.mcmg.core;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
