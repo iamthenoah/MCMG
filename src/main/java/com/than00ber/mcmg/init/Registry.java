@@ -39,7 +39,7 @@ public final class Registry<E> {
     }
 
     public void load(Main instance) {
-        Console.debug("Loading '" + registry + "' registry.");
+        Console.debug("Loading " + registry + " registry.");
         ENTRIES.forEach((key, obj) -> {
             if (obj.get() instanceof Configurable configurable) {
                 String path = registry.name().toLowerCase() + "/" + configurable.getConfigName();
@@ -50,7 +50,7 @@ public final class Registry<E> {
     }
 
     public void unload(Main instance) {
-        Console.debug("Unloading '" + registry + "' registry.");
+        Console.debug("Unloading " + registry + " registry.");
         ENTRIES.forEach((key, obj) -> {
             if (obj.get() instanceof Configurable configurable) {
                 String path = registry.name().toLowerCase() + "/" + configurable.getConfigName();
