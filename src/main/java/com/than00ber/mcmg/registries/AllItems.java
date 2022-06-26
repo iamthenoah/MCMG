@@ -1,8 +1,8 @@
-package com.than00ber.mcmg.init;
+package com.than00ber.mcmg.registries;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGameEngine;
-import com.than00ber.mcmg.MiniGameItem;
+import com.than00ber.mcmg.core.MiniGameEngine;
+import com.than00ber.mcmg.core.MiniGameItem;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MiniGameItems {
+public class AllItems {
 
     public static final Registry<MiniGameItem> ITEMS = new Registry<>(Registry.Registries.ITEMS);
 
@@ -95,7 +95,7 @@ public class MiniGameItems {
                     if (!(entity instanceof Player)) continue;
                     double to = player.getLocation().distance(entity.getLocation());
                     if (to > distance) continue;
-                    if (!Main.MINIGAME_ENGINE.getCurrentGame().isInTeam((Player) entity, MiniGameTeams.PROPS)) continue;
+                    if (!Main.MINIGAME_ENGINE.getCurrentGame().isInTeam((Player) entity, AllTeams.PROPS)) continue;
                     distance = to;
                     target = (Player) entity;
                 }
@@ -133,7 +133,7 @@ public class MiniGameItems {
 
                 for (Entity entity : player.getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player victim) {
-                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(victim, MiniGameTeams.HUNTERS)) {
+                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(victim, AllTeams.HUNTERS)) {
                             int duration = PropHuntMiniGame.STUN_JUICE_DURATION.get() * 20;
                             victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration + 20, 5));
                             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 5));
@@ -150,7 +150,7 @@ public class MiniGameItems {
 
                 for (Entity entity : event.getPlayer().getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player player) {
-                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.HUNTERS)) {
+                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, AllTeams.HUNTERS)) {
                             player.setGlowing(true);
                         }
                     }
@@ -160,7 +160,7 @@ public class MiniGameItems {
 
                 for (Entity entity : event.getPlayer().getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player player) {
-                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.HUNTERS)) {
+                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, AllTeams.HUNTERS)) {
                             player.setGlowing(false);
                         }
                     }
@@ -216,7 +216,7 @@ public class MiniGameItems {
             .setName(ChatColor.LIGHT_PURPLE + "Prop Randomizer")
             .addTooltip("Changes the appears of all props with any random nearby block.")
             .onTriggered(30, event -> {
-                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getAllInTeam(MiniGameTeams.PROPS)) {
+                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getAllInTeam(AllTeams.PROPS)) {
                     Random r = new Random();
                     Material material = Material.AIR;
                     Location loc = player.getLocation();

@@ -1,7 +1,7 @@
-package com.than00ber.mcmg;
+package com.than00ber.mcmg.core;
 
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;

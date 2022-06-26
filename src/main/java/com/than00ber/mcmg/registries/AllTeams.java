@@ -1,7 +1,7 @@
-package com.than00ber.mcmg.init;
+package com.than00ber.mcmg.registries;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGameTeam;
+import com.than00ber.mcmg.core.MiniGameTeam;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Team;
 
-public class MiniGameTeams {
+public class AllTeams {
 
     public static final Registry<MiniGameTeam> TEAMS = new Registry<>(Registry.Registries.TEAMS);
 
@@ -48,9 +48,9 @@ public class MiniGameTeams {
                 resetPlayer(player);
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
                 player.setHealth(40);
-                ItemStack hoe = MiniGameItems.SURVIVORS_WEAPON.toItemStack();
-                ItemStack food = MiniGameItems.SURVIVORS_FOOD.toItemStack();
-                ItemStack rules = MiniGameItems.RULE_BOOK.toItemStack();
+                ItemStack hoe = AllItems.SURVIVORS_WEAPON.toItemStack();
+                ItemStack food = AllItems.SURVIVORS_FOOD.toItemStack();
+                ItemStack rules = AllItems.RULE_BOOK.toItemStack();
                 food.setAmount(5);
                 player.getInventory().addItem(hoe, food);
                 player.getInventory().setItem(8, rules);
@@ -112,9 +112,9 @@ public class MiniGameTeams {
                 resetPlayer(player);
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(PropHuntMiniGame.PROPS_MAX_HEALTH.get());
                 player.setInvisible(true);
-                ItemStack stunInk = MiniGameItems.STUN_INK.toItemStack();
-                ItemStack glowDust = MiniGameItems.GLOW_DUST.toItemStack();
-                ItemStack propCocaine = MiniGameItems.COCAINE.toItemStack();
+                ItemStack stunInk = AllItems.STUN_INK.toItemStack();
+                ItemStack glowDust = AllItems.GLOW_DUST.toItemStack();
+                ItemStack propCocaine = AllItems.COCAINE.toItemStack();
                 player.getInventory().addItem(stunInk, glowDust, propCocaine);
                 Material material = Main.WORLD.getBlockAt(player.getLocation().add(0, -1, 0)).getType();
                 MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
@@ -137,12 +137,12 @@ public class MiniGameTeams {
             .disableWhileInGrace()
             .prepare(player -> {
                 resetPlayer(player);
-                ItemStack axe = MiniGameItems.HUNTERS_SWORD.toItemStack();
-                ItemStack bow = MiniGameItems.HUNTERS_BOW.toItemStack();
-                ItemStack arrow = MiniGameItems.HUNTERS_ARROW.toItemStack();
-                ItemStack compass = MiniGameItems.PROP_COMPASS.toItemStack();
-                ItemStack teleporter = MiniGameItems.TELEPORTER.toItemStack();
-                ItemStack propRandomizer = MiniGameItems.PROP_RANDOMIZER.toItemStack();
+                ItemStack axe = AllItems.HUNTERS_SWORD.toItemStack();
+                ItemStack bow = AllItems.HUNTERS_BOW.toItemStack();
+                ItemStack arrow = AllItems.HUNTERS_ARROW.toItemStack();
+                ItemStack compass = AllItems.PROP_COMPASS.toItemStack();
+                ItemStack teleporter = AllItems.TELEPORTER.toItemStack();
+                ItemStack propRandomizer = AllItems.PROP_RANDOMIZER.toItemStack();
                 player.setCooldown(compass.getType(), PropHuntMiniGame.PROP_COMPASS_COOLDOWN_START.get() * 20);
                 player.setCooldown(teleporter.getType(), PropHuntMiniGame.TELEPORTER_COOLDOWN_START.get() * 20);
                 player.setCooldown(propRandomizer.getType(), PropHuntMiniGame.PROP_RANDOMIZER_COOLDOWN_START.get() * 20);
@@ -179,8 +179,8 @@ public class MiniGameTeams {
             .setSound(Sound.BLOCK_ANVIL_LAND)
             .prepare(player -> {
                 resetPlayer(player);
-                ItemStack axe = MiniGameItems.SEEKERS_AXE.toItemStack();
-                ItemStack bow = MiniGameItems.SEEKERS_BOW.toItemStack();
+                ItemStack axe = AllItems.SEEKERS_AXE.toItemStack();
+                ItemStack bow = AllItems.SEEKERS_BOW.toItemStack();
                 player.getInventory().addItem(axe, bow);
             })
             .isRequired()

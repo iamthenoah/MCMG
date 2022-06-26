@@ -2,13 +2,13 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGameEvent;
-import com.than00ber.mcmg.MiniGameTeam;
-import com.than00ber.mcmg.WinCondition;
+import com.than00ber.mcmg.core.MiniGameEvent;
+import com.than00ber.mcmg.core.MiniGameTeam;
+import com.than00ber.mcmg.core.WinCondition;
+import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.WerewolfMiniGameEvents;
-import com.than00ber.mcmg.init.MiniGameTeams;
-import com.than00ber.mcmg.init.WinConditions;
-import com.than00ber.mcmg.util.config.MiniGameProperty;
+import com.than00ber.mcmg.registries.AllTeams;
+import com.than00ber.mcmg.registries.AllWinConditions;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
@@ -36,21 +36,21 @@ public class WerewolfMiniGame extends MiniGame {
     @Override
     public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
-                MiniGameTeams.VILLAGERS,
-                MiniGameTeams.WEREWOLVES,
-                MiniGameTeams.TRAITORS,
-                MiniGameTeams.VAMPIRES,
-                MiniGameTeams.POSSESSED
+                AllTeams.VILLAGERS,
+                AllTeams.WEREWOLVES,
+                AllTeams.TRAITORS,
+                AllTeams.VAMPIRES,
+                AllTeams.POSSESSED
         );
     }
 
     @Override
     public ImmutableList<WinCondition> getWinConditions() {
         return ImmutableList.of(
-                WinConditions.VAMPIRE_VICTORY,
-                WinConditions.ALL_VILLAGERS_DEAD,
-                WinConditions.ALL_WEREWOLVES_DEAD,
-                WinConditions.EVERYONE_DEAD
+                AllWinConditions.VAMPIRE_VICTORY,
+                AllWinConditions.ALL_VILLAGERS_DEAD,
+                AllWinConditions.ALL_WEREWOLVES_DEAD,
+                AllWinConditions.EVERYONE_DEAD
         );
     }
 

@@ -1,4 +1,4 @@
-package com.than00ber.mcmg;
+package com.than00ber.mcmg.core;
 
 import org.bukkit.boss.BossBar;
 

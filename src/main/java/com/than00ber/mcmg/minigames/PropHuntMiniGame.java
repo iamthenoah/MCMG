@@ -2,14 +2,14 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGameEvent;
-import com.than00ber.mcmg.MiniGameTeam;
-import com.than00ber.mcmg.WinCondition;
+import com.than00ber.mcmg.core.Console;
+import com.than00ber.mcmg.core.MiniGameEvent;
+import com.than00ber.mcmg.core.MiniGameTeam;
+import com.than00ber.mcmg.core.WinCondition;
+import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.PropHuntMiniGameEvents;
-import com.than00ber.mcmg.init.MiniGameTeams;
-import com.than00ber.mcmg.init.WinConditions;
-import com.than00ber.mcmg.util.Console;
-import com.than00ber.mcmg.util.config.MiniGameProperty;
+import com.than00ber.mcmg.registries.AllTeams;
+import com.than00ber.mcmg.registries.AllWinConditions;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -86,16 +86,16 @@ public class PropHuntMiniGame extends MiniGame {
     @Override
     public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
-                MiniGameTeams.HUNTERS,
-                MiniGameTeams.PROPS
+                AllTeams.HUNTERS,
+                AllTeams.PROPS
         );
     }
 
     @Override
     public ImmutableList<WinCondition> getWinConditions() {
         return ImmutableList.of(
-                WinConditions.NO_PROPS,
-                WinConditions.NO_HUNTERS
+                AllWinConditions.NO_PROPS,
+                AllWinConditions.NO_HUNTERS
         );
     }
 
@@ -115,7 +115,7 @@ public class PropHuntMiniGame extends MiniGame {
 
     @Override
     public void onRoundCycled(MiniGameEvent event) {
-        event.setWinCondition(WinConditions.PROPS_SURVIVED);
+        event.setWinCondition(AllWinConditions.PROPS_SURVIVED);
     }
 
     @Override

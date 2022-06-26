@@ -1,10 +1,10 @@
-package com.than00ber.mcmg.init;
+package com.than00ber.mcmg.registries;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.util.Console;
-import com.than00ber.mcmg.util.config.ConfigUtil;
-import com.than00ber.mcmg.util.config.Configurable;
+import com.than00ber.mcmg.core.Console;
+import com.than00ber.mcmg.core.config.Configurable;
+import com.than00ber.mcmg.util.ConfigUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Nullable;

@@ -1,4 +1,4 @@
-package com.than00ber.mcmg.util.config;
+package com.than00ber.mcmg.core.config;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 

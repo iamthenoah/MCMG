@@ -3,11 +3,12 @@ package com.than00ber.mcmg;
 import com.than00ber.mcmg.commands.AssignCommand;
 import com.than00ber.mcmg.commands.ConfigsCommand;
 import com.than00ber.mcmg.commands.MiniGameCommand;
+import com.than00ber.mcmg.core.MiniGameEngine;
 import com.than00ber.mcmg.events.GlobalEvents;
-import com.than00ber.mcmg.init.MiniGameItems;
-import com.than00ber.mcmg.init.MiniGameTeams;
-import com.than00ber.mcmg.init.MiniGames;
 import com.than00ber.mcmg.minigames.MiniGame;
+import com.than00ber.mcmg.registries.AllItems;
+import com.than00ber.mcmg.registries.AllMiniGames;
+import com.than00ber.mcmg.registries.AllTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,9 +32,9 @@ public class Main extends JavaPlugin {
         new ConfigsCommand(this, WORLD);
         new AssignCommand(this, WORLD);
 
-        MiniGameItems.ITEMS.load(this);
-        MiniGameTeams.TEAMS.load(this);
-        MiniGames.MINIGAMES.load(this);
+        AllItems.ITEMS.load(this);
+        AllTeams.TEAMS.load(this);
+        AllMiniGames.MINIGAMES.load(this);
     }
 
     @Override
@@ -46,8 +47,8 @@ public class Main extends JavaPlugin {
             }
         }
 
-        MiniGameItems.ITEMS.unload(this);
-        MiniGameTeams.TEAMS.unload(this);
-        MiniGames.MINIGAMES.unload(this);
+        AllItems.ITEMS.unload(this);
+        AllTeams.TEAMS.unload(this);
+        AllMiniGames.MINIGAMES.unload(this);
     }
 }

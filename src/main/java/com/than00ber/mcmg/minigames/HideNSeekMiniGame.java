@@ -2,13 +2,13 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGameEvent;
-import com.than00ber.mcmg.MiniGameTeam;
-import com.than00ber.mcmg.WinCondition;
+import com.than00ber.mcmg.core.MiniGameEvent;
+import com.than00ber.mcmg.core.MiniGameTeam;
+import com.than00ber.mcmg.core.WinCondition;
+import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.HideNSeekMiniGameEvents;
-import com.than00ber.mcmg.init.MiniGameTeams;
-import com.than00ber.mcmg.init.WinConditions;
-import com.than00ber.mcmg.util.config.MiniGameProperty;
+import com.than00ber.mcmg.registries.AllTeams;
+import com.than00ber.mcmg.registries.AllWinConditions;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -45,15 +45,15 @@ public class HideNSeekMiniGame extends MiniGame {
     @Override
     public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
-                MiniGameTeams.SEEKERS,
-                MiniGameTeams.HIDERS
+                AllTeams.SEEKERS,
+                AllTeams.HIDERS
         );
     }
 
     @Override
     public ImmutableList<WinCondition> getWinConditions() {
         return ImmutableList.of(
-                WinConditions.NO_HIDERS
+                AllWinConditions.NO_HIDERS
         );
     }
 
@@ -80,7 +80,7 @@ public class HideNSeekMiniGame extends MiniGame {
 
     @Override
     public void onRoundCycled(MiniGameEvent event) {
-        event.setWinCondition(WinConditions.HIDERS_SURVIVED);
+        event.setWinCondition(AllWinConditions.HIDERS_SURVIVED);
     }
 
     private void spawnRandomEntities() {

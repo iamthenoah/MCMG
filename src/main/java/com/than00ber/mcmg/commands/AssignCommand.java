@@ -2,9 +2,9 @@ package com.than00ber.mcmg.commands;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGameTeam;
+import com.than00ber.mcmg.core.ActionResult;
+import com.than00ber.mcmg.core.MiniGameTeam;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.World;

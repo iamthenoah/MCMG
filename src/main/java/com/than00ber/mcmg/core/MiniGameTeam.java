@@ -1,7 +1,7 @@
-package com.than00ber.mcmg;
+package com.than00ber.mcmg.core;
 
-import com.than00ber.mcmg.util.config.Configurable;
-import com.than00ber.mcmg.util.config.MiniGameProperty;
+import com.than00ber.mcmg.core.config.Configurable;
+import com.than00ber.mcmg.core.config.MiniGameProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

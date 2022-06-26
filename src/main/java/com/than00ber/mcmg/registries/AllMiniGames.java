@@ -1,4 +1,4 @@
-package com.than00ber.mcmg.init;
+package com.than00ber.mcmg.registries;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
@@ -6,7 +6,7 @@ import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.minigames.WerewolfMiniGame;
 
-public class MiniGames {
+public class AllMiniGames {
 
     public static final Registry<MiniGame> MINIGAMES = new Registry<>(Registry.Registries.MINIGAMES);
 
