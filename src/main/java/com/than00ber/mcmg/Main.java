@@ -4,6 +4,9 @@ import com.than00ber.mcmg.commands.AssignCommand;
 import com.than00ber.mcmg.commands.ConfigsCommand;
 import com.than00ber.mcmg.commands.MiniGameCommand;
 import com.than00ber.mcmg.events.GlobalEvents;
+import com.than00ber.mcmg.init.MiniGameItems;
+import com.than00ber.mcmg.init.MiniGameTeams;
+import com.than00ber.mcmg.init.MiniGames;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.config.ConfigUtil;
 import org.bukkit.Bukkit;
@@ -28,6 +31,10 @@ public class Main extends JavaPlugin {
         new MiniGameCommand(this, WORLD);
         new ConfigsCommand(this, WORLD);
         new AssignCommand(this, WORLD);
+
+        MiniGameItems.ITEMS.load(this);
+        MiniGameTeams.TEAMS.load(this);
+        MiniGames.MINIGAMES.load(this);
     }
 
     @Override
@@ -39,5 +46,9 @@ public class Main extends JavaPlugin {
                 MINIGAME_ENGINE.endMiniGame("Minigame ending caused by plugin disabling.");
             }
         }
+
+        MiniGameItems.ITEMS.unload(this);
+        MiniGameTeams.TEAMS.unload(this);
+        MiniGames.MINIGAMES.unload(this);
     }
 }

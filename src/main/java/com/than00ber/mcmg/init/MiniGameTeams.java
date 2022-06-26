@@ -5,7 +5,6 @@ import com.than00ber.mcmg.MiniGameTeam;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
-import com.than00ber.mcmg.util.Registry;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -24,7 +23,7 @@ import org.bukkit.scoreboard.Team;
 
 public class MiniGameTeams {
 
-    public static final Registry<MiniGameTeam> TEAMS = new Registry<>();
+    public static final Registry<MiniGameTeam> TEAMS = new Registry<>(Registry.Registries.TEAMS);
 
     // Misc Teams
     public static final MiniGameTeam SPECTATORS = TEAMS.register("spectators", () -> new MiniGameTeam.Builder("spectators")
@@ -53,8 +52,10 @@ public class MiniGameTeams {
                 player.setHealth(40);
                 ItemStack hoe = MiniGameItems.SURVIVORS_WEAPON;
                 ItemStack food = MiniGameItems.SURVIVORS_FOOD;
+                ItemStack rules = MiniGameItems.RULE_BOOK;
                 food.setAmount(5);
                 player.getInventory().addItem(hoe, food);
+                player.getInventory().setItem(8, rules);
             })
             .build());
     public static final MiniGameTeam WEREWOLVES = TEAMS.register("werewolves", () -> new MiniGameTeam.Builder("werewolves")

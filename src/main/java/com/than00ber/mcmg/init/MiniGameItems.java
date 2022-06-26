@@ -5,7 +5,6 @@ import com.than00ber.mcmg.MiniGameEngine;
 import com.than00ber.mcmg.MiniGameItem;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
-import com.than00ber.mcmg.util.Registry;
 import com.than00ber.mcmg.util.ScheduleUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -30,7 +29,7 @@ import java.util.Random;
 
 public class MiniGameItems {
 
-    public static final Registry<ItemStack> ITEMS = new Registry<>();
+    public static final Registry<ItemStack> ITEMS = new Registry<>(Registry.Registries.ITEMS);
 
     // Werewolf Items
     public static final ItemStack SURVIVORS_WEAPON = ITEMS.register("survivors_weapon", new MiniGameItem.Builder(Material.WOODEN_HOE)
