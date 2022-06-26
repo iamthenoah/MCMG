@@ -2,8 +2,8 @@ package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.MiniGameItem;
-import com.than00ber.mcmg.registries.AllItems;
-import com.than00ber.mcmg.registries.AllTeams;
+import com.than00ber.mcmg.registries.Items;
+import com.than00ber.mcmg.registries.Teams;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.ChatColor;
@@ -26,7 +26,7 @@ public class GlobalEvents implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (Main.MINIGAME_ENGINE.hasRunningGame()) {
             Player player = event.getPlayer();
-            AllTeams.SPECTATORS.prepare(player);
+            Teams.SPECTATORS.prepare(player);
             ChatUtil.toSelf(player,
                     ChatColor.GOLD + "A minigame has already started.",
                     ChatColor.GOLD + "You are now a spectator until the next round."
@@ -38,7 +38,7 @@ public class GlobalEvents implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         if (Main.MINIGAME_ENGINE.hasRunningGame()) {
             Player player = event.getPlayer();
-            AllTeams.resetPlayer(player);
+            Teams.resetPlayer(player);
             Main.MINIGAME_ENGINE.getCurrentGame().removePlayer(player);
             ChatUtil.toAll(TextUtil.formatPlayer(player) + " has been removed from the minigame.");
         }
@@ -54,7 +54,7 @@ public class GlobalEvents implements Listener {
                         .replaceAll("[-+.^:,']","")
                         .replaceAll(" ", "_")
                 ).toLowerCase(); // TODO - review this
-                MiniGameItem item = AllItems.ITEMS.get(name);
+                MiniGameItem item = Items.ITEMS.get(name);
                 Optional.ofNullable(item)
                         .flatMap(i -> Optional.ofNullable(i.getAction()))
                         .ifPresent(a -> a.onClick(event));

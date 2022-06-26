@@ -7,8 +7,8 @@ import com.than00ber.mcmg.core.MiniGameTeam;
 import com.than00ber.mcmg.core.WinCondition;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.WerewolfMiniGameEvents;
-import com.than00ber.mcmg.registries.AllTeams;
-import com.than00ber.mcmg.registries.AllWinConditions;
+import com.than00ber.mcmg.registries.Teams;
+import com.than00ber.mcmg.registries.WinConditions;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
@@ -36,21 +36,21 @@ public class WerewolfMiniGame extends MiniGame {
     @Override
     public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
-                AllTeams.VILLAGERS,
-                AllTeams.WEREWOLVES,
-                AllTeams.TRAITORS,
-                AllTeams.VAMPIRES,
-                AllTeams.POSSESSED
+                Teams.VILLAGERS,
+                Teams.WEREWOLVES,
+                Teams.TRAITORS,
+                Teams.VAMPIRES,
+                Teams.POSSESSED
         );
     }
 
     @Override
     public ImmutableList<WinCondition> getWinConditions() {
         return ImmutableList.of(
-                AllWinConditions.VAMPIRE_VICTORY,
-                AllWinConditions.ALL_VILLAGERS_DEAD,
-                AllWinConditions.ALL_WEREWOLVES_DEAD,
-                AllWinConditions.EVERYONE_DEAD
+                WinConditions.VAMPIRE_VICTORY,
+                WinConditions.ALL_VILLAGERS_DEAD,
+                WinConditions.ALL_WEREWOLVES_DEAD,
+                WinConditions.EVERYONE_DEAD
         );
     }
 

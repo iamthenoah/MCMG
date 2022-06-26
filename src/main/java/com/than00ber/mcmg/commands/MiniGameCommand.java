@@ -3,7 +3,7 @@ package com.than00ber.mcmg.commands;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.ActionResult;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.registries.AllMiniGames;
+import com.than00ber.mcmg.registries.MiniGames;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.World;
@@ -40,7 +40,7 @@ public class MiniGameCommand extends PluginCommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
         if (option.equals("play")) {
-            return TextUtil.getMatching(args, AllMiniGames.MINIGAMES.getRegistryKeys());
+            return TextUtil.getMatching(args, MiniGames.MINIGAMES.getRegistryKeys());
         }
         return args.length == 0 ? TextUtil.getMatching(args, List.of("play", "start", "end", "restart")) : List.of();
     }
@@ -48,7 +48,7 @@ public class MiniGameCommand extends PluginCommand {
     private ActionResult handleGameMount(String[] args) {
         if (args.length == 0) return PluginCommand.INVALID_COMMAND;
 
-        MiniGame game = AllMiniGames.MINIGAMES.get(args[1].toLowerCase());
+        MiniGame game = MiniGames.MINIGAMES.get(args[1].toLowerCase());
         ActionResult result = Main.MINIGAME_ENGINE.mount(game);
         if (!result.isSuccessful()) return result;
 //        ConfigUtil.loadConfigs(instance, game);

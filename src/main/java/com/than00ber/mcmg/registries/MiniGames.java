@@ -7,7 +7,7 @@ import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.minigames.WerewolfMiniGame;
 
-public class AllMiniGames {
+public class MiniGames {
 
     public static final Registry<MiniGame> MINIGAMES = new Registry<>(Registry.Registries.MINIGAMES);
 

@@ -1,15 +1,14 @@
 package com.than00ber.mcmg.core.config;
 
+import com.google.common.collect.ImmutableList;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.util.List;
 
 public interface Configurable {
     /**
      * Retrieves all configurable properties of the object.
      * @return All object properties.
      */
-    List<? extends ConfigProperty<?>> getProperties();
+    ImmutableList<? extends ConfigProperty<?>> getProperties();
 
     /**
      * Retrieves the configured object.

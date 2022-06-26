@@ -2,7 +2,7 @@ package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.WerewolfMiniGame;
-import com.than00ber.mcmg.registries.AllTeams;
+import com.than00ber.mcmg.registries.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +28,7 @@ public class WerewolfMiniGameEvents extends MiniGameEvents<WerewolfMiniGame> {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        minigame.switchTeam(event.getEntity(), AllTeams.SPECTATORS);
+        minigame.switchTeam(event.getEntity(), Teams.SPECTATORS);
 
         if (WerewolfMiniGame.DEATH_SKULL.get()) {
             Location location = player.getLocation();

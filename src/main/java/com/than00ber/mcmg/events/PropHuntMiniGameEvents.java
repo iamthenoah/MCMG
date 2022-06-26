@@ -2,8 +2,8 @@ package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
-import com.than00ber.mcmg.registries.AllItems;
-import com.than00ber.mcmg.registries.AllTeams;
+import com.than00ber.mcmg.registries.Items;
+import com.than00ber.mcmg.registries.Teams;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;
 import com.than00ber.mcmg.util.TextUtil;
@@ -34,8 +34,8 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        minigame.switchTeam(player, AllTeams.SPECTATORS);
-        int count = minigame.getAllInTeam(AllTeams.PROPS).size();
+        minigame.switchTeam(player, Teams.SPECTATORS);
+        int count = minigame.getAllInTeam(Teams.PROPS).size();
 
         if (count > 0) {
             String remaining = ChatColor.YELLOW + String.valueOf(count) + ChatColor.RESET;
@@ -50,7 +50,7 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
         Player player = event.getPlayer();
         Action action = event.getAction();
 
-        if (minigame.isInTeam(player, AllTeams.PROPS)) {
+        if (minigame.isInTeam(player, Teams.PROPS)) {
             if (player.isSneaking()) return;
             boolean isHoldItem = player.getInventory().getItemInMainHand().getType() != Material.AIR;
 
@@ -82,7 +82,7 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
         if (!PropHuntMiniGame.PROPS_IN_WATER.get()) {
             Player player = event.getPlayer();
 
-            if (minigame.isInTeam(player, AllTeams.PROPS) && player.isInWater()) {
+            if (minigame.isInTeam(player, Teams.PROPS) && player.isInWater()) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10, 10));
             }
         }
@@ -95,10 +95,10 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
             player.setCooldown(event.getBow().getType(), cooldown);
 
             ScheduleUtil.doDelayed(cooldown, () -> {
-                boolean hasArrow = player.getInventory().contains(AllItems.HUNTERS_ARROW.toItemStack());
+                boolean hasArrow = player.getInventory().contains(Items.HUNTERS_ARROW.toItemStack());
 
                 if (Main.MINIGAME_ENGINE.hasRunningGame() && !hasArrow) {
-                    player.getInventory().setItem(8, AllItems.HUNTERS_ARROW.toItemStack());
+                    player.getInventory().setItem(8, Items.HUNTERS_ARROW.toItemStack());
                 }
             });
         }
@@ -109,7 +109,7 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
         if (event.getHitBlock() != null) {
             event.getEntity().remove();
         } else if (event.getHitEntity() instanceof Player player) {
-            if (minigame.isInTeam(player, AllTeams.PROPS)) {
+            if (minigame.isInTeam(player, Teams.PROPS)) {
                 player.setHealth(0);
             }
         }

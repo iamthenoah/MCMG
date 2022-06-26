@@ -2,7 +2,6 @@ package com.than00ber.mcmg.core;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.core.Console;
 import com.than00ber.mcmg.core.config.Configurable;
 import com.than00ber.mcmg.util.ConfigUtil;
 import org.bukkit.ChatColor;

@@ -8,8 +8,8 @@ import com.than00ber.mcmg.core.MiniGameTeam;
 import com.than00ber.mcmg.core.WinCondition;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.PropHuntMiniGameEvents;
-import com.than00ber.mcmg.registries.AllTeams;
-import com.than00ber.mcmg.registries.AllWinConditions;
+import com.than00ber.mcmg.registries.Teams;
+import com.than00ber.mcmg.registries.WinConditions;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -86,16 +86,16 @@ public class PropHuntMiniGame extends MiniGame {
     @Override
     public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
-                AllTeams.HUNTERS,
-                AllTeams.PROPS
+                Teams.HUNTERS,
+                Teams.PROPS
         );
     }
 
     @Override
     public ImmutableList<WinCondition> getWinConditions() {
         return ImmutableList.of(
-                AllWinConditions.NO_PROPS,
-                AllWinConditions.NO_HUNTERS
+                WinConditions.NO_PROPS,
+                WinConditions.NO_HUNTERS
         );
     }
 
@@ -115,7 +115,7 @@ public class PropHuntMiniGame extends MiniGame {
 
     @Override
     public void onRoundCycled(MiniGameEvent event) {
-        event.setWinCondition(AllWinConditions.PROPS_SURVIVED);
+        event.setWinCondition(WinConditions.PROPS_SURVIVED);
     }
 
     @Override

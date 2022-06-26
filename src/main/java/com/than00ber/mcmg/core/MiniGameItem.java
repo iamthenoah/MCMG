@@ -1,5 +1,6 @@
 package com.than00ber.mcmg.core;
 
+import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.core.config.ConfigProperty;
 import com.than00ber.mcmg.core.config.Configurable;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
@@ -56,11 +57,11 @@ public class MiniGameItem implements Configurable {
     }
 
     @Override
-    public List<? extends ConfigProperty<?>> getProperties() {
+    public ImmutableList<? extends ConfigProperty<?>> getProperties() {
         List<ConfigProperty<?>> properties = new ArrayList<>();
         if (action != null) properties.addAll(action.getActionProperties());
         properties.addAll(List.of(material, name, unbreakable));
-        return properties;
+        return ImmutableList.copyOf(properties);
     }
 
     public static class Builder {

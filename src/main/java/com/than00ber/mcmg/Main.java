@@ -6,9 +6,9 @@ import com.than00ber.mcmg.commands.MiniGameCommand;
 import com.than00ber.mcmg.core.MiniGameEngine;
 import com.than00ber.mcmg.events.GlobalEvents;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.registries.AllItems;
-import com.than00ber.mcmg.registries.AllMiniGames;
-import com.than00ber.mcmg.registries.AllTeams;
+import com.than00ber.mcmg.registries.Items;
+import com.than00ber.mcmg.registries.MiniGames;
+import com.than00ber.mcmg.registries.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,9 +32,9 @@ public class Main extends JavaPlugin {
         new ConfigsCommand(this, WORLD);
         new AssignCommand(this, WORLD);
 
-        AllItems.ITEMS.load(this);
-        AllTeams.TEAMS.load(this);
-        AllMiniGames.MINIGAMES.load(this);
+        Items.ITEMS.load(this);
+        Teams.TEAMS.load(this);
+        MiniGames.MINIGAMES.load(this);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class Main extends JavaPlugin {
             }
         }
 
-        AllItems.ITEMS.unload(this);
-        AllTeams.TEAMS.unload(this);
-        AllMiniGames.MINIGAMES.unload(this);
+        Items.ITEMS.unload(this);
+        Teams.TEAMS.unload(this);
+        MiniGames.MINIGAMES.unload(this);
     }
 }

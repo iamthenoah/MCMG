@@ -2,7 +2,7 @@ package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
-import com.than00ber.mcmg.registries.AllTeams;
+import com.than00ber.mcmg.registries.Teams;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
@@ -24,10 +24,10 @@ public class HideNSeekMiniGameEvents extends MiniGameEvents<HideNSeekMiniGame> {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (minigame.isInTeam(player, AllTeams.SEEKERS)) {
-            minigame.switchTeam(player, AllTeams.SPECTATORS);
+        if (minigame.isInTeam(player, Teams.SEEKERS)) {
+            minigame.switchTeam(player, Teams.SPECTATORS);
         } else {
-            minigame.switchTeam(player, AllTeams.SEEKERS);
+            minigame.switchTeam(player, Teams.SEEKERS);
             minigame.sendToGameSpawn(player);
         }
     }
@@ -37,7 +37,7 @@ public class HideNSeekMiniGameEvents extends MiniGameEvents<HideNSeekMiniGame> {
         event.setCancelled(true);
         Player player = event.getPlayer();
 
-        if (minigame.isInTeam(player, AllTeams.HIDERS)) {
+        if (minigame.isInTeam(player, Teams.HIDERS)) {
             Entity entity = event.getRightClicked();
             if ((entity.getType() != HideNSeekMiniGame.ENTITY_TYPE.get())) return;
 
@@ -53,7 +53,7 @@ public class HideNSeekMiniGameEvents extends MiniGameEvents<HideNSeekMiniGame> {
 
         if (assaulter instanceof Player player) {
 
-            if (minigame.isInTeam(player, AllTeams.SEEKERS)) {
+            if (minigame.isInTeam(player, Teams.SEEKERS)) {
                 Entity victim = event.getEntity();
 
                 if (!(victim instanceof Player)) {
@@ -69,7 +69,7 @@ public class HideNSeekMiniGameEvents extends MiniGameEvents<HideNSeekMiniGame> {
 
         if (entity instanceof Player player) {
 
-            if (minigame.isInTeam(player, AllTeams.SEEKERS)) {
+            if (minigame.isInTeam(player, Teams.SEEKERS)) {
                 event.setCancelled(true);
             }
         }
