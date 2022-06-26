@@ -2,6 +2,7 @@ package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameItem;
+import com.than00ber.mcmg.init.MiniGameItems;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
@@ -9,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -17,6 +17,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Optional;
 
 public class GlobalEvents implements Listener {
 
@@ -44,16 +46,15 @@ public class GlobalEvents implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Action action = event.getAction();
+        if (event.getItem() != null) {
+            ItemMeta meta = event.getItem().getItemMeta();
 
-        if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-            if (event.getItem() != null && event.getItem().getItemMeta() != null) {
-                ItemMeta meta = event.getItem().getItemMeta();
+            if (meta != null) {
                 String name = ChatColor.stripColor(meta.getDisplayName());
-
-                if (MiniGameItem.TOGGLEABLE_ITEMS.containsKey(name)) {
-                    MiniGameItem.TOGGLEABLE_ITEMS.get(name).getAction().onClick(event);
-                }
+                MiniGameItem item = MiniGameItems.ITEMS.get(name);
+                Optional.ofNullable(item)
+                        .flatMap(i -> Optional.ofNullable(i.getAction()))
+                        .ifPresent(a -> a.onClick(event));
             }
         }
     }

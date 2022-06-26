@@ -12,15 +12,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class MiniGameItem implements Supplier<ItemStack> {
-
-    public static final Map<String, MiniGameItem> TOGGLEABLE_ITEMS = new HashMap<>();
+public class MiniGameItem {
 
     private final Material material;
     private final String name;
@@ -35,21 +31,19 @@ public class MiniGameItem implements Supplier<ItemStack> {
         this.unbreakable = unbreakable;
         this.meta = meta;
         this.action = action;
-
-        if (action != null) {
-            TOGGLEABLE_ITEMS.put(ChatColor.stripColor(name), this);
-        }
-
         // lore has dark purple color set by default
         this.tooltips = tooltips.stream().map(s -> ChatColor.WHITE + s).toList();
+    }
+
+    public String getName() {
+        return name;
     }
 
     public @Nullable Action getAction() {
         return action;
     }
 
-    @Override
-    public ItemStack get() {
+    public ItemStack toItemStack() {
         ItemStack item = new ItemStack(material);
         meta.setLore(tooltips);
         meta.setDisplayName(name);

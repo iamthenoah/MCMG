@@ -95,10 +95,10 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
             player.setCooldown(event.getBow().getType(), cooldown);
 
             ScheduleUtil.doDelayed(cooldown, () -> {
-                boolean hasArrow = player.getInventory().contains(MiniGameItems.HUNTERS_ARROW);
+                boolean hasArrow = player.getInventory().contains(MiniGameItems.HUNTERS_ARROW.toItemStack());
 
                 if (Main.MINIGAME_ENGINE.hasRunningGame() && !hasArrow) {
-                    player.getInventory().setItem(8, MiniGameItems.HUNTERS_ARROW);
+                    player.getInventory().setItem(8, MiniGameItems.HUNTERS_ARROW.toItemStack());
                 }
             });
         }

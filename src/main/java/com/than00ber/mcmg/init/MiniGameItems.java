@@ -29,19 +29,19 @@ import java.util.Random;
 
 public class MiniGameItems {
 
-    public static final Registry<ItemStack> ITEMS = new Registry<>(Registry.Registries.ITEMS);
+    public static final Registry<MiniGameItem> ITEMS = new Registry<>(Registry.Registries.ITEMS);
 
     // Werewolf Items
-    public static final ItemStack SURVIVORS_WEAPON = ITEMS.register("survivors_weapon", new MiniGameItem.Builder(Material.WOODEN_HOE)
+    public static final MiniGameItem SURVIVORS_WEAPON = register(new MiniGameItem.Builder(Material.WOODEN_HOE)
             .setName("Survivor's weapon")
             .addTooltip(ChatColor.ITALIC + "Who said you can't trust hoes?")
             .unbreakable()
             .build());
-    public static final ItemStack SURVIVORS_FOOD = ITEMS.register("survivors_food",
+    public static final MiniGameItem SURVIVORS_FOOD = register(
             new MiniGameItem.Builder(Material.COOKED_SALMON)
             .setName("Survivor's Fish")
             .build());
-    public static final ItemStack RULE_BOOK = ITEMS.register("rule_book", new MiniGameItem.Builder(Material.WRITTEN_BOOK)
+    public static final MiniGameItem RULE_BOOK = register(new MiniGameItem.Builder(Material.WRITTEN_BOOK)
             .setName(ChatColor.YELLOW + "WWRPG Rule Book")
             .setMeta(() -> {
                 List<String> pages = new ArrayList<>();
@@ -56,27 +56,27 @@ public class MiniGameItems {
             .build());
 
     // HideNSeek Items
-    public static final ItemStack SEEKERS_AXE = ITEMS.register("seekers_axe", new MiniGameItem.Builder(Material.GOLDEN_AXE)
+    public static final MiniGameItem SEEKERS_AXE = register(new MiniGameItem.Builder(Material.GOLDEN_AXE)
             .setName(ChatColor.YELLOW + "Seeker's Axe")
             .unbreakable()
             .build());
-    public static final ItemStack SEEKERS_BOW = ITEMS.register("seekers_bow", new MiniGameItem.Builder(Material.BOW)
+    public static final MiniGameItem SEEKERS_BOW = register(new MiniGameItem.Builder(Material.BOW)
             .setName(ChatColor.YELLOW + "Seeker's Bow")
             .unbreakable()
             .build());
 
     // PropHunt Items
-    public static final ItemStack HUNTERS_SWORD = ITEMS.register("hunters_food", new MiniGameItem.Builder(Material.IRON_SWORD)
+    public static final MiniGameItem HUNTERS_SWORD = register(new MiniGameItem.Builder(Material.IRON_SWORD)
             .setName(ChatColor.AQUA + "Hunter's Sword")
             .unbreakable().build());
-    public static final ItemStack HUNTERS_BOW = ITEMS.register("hunters_bow", new MiniGameItem.Builder(Material.BOW)
+    public static final MiniGameItem HUNTERS_BOW = register(new MiniGameItem.Builder(Material.BOW)
             .setName(ChatColor.AQUA + "Hunter's Bow")
             .unbreakable()
             .build());
-    public static final ItemStack HUNTERS_ARROW = ITEMS.register("hunters_arrow", new MiniGameItem.Builder(Material.ARROW)
+    public static final MiniGameItem HUNTERS_ARROW = register(new MiniGameItem.Builder(Material.ARROW)
             .setName(ChatColor.AQUA + "Hunter's Arrow")
             .build());
-    public static final ItemStack PROP_COMPASS = ITEMS.register("prop_compass", new MiniGameItem.Builder(Material.COMPASS)
+    public static final MiniGameItem PROP_COMPASS = register(new MiniGameItem.Builder(Material.COMPASS)
             .setName(ChatColor.DARK_AQUA + "Prop Compass")
             .addTooltip("Reveals the location of the closest props.")
             .setMeta(() -> {
@@ -124,7 +124,7 @@ public class MiniGameItems {
                 }
             })
             .build());
-    public static final ItemStack STUN_INK = ITEMS.register("stun_ink", new MiniGameItem.Builder(Material.INK_SAC)
+    public static final MiniGameItem STUN_INK = register(new MiniGameItem.Builder(Material.INK_SAC)
             .setName(ChatColor.DARK_AQUA + "Stun Juice")
             .addTooltip("Blinds any nearby hunter for a brief moment.")
             .onTriggered(PropHuntMiniGame.STUN_JUICE_COOLDOWN, event -> {
@@ -142,7 +142,7 @@ public class MiniGameItems {
                 }
             })
             .build());
-    public static final ItemStack GLOW_DUST = ITEMS.register("glow_dust", new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
+    public static final MiniGameItem GLOW_DUST = register(new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
             .setName(ChatColor.YELLOW + "Glow Dust")
             .addTooltip("Reveals all hunters in the game for a brief moment.")
             .onToggled(PropHuntMiniGame.GLOW_DUST_DURATION, PropHuntMiniGame.GLOW_DUST_COOLDOWN, event -> {
@@ -167,7 +167,7 @@ public class MiniGameItems {
                 }
             })
             .build());
-    public static final ItemStack TELEPORTER = ITEMS.register("teleporter", new MiniGameItem.Builder(Material.FEATHER)
+    public static final MiniGameItem TELEPORTER = register(new MiniGameItem.Builder(Material.FEATHER)
             .setName(ChatColor.DARK_PURPLE + "Teleporter")
             .addTooltip("Teleports you straight to the pointed direction.")
             .onTriggered(PropHuntMiniGame.TELEPORTER_COOLDOWN, event -> {
@@ -202,7 +202,7 @@ public class MiniGameItems {
                 }
             })
             .build());
-    public static final ItemStack COCAINE = ITEMS.register("cocaine", new MiniGameItem.Builder(Material.SUGAR)
+    public static final MiniGameItem COCAINE = register(new MiniGameItem.Builder(Material.SUGAR)
             .setName(ChatColor.BLUE + "Cocaine")
             .addTooltip("Gives you extreme speed for a brief moment.")
             .onToggled(PropHuntMiniGame.COCAINE_DURATION, PropHuntMiniGame.COCAINE_COOLDOWN, event -> {
@@ -212,7 +212,7 @@ public class MiniGameItems {
                 player.addPotionEffect(potion);
             })
             .build());
-    public static final ItemStack PROP_RANDOMIZER = ITEMS.register("prop_randomizer", new MiniGameItem.Builder(Material.FLOWER_POT)
+    public static final MiniGameItem PROP_RANDOMIZER = register(new MiniGameItem.Builder(Material.FLOWER_POT)
             .setName(ChatColor.LIGHT_PURPLE + "Prop Randomizer")
             .addTooltip("Changes the appears of all props with any random nearby block.")
             .onTriggered(PropHuntMiniGame.PROP_RANDOMIZER_COOLDOWN, event -> {
@@ -241,4 +241,8 @@ public class MiniGameItems {
                 }
             })
             .build());
+
+    private static MiniGameItem register(MiniGameItem item) {
+        return ITEMS.register(ChatColor.stripColor(item.getName()), () -> item);
+    }
 }
