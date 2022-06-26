@@ -80,11 +80,6 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
     }
 
     @Override
-    public final String getConfigName() {
-        return getMiniGameName().toLowerCase() + "-latest";
-    }
-
-    @Override
     public final ImmutableList<? extends ConfigProperty<?>> getProperties() {
         return ImmutableList.copyOf(properties);
     }
@@ -127,14 +122,14 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
         if (manager != null) {
             Scoreboard scoreboard = manager.getMainScoreboard();
-            Team currentTeam = scoreboard.getTeam(previousMiniGameTeam.getTeamId());
-            Team newTeam = scoreboard.getTeam(newMiniGameTeam.getTeamId());
+            Team currentTeam = scoreboard.getTeam(previousMiniGameTeam.getName());
+            Team newTeam = scoreboard.getTeam(newMiniGameTeam.getName());
 
             if (!previousMiniGameTeam.isSpectator() && currentTeam == null) {
-                Console.warn("Current player team not registered " + previousMiniGameTeam.getDisplayName());
+                Console.warn("Current player team not registered " + previousMiniGameTeam.getVisibleName());
             }
             if (!newMiniGameTeam.isSpectator() && newTeam == null) {
-                Console.warn("New player team not registered " + newMiniGameTeam.getDisplayName());
+                Console.warn("New player team not registered " + newMiniGameTeam.getVisibleName());
             }
 
             if (currentTeam == null || newTeam == null) return;

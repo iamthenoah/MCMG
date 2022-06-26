@@ -8,7 +8,6 @@ import com.than00ber.mcmg.init.MiniGameItems;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.MiniGames;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.util.config.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,7 +39,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         if (MINIGAME_ENGINE != null && MINIGAME_ENGINE.hasGame()) {
-            ConfigUtil.saveConfigs(this, MINIGAME_ENGINE.getCurrentGame());
+//            ConfigUtil.saveConfigs(this, MINIGAME_ENGINE.getCurrentGame());
 
             if (MINIGAME_ENGINE.hasRunningGame()) {
                 MINIGAME_ENGINE.endMiniGame("Minigame ending caused by plugin disabling.");

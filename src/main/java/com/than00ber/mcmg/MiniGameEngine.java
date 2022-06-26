@@ -215,7 +215,7 @@ public class MiniGameEngine<G extends MiniGame> {
             Scoreboard scoreboard = manager.getMainScoreboard();
 
             for (MiniGameTeam miniGameTeam : game.getMiniGameTeams()) {
-                Team team = scoreboard.registerNewTeam(miniGameTeam.getTeamId());
+                Team team = scoreboard.registerNewTeam(miniGameTeam.getName());
                 team.setOption(Team.Option.NAME_TAG_VISIBILITY, miniGameTeam.getVisibility());
             }
         }

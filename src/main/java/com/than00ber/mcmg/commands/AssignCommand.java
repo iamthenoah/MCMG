@@ -34,7 +34,7 @@ public class AssignCommand extends PluginCommand {
             if (player != null) {
                 String teamName = args[1];
                 MiniGameTeam found = game.getMiniGameTeams().stream()
-                        .filter(t -> Objects.equals(t.getDisplayName(), teamName))
+                        .filter(t -> Objects.equals(t.getVisibleName(), teamName))
                         .findFirst()
                         .orElse(null);
 
@@ -55,7 +55,7 @@ public class AssignCommand extends PluginCommand {
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
         if (Main.MINIGAME_ENGINE.hasRunningGame() && args.length == 1) {
             ImmutableList<MiniGameTeam> teams = Main.MINIGAME_ENGINE.getCurrentGame().getMiniGameTeams();
-            return teams.stream().map(MiniGameTeam::getDisplayName).toList();
+            return teams.stream().map(MiniGameTeam::getVisibleName).toList();
         }
         return null;
     }

@@ -6,7 +6,6 @@ import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
-import com.than00ber.mcmg.util.config.ConfigUtil;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +51,7 @@ public class MiniGameCommand extends PluginCommand {
         MiniGame game = MiniGames.MINIGAMES.get(args[1].toLowerCase());
         ActionResult result = Main.MINIGAME_ENGINE.mount(game);
         if (!result.isSuccessful()) return result;
-        ConfigUtil.loadConfigs(instance, game);
+//        ConfigUtil.loadConfigs(instance, game);
 
         return ActionResult.info("Minigame set to " + TextUtil.formatMiniGame(game));
     }

@@ -85,7 +85,7 @@ public class MiniGameItems {
                 meta.setLodestoneTracked(false);
                 return meta;
             })
-            .onToggled(PropHuntMiniGame.PROP_COMPASS_DURATION, PropHuntMiniGame.PROP_COMPASS_COOLDOWN, event -> {
+            .onToggled(30, 30, event -> {
                 Player player = event.getPlayer();
                 double range = (double) PropHuntMiniGame.PLAYGROUND_RADIUS.get() * 2;
                 double distance = Double.POSITIVE_INFINITY;
@@ -127,7 +127,7 @@ public class MiniGameItems {
     public static final MiniGameItem STUN_INK = register(new MiniGameItem.Builder(Material.INK_SAC)
             .setName(ChatColor.DARK_AQUA + "Stun Juice")
             .addTooltip("Blinds any nearby hunter for a brief moment.")
-            .onTriggered(PropHuntMiniGame.STUN_JUICE_COOLDOWN, event -> {
+            .onTriggered(30, event -> {
                 Player player = event.getPlayer();
                 double range = PropHuntMiniGame.STUN_JUICE_RANGE.get();
 
@@ -145,7 +145,7 @@ public class MiniGameItems {
     public static final MiniGameItem GLOW_DUST = register(new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
             .setName(ChatColor.YELLOW + "Glow Dust")
             .addTooltip("Reveals all hunters in the game for a brief moment.")
-            .onToggled(PropHuntMiniGame.GLOW_DUST_DURATION, PropHuntMiniGame.GLOW_DUST_COOLDOWN, event -> {
+            .onToggled(30, 30, event -> {
                 int range = PropHuntMiniGame.GLOW_DUST_RANGE.get();
 
                 for (Entity entity : event.getPlayer().getNearbyEntities(range, range, range)) {
@@ -170,7 +170,7 @@ public class MiniGameItems {
     public static final MiniGameItem TELEPORTER = register(new MiniGameItem.Builder(Material.FEATHER)
             .setName(ChatColor.DARK_PURPLE + "Teleporter")
             .addTooltip("Teleports you straight to the pointed direction.")
-            .onTriggered(PropHuntMiniGame.TELEPORTER_COOLDOWN, event -> {
+            .onTriggered(30, event -> {
                 Player player = event.getPlayer();
                 Location eyeLoc = player.getEyeLocation();
                 Vector eyeDirection = eyeLoc.getDirection();
@@ -205,7 +205,7 @@ public class MiniGameItems {
     public static final MiniGameItem COCAINE = register(new MiniGameItem.Builder(Material.SUGAR)
             .setName(ChatColor.BLUE + "Cocaine")
             .addTooltip("Gives you extreme speed for a brief moment.")
-            .onToggled(PropHuntMiniGame.COCAINE_DURATION, PropHuntMiniGame.COCAINE_COOLDOWN, event -> {
+            .onToggled(30, 30, event -> {
                 Player player = event.getPlayer();
                 int duration = PropHuntMiniGame.COCAINE_DURATION.get() * 20;
                 PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, duration, 10);
@@ -215,7 +215,7 @@ public class MiniGameItems {
     public static final MiniGameItem PROP_RANDOMIZER = register(new MiniGameItem.Builder(Material.FLOWER_POT)
             .setName(ChatColor.LIGHT_PURPLE + "Prop Randomizer")
             .addTooltip("Changes the appears of all props with any random nearby block.")
-            .onTriggered(PropHuntMiniGame.PROP_RANDOMIZER_COOLDOWN, event -> {
+            .onTriggered(30, event -> {
                 for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getAllInTeam(MiniGameTeams.PROPS)) {
                     Random r = new Random();
                     Material material = Material.AIR;
@@ -243,6 +243,6 @@ public class MiniGameItems {
             .build());
 
     private static MiniGameItem register(MiniGameItem item) {
-        return ITEMS.register(ChatColor.stripColor(item.getName()), () -> item);
+        return ITEMS.register(item.getName(), () -> item);
     }
 }

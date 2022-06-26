@@ -1,6 +1,9 @@
 package com.than00ber.mcmg;
 
 import com.than00ber.mcmg.util.ScheduleUtil;
+import com.than00ber.mcmg.util.config.ConfigProperty;
+import com.than00ber.mcmg.util.config.Configurable;
+import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -16,19 +19,19 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class MiniGameItem {
+public class MiniGameItem implements Configurable {
 
-    private final Material material;
-    private final String name;
-    private final List<String> tooltips;
-    private final boolean unbreakable;
+    private final MiniGameProperty.StringProperty name;
+    private final MiniGameProperty.EnumProperty<Material> material;
+    private final MiniGameProperty.BooleanProperty unbreakable;
     private final ItemMeta meta;
+    private final List<String> tooltips;
     private final @Nullable Action action;
 
     private MiniGameItem(Material material, String name, List<String> tooltips, boolean unbreakable, ItemMeta meta, @Nullable Action action) {
-        this.material = material;
-        this.name = name;
-        this.unbreakable = unbreakable;
+        this.name = new MiniGameProperty.StringProperty("name", name);
+        this.material = new MiniGameProperty.EnumProperty<>("material", Material.class, material);
+        this.unbreakable = new MiniGameProperty.BooleanProperty("unbreakable", unbreakable);
         this.meta = meta;
         this.action = action;
         // lore has dark purple color set by default
@@ -36,7 +39,7 @@ public class MiniGameItem {
     }
 
     public String getName() {
-        return name;
+        return name.get();
     }
 
     public @Nullable Action getAction() {
@@ -44,18 +47,26 @@ public class MiniGameItem {
     }
 
     public ItemStack toItemStack() {
-        ItemStack item = new ItemStack(material);
+        ItemStack item = new ItemStack(material.get());
+        meta.setDisplayName(name.get());
+        meta.setUnbreakable(unbreakable.get());
         meta.setLore(tooltips);
-        meta.setDisplayName(name);
-        meta.setUnbreakable(unbreakable);
         item.setItemMeta(meta);
         return item;
     }
 
+    @Override
+    public List<? extends ConfigProperty<?>> getProperties() {
+        List<ConfigProperty<?>> properties = new ArrayList<>();
+        if (action != null) properties.addAll(action.getActionProperties());
+        properties.addAll(List.of(material, name, unbreakable));
+        return properties;
+    }
+
     public static class Builder {
 
-        private final Material material;
         private String name;
+        private final Material material;
         private final List<String> tooltips;
         private boolean unbreakable;
         private ItemMeta meta;
@@ -90,27 +101,18 @@ public class MiniGameItem {
             return this;
         }
 
-        public Builder onToggled(
-                Supplier<Integer> duration,
-                Supplier<Integer> cooldown,
-                Consumer<PlayerInteractEvent> start) {
+        public Builder onToggled(int duration, int cooldown, Consumer<PlayerInteractEvent> start) {
             action = new Action(material, duration, cooldown, start, null);
             return this;
         }
 
-        public Builder onToggled(
-                Supplier<Integer> duration,
-                Supplier<Integer> cooldown,
-                Consumer<PlayerInteractEvent> start,
-                Consumer<PlayerInteractEvent> end) {
+        public Builder onToggled(int duration, int cooldown, Consumer<PlayerInteractEvent> start, Consumer<PlayerInteractEvent> end) {
             action = new Action(material, duration, cooldown, start, end);
             return this;
         }
 
-        public Builder onTriggered(
-                Supplier<Integer> cooldown,
-                Consumer<PlayerInteractEvent> start) {
-            action = new Action(material, () -> 0, cooldown, start, null);
+        public Builder onTriggered(int cooldown, Consumer<PlayerInteractEvent> start) {
+            action = new Action(material, 0, cooldown, start, null);
             return this;
         }
 
@@ -132,19 +134,19 @@ public class MiniGameItem {
         private final Material material;
         private final Consumer<PlayerInteractEvent> onStart;
         private final @Nullable Consumer<PlayerInteractEvent> onEnd;
-        private final Supplier<Integer> duration;
-        private final Supplier<Integer> cooldown;
+        private final MiniGameProperty.IntegerProperty duration;
+        private final MiniGameProperty.IntegerProperty cooldown;
 
         public Action(
                 Material material,
-                Supplier<Integer> duration,
-                Supplier<Integer> cooldown,
+                int duration,
+                int cooldown,
                 Consumer<PlayerInteractEvent> onStart,
                 @Nullable Consumer<PlayerInteractEvent> onEnd
         ) {
             this.material = material;
-            this.duration = duration;
-            this.cooldown = cooldown;
+            this.duration = new MiniGameProperty.IntegerProperty("action.duration", duration);
+            this.cooldown = new MiniGameProperty.IntegerProperty("action.cooldown", cooldown);
             this.onStart = onStart;
             this.onEnd = onEnd;
         }
@@ -157,28 +159,30 @@ public class MiniGameItem {
             return cooldown.get();
         }
 
+        public List<ConfigProperty<?>> getActionProperties() {
+            return List.of(duration, cooldown);
+        }
+
         public void onClick(PlayerInteractEvent event) {
-            if (onStart != null && duration != null && cooldown != null) {
-                Player player = event.getPlayer();
-                ItemStack item = event.getItem();
+            Player player = event.getPlayer();
+            ItemStack item = event.getItem();
 
-                if (!player.hasCooldown(material) && !item.containsEnchantment(Enchantment.LOYALTY)) {
-                    event.setCancelled(true);
-                    int delay = getDuration() * 20;
-                    int cooldown = getCooldown() * 20;
+            if (!player.hasCooldown(material) && !item.containsEnchantment(Enchantment.LOYALTY)) {
+                event.setCancelled(true);
+                int delay = getDuration() * 20;
+                int cooldown = getCooldown() * 20;
 
-                    onStart.accept(event);
-                    item.addUnsafeEnchantment(Enchantment.LOYALTY, 1);
+                onStart.accept(event);
+                item.addUnsafeEnchantment(Enchantment.LOYALTY, 1);
 
-                    if (delay != 0) player.playEffect(player.getLocation(), Effect.CLICK1, null);
+                if (delay != 0) player.playEffect(player.getLocation(), Effect.CLICK1, null);
 
-                    ScheduleUtil.doDelayed(delay, () -> {
-                        if (onEnd != null) onEnd.accept(event);
-                        item.removeEnchantment(Enchantment.LOYALTY);
-                        player.playEffect(player.getLocation(), Effect.CLICK2, null);
-                        player.setCooldown(material, cooldown);
-                    });
-                }
+                ScheduleUtil.doDelayed(delay, () -> {
+                    if (onEnd != null) onEnd.accept(event);
+                    item.removeEnchantment(Enchantment.LOYALTY);
+                    player.playEffect(player.getLocation(), Effect.CLICK2, null);
+                    player.setCooldown(material, cooldown);
+                });
             }
         }
     }

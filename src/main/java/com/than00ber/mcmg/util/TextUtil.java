@@ -43,7 +43,7 @@ public class TextUtil {
     }
 
     public static String formatGameTeam(MiniGameTeam team) {
-        return team.getColor() + "" + ChatColor.BOLD + team.getDisplayName() + ChatColor.RESET;
+        return team.getColor() + "" + ChatColor.BOLD + team.getVisibleName() + ChatColor.RESET;
     }
 
     public static String formatObjective(MiniGameTeam team) {

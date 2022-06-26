@@ -6,7 +6,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -14,8 +13,8 @@ import static org.bukkit.scoreboard.Team.OptionStatus;
 
 public class MiniGameTeam implements Configurable {
 
-    private final String teamId;
-    private final MiniGameProperty.StringProperty displayName;
+    private final MiniGameProperty.StringProperty name;
+    private final MiniGameProperty.StringProperty visibleName;
     private final MiniGameProperty.DoubleProperty weight;
     private final MiniGameProperty.IntegerProperty threshold;
     private final MiniGameProperty.ChatColorProperty color;
@@ -29,8 +28,8 @@ public class MiniGameTeam implements Configurable {
     private final Consumer<Player> preparePlayer;
 
     private MiniGameTeam(
-            String teamId,
-            String displayName,
+            String name,
+            String visibleName,
             double weight,
             int threshold,
             ChatColor color,
@@ -43,8 +42,8 @@ public class MiniGameTeam implements Configurable {
             boolean disableWhileGrace,
             Consumer<Player> preparePlayer
     ) {
-        this.teamId = teamId;
-        this.displayName = new MiniGameProperty.StringProperty("name", displayName);
+        this.name = new MiniGameProperty.StringProperty("name", name);
+        this.visibleName = new MiniGameProperty.StringProperty("visibleName", visibleName);
         this.weight = new MiniGameProperty.DoubleProperty("weight", weight);
         this.threshold = new MiniGameProperty.IntegerProperty("threshold", threshold);
         this.color = new MiniGameProperty.ChatColorProperty("color", color);
@@ -58,12 +57,12 @@ public class MiniGameTeam implements Configurable {
         this.preparePlayer = preparePlayer;
     }
 
-    public String getTeamId() {
-        return teamId;
+    public String getName() {
+        return name.get();
     }
 
-    public String getDisplayName() {
-        return displayName.get();
+    public String getVisibleName() {
+        return visibleName.get();
     }
 
     public Double getWeight() {
@@ -111,14 +110,9 @@ public class MiniGameTeam implements Configurable {
     }
 
     @Override
-    public String getConfigName() {
-        return getTeamId() + "-latest";
-    }
-
-    @Override
     public List<MiniGameProperty<?>> getProperties() {
-        return Arrays.asList(
-                displayName,
+        return List.of(
+                visibleName,
                 weight,
                 threshold,
                 color,
@@ -134,8 +128,8 @@ public class MiniGameTeam implements Configurable {
 
     public static class Builder {
 
-        private final String teamId;
-        private String displayName;
+        private final String name;
+        private String visibleName;
         private double weight;
         private int threshold;
         private ChatColor color;
@@ -148,9 +142,9 @@ public class MiniGameTeam implements Configurable {
         private boolean disableWhileGrace;
         Consumer<Player> preparePlayer;
 
-        public Builder(String id) {
-            teamId = id;
-            displayName = teamId;
+        public Builder(String name) {
+            this.name = name;
+            visibleName = name;
             weight = 0;
             threshold = 0;
             color = ChatColor.WHITE;
@@ -162,7 +156,7 @@ public class MiniGameTeam implements Configurable {
         }
 
         public Builder setDisplayName(String name) {
-            displayName = name;
+            visibleName = name;
             return this;
         }
 
@@ -223,8 +217,8 @@ public class MiniGameTeam implements Configurable {
 
         public MiniGameTeam build() {
             return new MiniGameTeam(
-                    teamId,
-                    displayName,
+                    name,
+                    visibleName,
                     weight,
                     threshold,
                     color,

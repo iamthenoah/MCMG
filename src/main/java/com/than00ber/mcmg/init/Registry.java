@@ -5,6 +5,7 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.config.ConfigUtil;
 import com.than00ber.mcmg.util.config.Configurable;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,17 +21,21 @@ public final class Registry<E> {
         this.registry = registry;
     }
 
-    public E register(String key, Supplier<E> supplier) {
+    public E register(final String key, final Supplier<E> supplier) {
         if (ENTRIES.containsKey(key)) {
             Console.warn("Registry object with key '" + key + "' already registered.");
-            Console.warn("  This is override the currently registered object with '" + key + "'.");
+            Console.warn("  This will override the currently registered object.");
         }
-        ENTRIES.put(key, supplier);
+        String name = ChatColor.stripColor(key
+                .replaceAll("[-+.^:,']","")
+                .replaceAll(" ", "_")
+        ).toLowerCase(); // TODO - review this
+        ENTRIES.put(name, supplier);
         return supplier.get();
     }
 
     @Nullable
-    public E get(String key) {
+    public E get(final String key) {
         return ENTRIES.getOrDefault(key, null).get();
     }
 
@@ -38,22 +43,22 @@ public final class Registry<E> {
         return ImmutableList.copyOf(ENTRIES.keySet());
     }
 
-    public void load(Main instance) {
+    public void load(final Main instance) {
         Console.debug("Loading " + registry + " registry.");
         ENTRIES.forEach((key, obj) -> {
             if (obj.get() instanceof Configurable configurable) {
-                String path = registry.name().toLowerCase() + "/" + configurable.getConfigName();
+                String path = registry.name().toLowerCase() + "/" + key;
                 YamlConfiguration data = ConfigUtil.load(instance, path);
                 configurable.setConfig(data);
             }
         });
     }
 
-    public void unload(Main instance) {
+    public void unload(final Main instance) {
         Console.debug("Unloading " + registry + " registry.");
         ENTRIES.forEach((key, obj) -> {
             if (obj.get() instanceof Configurable configurable) {
-                String path = registry.name().toLowerCase() + "/" + configurable.getConfigName();
+                String path = registry.name().toLowerCase() + "/" + key;
                 ConfigUtil.save(instance, path, configurable.getConfig());
             }
         });

@@ -50,7 +50,10 @@ public class GlobalEvents implements Listener {
             ItemMeta meta = event.getItem().getItemMeta();
 
             if (meta != null) {
-                String name = ChatColor.stripColor(meta.getDisplayName());
+                String name = ChatColor.stripColor(meta.getDisplayName()
+                        .replaceAll("[-+.^:,']","")
+                        .replaceAll(" ", "_")
+                ).toLowerCase(); // TODO - review this
                 MiniGameItem item = MiniGameItems.ITEMS.get(name);
                 Optional.ofNullable(item)
                         .flatMap(i -> Optional.ofNullable(i.getAction()))

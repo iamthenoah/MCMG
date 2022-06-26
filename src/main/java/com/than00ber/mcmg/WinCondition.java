@@ -57,7 +57,7 @@ public class WinCondition<G> {
 
     private String getDefaultSubTitle() {
         List<String> winningTeams = winners.stream()
-                .map(MiniGameTeam::getDisplayName)
+                .map(MiniGameTeam::getVisibleName)
                 .collect(Collectors.toList());
         String winningTeam = String.join(", ", winningTeams);
         String team = "Team" + (winningTeams.size() > 1 ? "s " : " ");

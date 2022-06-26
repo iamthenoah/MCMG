@@ -6,7 +6,6 @@ import com.than00ber.mcmg.util.ActionResult;
 import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import com.than00ber.mcmg.util.config.ConfigProperty;
-import com.than00ber.mcmg.util.config.ConfigUtil;
 import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -59,7 +58,7 @@ public class ConfigsCommand extends PluginCommand {
                             String s = "Property '" + propertyName + "' updated";
                             if (options.length > 0) s += " " + arguments;
 
-                            ConfigUtil.saveConfigs(instance, game); // persist data on change
+//                            ConfigUtil.saveConfigs(instance, game); // persist data on change
 
                             return ActionResult.success(s + ".");
                         } else {
