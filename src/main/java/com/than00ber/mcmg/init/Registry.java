@@ -62,37 +62,4 @@ public final class Registry<E> {
     public enum Registries {
         MINIGAMES, ITEMS, TEAMS
     }
-
-//    public String getRegistryName() {
-//        return registry.name().toLowerCase() + "-registry";
-//    }
-//
-//    public void load(Main instance) {
-//        Console.debug("Loading '" + registry + "' registry from '" + getRegistryName() + "' file.");
-//        YamlConfiguration configs =  ConfigUtil.load(instance, getRegistryName());
-//        ENTRIES.forEach((key, obj) -> {
-//            if (obj.get() instanceof Configurable configurable) {
-//                for (ConfigProperty<?> property : configurable.getProperties()) {
-//                    ConfigurationSection section = configs.getConfigurationSection(key);
-//                    if (section == null) section = configs.createSection(key);
-//                    property.load(section);
-//                }
-//            }
-//        });
-//    }
-//
-//    public void unload(Main instance) {
-//        Console.debug("Unloading '" + registry + "' registry to '" + getRegistryName() + "' file.");
-//        YamlConfiguration configs = new YamlConfiguration();
-//        ENTRIES.forEach((key, obj) -> {
-//            if (obj.get() instanceof Configurable configurable) {
-//                for (ConfigProperty<?> property : configurable.getProperties()) {
-//                    ConfigurationSection section = configs.getConfigurationSection(key);
-//                    if (section == null) section = configs.createSection(key);
-//                    property.save(section);
-//                }
-//            }
-//        });
-//        ConfigUtil.save(instance, getRegistryName(), configs);
-//    }
 }
