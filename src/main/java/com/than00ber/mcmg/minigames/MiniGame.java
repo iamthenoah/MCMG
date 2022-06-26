@@ -42,7 +42,6 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         currentPlayerRoles = new HashMap<>();
         originalPlayerRoles = new HashMap<>();
         properties = new ArrayList<>();
-        getMiniGameTeams().forEach(t -> properties.addAll(t.getProperties()));
         addProperties(
                 PLAYGROUND_SPAWN,
                 PLAYGROUND_RADIUS,
