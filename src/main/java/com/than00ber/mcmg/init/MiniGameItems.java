@@ -5,6 +5,7 @@ import com.than00ber.mcmg.MiniGameEngine;
 import com.than00ber.mcmg.MiniGameItem;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
+import com.than00ber.mcmg.util.Registry;
 import com.than00ber.mcmg.util.ScheduleUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -29,18 +30,19 @@ import java.util.Random;
 
 public class MiniGameItems {
 
-    /**
-     * Werewolf Items
-     */
-    public static final MiniGameItem SURVIVORS_WEAPON = new MiniGameItem.Builder(Material.WOODEN_HOE)
+    public static final Registry<ItemStack> ITEMS = new Registry<>();
+
+    // Werewolf Items
+    public static final ItemStack SURVIVORS_WEAPON = ITEMS.register("survivors_weapon", new MiniGameItem.Builder(Material.WOODEN_HOE)
             .setName("Survivor's weapon")
             .addTooltip(ChatColor.ITALIC + "Who said you can't trust hoes?")
             .unbreakable()
-            .build();
-    public static final MiniGameItem SURVIVORS_FOOD = new MiniGameItem.Builder(Material.COOKED_SALMON)
+            .build());
+    public static final ItemStack SURVIVORS_FOOD = ITEMS.register("survivors_food",
+            new MiniGameItem.Builder(Material.COOKED_SALMON)
             .setName("Survivor's Fish")
-            .build();
-    public static final MiniGameItem RULE_BOOK = new MiniGameItem.Builder(Material.WRITTEN_BOOK)
+            .build());
+    public static final ItemStack RULE_BOOK = ITEMS.register("rule_book", new MiniGameItem.Builder(Material.WRITTEN_BOOK)
             .setName(ChatColor.YELLOW + "WWRPG Rule Book")
             .setMeta(() -> {
                 List<String> pages = new ArrayList<>();
@@ -52,35 +54,30 @@ public class MiniGameItems {
                 meta.setPages(pages);
                 return meta;
             })
-            .build();
+            .build());
 
-    /**
-     * HideNSeek Items
-     */
-    public static final MiniGameItem SEEKERS_AXE = new MiniGameItem.Builder(Material.GOLDEN_AXE)
+    // HideNSeek Items
+    public static final ItemStack SEEKERS_AXE = ITEMS.register("seekers_axe", new MiniGameItem.Builder(Material.GOLDEN_AXE)
             .setName(ChatColor.YELLOW + "Seeker's Axe")
             .unbreakable()
-            .build();
-    public static final MiniGameItem SEEKERS_BOW = new MiniGameItem.Builder(Material.BOW)
+            .build());
+    public static final ItemStack SEEKERS_BOW = ITEMS.register("seekers_bow", new MiniGameItem.Builder(Material.BOW)
             .setName(ChatColor.YELLOW + "Seeker's Bow")
             .unbreakable()
-            .build();
+            .build());
 
-    /**
-     * PropHunt Items
-     */
-    public static final MiniGameItem HUNTERS_SWORD = new MiniGameItem.Builder(Material.IRON_SWORD)
+    // PropHunt Items
+    public static final ItemStack HUNTERS_SWORD = ITEMS.register("hunters_food", new MiniGameItem.Builder(Material.IRON_SWORD)
             .setName(ChatColor.AQUA + "Hunter's Sword")
-            .unbreakable()
-            .build();
-    public static final MiniGameItem HUNTERS_BOW = new MiniGameItem.Builder(Material.BOW)
+            .unbreakable().build());
+    public static final ItemStack HUNTERS_BOW = ITEMS.register("hunters_bow", new MiniGameItem.Builder(Material.BOW)
             .setName(ChatColor.AQUA + "Hunter's Bow")
             .unbreakable()
-            .build();
-    public static final MiniGameItem HUNTERS_ARROWS = new MiniGameItem.Builder(Material.ARROW)
+            .build());
+    public static final ItemStack HUNTERS_ARROW = ITEMS.register("hunters_arrow", new MiniGameItem.Builder(Material.ARROW)
             .setName(ChatColor.AQUA + "Hunter's Arrow")
-            .build();
-    public static final MiniGameItem PROP_COMPASS = new MiniGameItem.Builder(Material.COMPASS)
+            .build());
+    public static final ItemStack PROP_COMPASS = ITEMS.register("prop_compass", new MiniGameItem.Builder(Material.COMPASS)
             .setName(ChatColor.DARK_AQUA + "Prop Compass")
             .addTooltip("Reveals the location of the closest props.")
             .setMeta(() -> {
@@ -127,8 +124,8 @@ public class MiniGameItems {
                     });
                 }
             })
-            .build();
-    public static final MiniGameItem STUN_INK = new MiniGameItem.Builder(Material.INK_SAC)
+            .build());
+    public static final ItemStack STUN_INK = ITEMS.register("stun_ink", new MiniGameItem.Builder(Material.INK_SAC)
             .setName(ChatColor.DARK_AQUA + "Stun Juice")
             .addTooltip("Blinds any nearby hunter for a brief moment.")
             .onTriggered(PropHuntMiniGame.STUN_JUICE_COOLDOWN, event -> {
@@ -145,8 +142,8 @@ public class MiniGameItems {
                     }
                 }
             })
-            .build();
-    public static final MiniGameItem GLOW_DUST = new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
+            .build());
+    public static final ItemStack GLOW_DUST = ITEMS.register("glow_dust", new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
             .setName(ChatColor.YELLOW + "Glow Dust")
             .addTooltip("Reveals all hunters in the game for a brief moment.")
             .onToggled(PropHuntMiniGame.GLOW_DUST_DURATION, PropHuntMiniGame.GLOW_DUST_COOLDOWN, event -> {
@@ -170,8 +167,8 @@ public class MiniGameItems {
                     }
                 }
             })
-            .build();
-    public static final MiniGameItem TELEPORTER = new MiniGameItem.Builder(Material.FEATHER)
+            .build());
+    public static final ItemStack TELEPORTER = ITEMS.register("teleporter", new MiniGameItem.Builder(Material.FEATHER)
             .setName(ChatColor.DARK_PURPLE + "Teleporter")
             .addTooltip("Teleports you straight to the pointed direction.")
             .onTriggered(PropHuntMiniGame.TELEPORTER_COOLDOWN, event -> {
@@ -205,8 +202,8 @@ public class MiniGameItems {
                     }
                 }
             })
-            .build();
-    public static final MiniGameItem COCAINE = new MiniGameItem.Builder(Material.SUGAR)
+            .build());
+    public static final ItemStack COCAINE = ITEMS.register("cocaine", new MiniGameItem.Builder(Material.SUGAR)
             .setName(ChatColor.BLUE + "Cocaine")
             .addTooltip("Gives you extreme speed for a brief moment.")
             .onToggled(PropHuntMiniGame.COCAINE_DURATION, PropHuntMiniGame.COCAINE_COOLDOWN, event -> {
@@ -215,8 +212,8 @@ public class MiniGameItems {
                 PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, duration, 10);
                 player.addPotionEffect(potion);
             })
-            .build();
-    public static final MiniGameItem PROP_RANDOMIZER = new MiniGameItem.Builder(Material.FLOWER_POT)
+            .build());
+    public static final ItemStack PROP_RANDOMIZER = ITEMS.register("prop_randomizer", new MiniGameItem.Builder(Material.FLOWER_POT)
             .setName(ChatColor.LIGHT_PURPLE + "Prop Randomizer")
             .addTooltip("Changes the appears of all props with any random nearby block.")
             .onTriggered(PropHuntMiniGame.PROP_RANDOMIZER_COOLDOWN, event -> {
@@ -244,5 +241,5 @@ public class MiniGameItems {
                     player.sendTitle(title, subtitle, 0, 30, 5);
                 }
             })
-            .build();
+            .build());
 }

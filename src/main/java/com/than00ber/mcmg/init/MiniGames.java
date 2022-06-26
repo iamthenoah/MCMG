@@ -5,21 +5,15 @@ import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.minigames.MiniGame;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.minigames.WerewolfMiniGame;
-
-import java.util.HashMap;
-import java.util.function.Supplier;
+import com.than00ber.mcmg.util.Registry;
 
 public class MiniGames {
 
-    public static final HashMap<String, Supplier<? extends MiniGame>> MINI_GAMES = new HashMap<>();
+    public static final Registry<MiniGame> MINIGAMES = new Registry<>();
 
     static {
-        register(() -> new WerewolfMiniGame(Main.INSTANCE, Main.WORLD));
-        register(() -> new PropHuntMiniGame(Main.INSTANCE, Main.WORLD));
-        register(() -> new HideNSeekMiniGame(Main.INSTANCE, Main.WORLD));
-    }
-
-    private static void register(Supplier<? extends MiniGame> minigame) {
-        MINI_GAMES.put(minigame.get().getMiniGameName().toLowerCase(), minigame);
+        MINIGAMES.register("prophunt", () -> new PropHuntMiniGame(Main.INSTANCE, Main.WORLD));
+        MINIGAMES.register("werewolf", () -> new WerewolfMiniGame(Main.INSTANCE, Main.WORLD));
+        MINIGAMES.register("hidenseek", () -> new HideNSeekMiniGame(Main.INSTANCE, Main.WORLD));
     }
 }
