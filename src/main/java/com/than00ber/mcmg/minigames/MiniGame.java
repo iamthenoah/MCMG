@@ -8,7 +8,7 @@ import com.than00ber.mcmg.core.config.ConfigProperty;
 import com.than00ber.mcmg.core.config.Configurable;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.MiniGameEvents;
-import com.than00ber.mcmg.registries.AllTeams;
+import com.than00ber.mcmg.registries.Teams;
 import com.than00ber.mcmg.util.ChatUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -117,7 +117,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
 
     private void addToScoreboardTeam(Player player, MiniGameTeam newMiniGameTeam) {
         MiniGameTeam previousMiniGameTeam = getCurrentPlayerRoles().get(player);
-        if (previousMiniGameTeam == null) previousMiniGameTeam = AllTeams.SPECTATORS;
+        if (previousMiniGameTeam == null) previousMiniGameTeam = Teams.SPECTATORS;
         ScoreboardManager manager = Bukkit.getScoreboardManager();
 
         if (manager != null) {
@@ -186,7 +186,7 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
         currentPlayerRoles.clear();
         originalPlayerRoles.clear();
         getWorld().getPlayers().forEach(player -> {
-            AllTeams.resetPlayer(player);
+            Teams.resetPlayer(player);
             sendToGameSpawn(player);
         });
     }

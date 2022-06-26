@@ -7,8 +7,8 @@ import com.than00ber.mcmg.core.MiniGameTeam;
 import com.than00ber.mcmg.core.WinCondition;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.HideNSeekMiniGameEvents;
-import com.than00ber.mcmg.registries.AllTeams;
-import com.than00ber.mcmg.registries.AllWinConditions;
+import com.than00ber.mcmg.registries.Teams;
+import com.than00ber.mcmg.registries.WinConditions;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -45,15 +45,15 @@ public class HideNSeekMiniGame extends MiniGame {
     @Override
     public ImmutableList<MiniGameTeam> getMiniGameTeams() {
         return ImmutableList.of(
-                AllTeams.SEEKERS,
-                AllTeams.HIDERS
+                Teams.SEEKERS,
+                Teams.HIDERS
         );
     }
 
     @Override
     public ImmutableList<WinCondition> getWinConditions() {
         return ImmutableList.of(
-                AllWinConditions.NO_HIDERS
+                WinConditions.NO_HIDERS
         );
     }
 
@@ -80,7 +80,7 @@ public class HideNSeekMiniGame extends MiniGame {
 
     @Override
     public void onRoundCycled(MiniGameEvent event) {
-        event.setWinCondition(AllWinConditions.HIDERS_SURVIVED);
+        event.setWinCondition(WinConditions.HIDERS_SURVIVED);
     }
 
     private void spawnRandomEntities() {
