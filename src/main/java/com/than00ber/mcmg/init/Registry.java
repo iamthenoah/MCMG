@@ -22,12 +22,11 @@ public final class Registry<E> {
 
     public E register(String key, Supplier<E> supplier) {
         if (ENTRIES.containsKey(key)) {
-            Console.warn("Registry object with key '" + key + "' already registered. Skipping...");
-            return null;
-        } else {
-            ENTRIES.put(key, supplier);
-            return supplier.get();
+            Console.warn("Registry object with key '" + key + "' already registered.");
+            Console.warn("  This is override the currently registered object with '" + key + "'.");
         }
+        ENTRIES.put(key, supplier);
+        return supplier.get();
     }
 
     @Nullable
