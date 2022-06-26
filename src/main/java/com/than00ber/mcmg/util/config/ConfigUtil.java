@@ -24,7 +24,7 @@ public final class ConfigUtil {
                     instance.saveResource(name, true);
                 }
             } catch (IOException exception) {
-                Console.error("Could not create '" + name + "' file. ");
+                Console.error("Could not create '" + name + "' config file. ");
                 Console.error(exception);
             }
         }
@@ -37,7 +37,7 @@ public final class ConfigUtil {
             File file = new File(instance.getDataFolder(), name);
             configs.save(file);
         } catch (IOException e) {
-            Console.error("Error saving " + name + " file: " + e.getMessage());
+            Console.error("Error saving '" + name + "' config file: " + e.getMessage());
         }
     }
 
