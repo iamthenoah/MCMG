@@ -1,12 +1,13 @@
 package com.than00ber.mcmg.core;
 
+import com.google.common.collect.ImmutableList;
+import com.than00ber.mcmg.core.config.ConfigProperty;
 import com.than00ber.mcmg.core.config.Configurable;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static org.bukkit.scoreboard.Team.OptionStatus;
@@ -110,8 +111,8 @@ public class MiniGameTeam implements Configurable {
     }
 
     @Override
-    public List<MiniGameProperty<?>> getProperties() {
-        return List.of(
+    public ImmutableList<? extends ConfigProperty<?>> getProperties() {
+        return ImmutableList.of(
                 visibleName,
                 weight,
                 threshold,
