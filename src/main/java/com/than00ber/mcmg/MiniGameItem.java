@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class MiniGameItem {
+public class MiniGameItem implements Supplier<ItemStack> {
 
     public static final Map<String, MiniGameItem> TOGGLEABLE_ITEMS = new HashMap<>();
 
@@ -48,6 +48,7 @@ public class MiniGameItem {
         return action;
     }
 
+    @Override
     public ItemStack get() {
         ItemStack item = new ItemStack(material);
         meta.setLore(tooltips);
@@ -137,7 +138,6 @@ public class MiniGameItem {
         private final Material material;
         private final Consumer<PlayerInteractEvent> onStart;
         private final @Nullable Consumer<PlayerInteractEvent> onEnd;
-        // providing supplier in case config changes during runtime
         private final Supplier<Integer> duration;
         private final Supplier<Integer> cooldown;
 
