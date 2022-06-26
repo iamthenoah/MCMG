@@ -1,8 +1,8 @@
 package com.than00ber.mcmg.util;
 
 import com.google.common.collect.ImmutableMap;
-import com.than00ber.mcmg.MiniGameTeam;
-import com.than00ber.mcmg.WinCondition;
+import com.than00ber.mcmg.core.MiniGameTeam;
+import com.than00ber.mcmg.core.WinCondition;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;

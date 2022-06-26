@@ -1,12 +1,11 @@
 package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.init.MiniGames;
+import com.than00ber.mcmg.core.ActionResult;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.util.ActionResult;
+import com.than00ber.mcmg.registries.AllMiniGames;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
-import com.than00ber.mcmg.util.config.ConfigUtil;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class MiniGameCommand extends PluginCommand {
 
@@ -42,7 +40,7 @@ public class MiniGameCommand extends PluginCommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
         if (option.equals("play")) {
-            return TextUtil.getMatching(args, MiniGames.MINI_GAMES.keySet().stream().toList());
+            return TextUtil.getMatching(args, AllMiniGames.MINIGAMES.getRegistryKeys());
         }
         return args.length == 0 ? TextUtil.getMatching(args, List.of("play", "start", "end", "restart")) : List.of();
     }
@@ -50,18 +48,12 @@ public class MiniGameCommand extends PluginCommand {
     private ActionResult handleGameMount(String[] args) {
         if (args.length == 0) return PluginCommand.INVALID_COMMAND;
 
-        Supplier<? extends MiniGame> supplier = MiniGames.MINI_GAMES.getOrDefault(args[1].toLowerCase(), null);
+        MiniGame game = AllMiniGames.MINIGAMES.get(args[1].toLowerCase());
+        ActionResult result = Main.MINIGAME_ENGINE.mount(game);
+        if (!result.isSuccessful()) return result;
+//        ConfigUtil.loadConfigs(instance, game);
 
-        if (supplier != null) {
-            MiniGame game = supplier.get();
-
-            ActionResult result = Main.MINIGAME_ENGINE.mount(game);
-            if (!result.isSuccessful()) return result;
-            ConfigUtil.loadConfigs(instance, game);
-
-            return ActionResult.info("Minigame set to " + TextUtil.formatMiniGame(game));
-        }
-        return ActionResult.failure("Minigame '" + args[1] + "' not found.");
+        return ActionResult.info("Minigame set to " + TextUtil.formatMiniGame(game));
     }
 
     private static String getReason(CommandSender sender, String[] args, String action) {

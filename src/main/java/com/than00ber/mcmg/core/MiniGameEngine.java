@@ -1,10 +1,7 @@
-package com.than00ber.mcmg;
+package com.than00ber.mcmg.core;
 
-import com.than00ber.mcmg.events.MiniGameEvents;
-import com.than00ber.mcmg.init.MiniGameTeams;
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.util.ActionResult;
-import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
@@ -23,7 +20,6 @@ import java.util.function.Supplier;
 public class MiniGameEngine<G extends MiniGame> {
 
     private final Main instance;
-    private List<Player> participants; // TODO - revisit how players are queued
     private G minigame;
     private Supplier<MiniGameHandler> handlerSupplier;
     private MiniGameHandler currentHandler;
@@ -128,12 +124,13 @@ public class MiniGameEngine<G extends MiniGame> {
                     } else {
                         countdownRound--;
                         event.getBossBar().setProgress((float) countdownRound / minigame.getOptions().getDurationRound());
+                        event.setTick(minigame.getOptions().getDurationRound() - countdownRound);
+                        minigame.onMiniGameTick(event);
                     }
                 }
             }
         };
 
-        participants = null;
         minigame = nextGame;
         return ActionResult.success();
     }
@@ -142,21 +139,14 @@ public class MiniGameEngine<G extends MiniGame> {
         ActionResult invalid = checkCanStart(players);
         if (!invalid.isSuccessful()) return invalid;
 
-        participants = players;
         minigame.getWorld().getWorldBorder().setSize(minigame.getOptions().getPlaygroundRadius());
         minigame.getWorld().getWorldBorder().setCenter(minigame.getOptions().getPlaygroundSpawn());
 
         unregisterTeams();
         registerTeams(minigame);
-        minigame.onMinigameStarted(participants);
-        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEvents::register);
-        for (Player player : minigame.getWorld().getPlayers()) {
-
-            if (!participants.contains(player)) {
-                MiniGameTeams.SPECTATORS.prepare(player);
-                String s = TextUtil.formatMiniGame(minigame) + ChatColor.GOLD;
-                ChatUtil.toSelf(player, s + " minigame started and you were not ready.");
-            }
+        minigame.onMinigameStarted(players);
+        if (minigame.hasEventListener()) {
+            minigame.getEventListener().register();
         }
 
         currentHandler = handlerSupplier.get();
@@ -168,17 +158,18 @@ public class MiniGameEngine<G extends MiniGame> {
     public ActionResult endMiniGame(@Nullable String reason) {
         if (!hasGame()) return ActionResult.warn("No minigame is currently running.");
 
-        minigame.getWorld().getWorldBorder().reset();
         minigame.onMinigameEnded();
+        minigame.getWorld().getWorldBorder().reset();
+        Bukkit.getScheduler().cancelTasks(instance);
+        unregisterTeams();
 
         if (currentHandler != null) {
             currentHandler.deactivate();
             currentHandler = null;
         }
-
-        unregisterTeams();
-        Optional.ofNullable(minigame.getEventListener()).ifPresent(MiniGameEvents::unregister);
-        Bukkit.getScheduler().cancelTasks(instance);
+        if (minigame.hasEventListener()) {
+            minigame.getEventListener().unregister();
+        }
 
         return ActionResult.success(reason);
     }
@@ -191,8 +182,7 @@ public class MiniGameEngine<G extends MiniGame> {
         Bukkit.getScheduler().cancelTasks(instance);
         currentHandler = null;
 
-        if (participants == null) participants = Main.WORLD.getPlayers();
-        ActionResult startResult = startMiniGame(participants, null);
+        ActionResult startResult = startMiniGame(Main.WORLD.getPlayers(), null);
         return !startResult.isSuccessful() ? startResult : ActionResult.success(reason);
     }
 
@@ -225,7 +215,7 @@ public class MiniGameEngine<G extends MiniGame> {
             Scoreboard scoreboard = manager.getMainScoreboard();
 
             for (MiniGameTeam miniGameTeam : game.getMiniGameTeams()) {
-                Team team = scoreboard.registerNewTeam(miniGameTeam.getTeamId());
+                Team team = scoreboard.registerNewTeam(miniGameTeam.getName());
                 team.setOption(Team.Option.NAME_TAG_VISIBILITY, miniGameTeam.getVisibility());
             }
         }

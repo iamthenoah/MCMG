@@ -1,16 +1,10 @@
-package com.than00ber.mcmg.util.config;
+package com.than00ber.mcmg.core.config;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
 
 public interface Configurable {
-    /**
-     * Get default file name to be used to save the configs on.
-     * @return Default file name.
-     */
-    String getConfigName();
-
     /**
      * Retrieves all configurable properties of the object.
      * @return All object properties.

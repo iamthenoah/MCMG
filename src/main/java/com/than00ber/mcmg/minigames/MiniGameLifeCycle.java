@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.minigames;
 
-import com.than00ber.mcmg.MiniGameEvent;
-import com.than00ber.mcmg.WinCondition;
+import com.than00ber.mcmg.core.MiniGameEvent;
+import com.than00ber.mcmg.core.WinCondition;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -32,6 +32,12 @@ public interface MiniGameLifeCycle {
      * @param event MiniGameEvent event.
      */
     void onRoundCycled(MiniGameEvent event);
+
+    /**
+     * Called on every minigame tick (not necessarily Minecraft ticks).
+     * @param event MiniGameEvent event.
+     */
+    void onMiniGameTick(MiniGameEvent event);
 
     /**
      * Called when a round finishes along with the winning reason.

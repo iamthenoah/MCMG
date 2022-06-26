@@ -1,4 +1,4 @@
-package com.than00ber.mcmg;
+package com.than00ber.mcmg.core;
 
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Nullable;
@@ -57,7 +57,7 @@ public class WinCondition<G> {
 
     private String getDefaultSubTitle() {
         List<String> winningTeams = winners.stream()
-                .map(MiniGameTeam::getDisplayName)
+                .map(MiniGameTeam::getVisibleName)
                 .collect(Collectors.toList());
         String winningTeam = String.join(", ", winningTeams);
         String team = "Team" + (winningTeams.size() > 1 ? "s " : " ");

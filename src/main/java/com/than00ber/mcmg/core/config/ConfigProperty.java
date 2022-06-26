@@ -1,6 +1,6 @@
-package com.than00ber.mcmg.util.config;
+package com.than00ber.mcmg.core.config;
 
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -20,18 +20,12 @@ public class ConfigProperty<V> implements Supplier<V> {
         return path;
     }
 
-    public boolean isSet() {
-        return value != null;
-    }
-
     public V set(V val) {
-        value = val;
-        return val;
+        return value = val;
     }
 
     public V reset() {
-        value = defaultValue;
-        return value;
+        return value = defaultValue;
     }
 
     @Override
@@ -39,14 +33,12 @@ public class ConfigProperty<V> implements Supplier<V> {
         return Optional.ofNullable(value).orElse(defaultValue);
     }
 
-    public void load(YamlConfiguration configs) {
+    public void load(ConfigurationSection configs) {
         Object obj = configs.get(getPath());
-        if (obj != null) {
-            set((V) obj);
-        }
+        if (obj != null) set((V) obj);
     }
 
-    public void save(YamlConfiguration configs) {
+    public void save(ConfigurationSection configs) {
         configs.set(path, get());
     }
 }

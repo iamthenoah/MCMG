@@ -1,5 +1,6 @@
-package com.than00ber.mcmg.util;
+package com.than00ber.mcmg.core;
 
+import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 

@@ -1,8 +1,8 @@
-package com.than00ber.mcmg.util.config;
+package com.than00ber.mcmg.core.config;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -124,7 +124,7 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         }
 
         @Override
-        public void load(YamlConfiguration configs) {
+        public void load(ConfigurationSection configs) {
             Object obj = configs.get(getPath());
             if (obj != null) {
                 set(E.valueOf(enumClass, (String) obj));
@@ -132,7 +132,7 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         }
 
         @Override
-        public void save(YamlConfiguration configs) {
+        public void save(ConfigurationSection configs) {
             if (get() != null) {
                 configs.set(getPath(), get().toString());
             }
@@ -181,7 +181,7 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         }
 
         @Override
-        public void load(YamlConfiguration configs) {
+        public void load(ConfigurationSection configs) {
             Object obj = configs.get(getPath());
             if (obj != null) {
                 set(ChatColor.getByChar((String) obj));
@@ -189,7 +189,7 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         }
 
         @Override
-        public void save(YamlConfiguration configs) {
+        public void save(ConfigurationSection configs) {
             configs.set(getPath(), get().getChar());
         }
 

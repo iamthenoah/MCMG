@@ -1,7 +1,7 @@
-package com.than00ber.mcmg.util.config;
+package com.than00ber.mcmg.util;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.util.Console;
+import com.than00ber.mcmg.core.Console;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -24,7 +24,7 @@ public final class ConfigUtil {
                     instance.saveResource(name, true);
                 }
             } catch (IOException exception) {
-                Console.error("Could not create '" + name + "' file. ");
+                Console.error("Could not create '" + name + "' config file. ");
                 Console.error(exception);
             }
         }
@@ -37,16 +37,16 @@ public final class ConfigUtil {
             File file = new File(instance.getDataFolder(), name);
             configs.save(file);
         } catch (IOException e) {
-            Console.error("Error saving " + name + " file: " + e.getMessage());
+            Console.error("Error saving '" + name + "' config file: " + e.getMessage());
         }
     }
 
-    public static void loadConfigs(Main instance, Configurable configurable) {
-        YamlConfiguration data = load(instance, configurable.getConfigName());
-        configurable.setConfig(data);
-    }
-
-    public static void saveConfigs(Main instance, Configurable configurable) {
-        save(instance, configurable.getConfigName(), configurable.getConfig());
-    }
+//    public static void loadConfigs(Main instance, Configurable configurable) {
+//        YamlConfiguration data = load(instance, configurable.getConfigName());
+//        configurable.setConfig(data);
+//    }
+//
+//    public static void saveConfigs(Main instance, Configurable configurable) {
+//        save(instance, configurable.getConfigName(), configurable.getConfig());
+//    }
 }

@@ -1,5 +1,6 @@
-package com.than00ber.mcmg;
+package com.than00ber.mcmg.core;
 
+import com.than00ber.mcmg.Main;
 import org.bukkit.Bukkit;
 
 public abstract class MiniGameHandler implements Runnable {

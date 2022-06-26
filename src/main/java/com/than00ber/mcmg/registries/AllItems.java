@@ -1,8 +1,9 @@
-package com.than00ber.mcmg.init;
+package com.than00ber.mcmg.registries;
 
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.MiniGameEngine;
-import com.than00ber.mcmg.MiniGameItem;
+import com.than00ber.mcmg.core.MiniGameEngine;
+import com.than00ber.mcmg.core.MiniGameItem;
+import com.than00ber.mcmg.core.Registry;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;
@@ -27,20 +28,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MiniGameItems {
+public class AllItems {
 
-    /**
-     * Werewolf Items
-     */
-    public static final MiniGameItem SURVIVORS_WEAPON = new MiniGameItem.Builder(Material.WOODEN_HOE)
+    public static final Registry<MiniGameItem> ITEMS = new Registry<>(Registry.Registries.ITEMS);
+
+    // Werewolf Items
+    public static final MiniGameItem SURVIVORS_WEAPON = register(new MiniGameItem.Builder(Material.WOODEN_HOE)
             .setName("Survivor's weapon")
             .addTooltip(ChatColor.ITALIC + "Who said you can't trust hoes?")
             .unbreakable()
-            .build();
-    public static final MiniGameItem SURVIVORS_FOOD = new MiniGameItem.Builder(Material.COOKED_SALMON)
+            .build());
+    public static final MiniGameItem SURVIVORS_FOOD = register(
+            new MiniGameItem.Builder(Material.COOKED_SALMON)
             .setName("Survivor's Fish")
-            .build();
-    public static final MiniGameItem RULE_BOOK = new MiniGameItem.Builder(Material.WRITTEN_BOOK)
+            .build());
+    public static final MiniGameItem RULE_BOOK = register(new MiniGameItem.Builder(Material.WRITTEN_BOOK)
             .setName(ChatColor.YELLOW + "WWRPG Rule Book")
             .setMeta(() -> {
                 List<String> pages = new ArrayList<>();
@@ -52,35 +54,30 @@ public class MiniGameItems {
                 meta.setPages(pages);
                 return meta;
             })
-            .build();
+            .build());
 
-    /**
-     * HideNSeek Items
-     */
-    public static final MiniGameItem SEEKERS_AXE = new MiniGameItem.Builder(Material.GOLDEN_AXE)
+    // HideNSeek Items
+    public static final MiniGameItem SEEKERS_AXE = register(new MiniGameItem.Builder(Material.GOLDEN_AXE)
             .setName(ChatColor.YELLOW + "Seeker's Axe")
             .unbreakable()
-            .build();
-    public static final MiniGameItem SEEKERS_BOW = new MiniGameItem.Builder(Material.BOW)
+            .build());
+    public static final MiniGameItem SEEKERS_BOW = register(new MiniGameItem.Builder(Material.BOW)
             .setName(ChatColor.YELLOW + "Seeker's Bow")
             .unbreakable()
-            .build();
+            .build());
 
-    /**
-     * PropHunt Items
-     */
-    public static final MiniGameItem HUNTERS_SWORD = new MiniGameItem.Builder(Material.IRON_SWORD)
+    // PropHunt Items
+    public static final MiniGameItem HUNTERS_SWORD = register(new MiniGameItem.Builder(Material.IRON_SWORD)
             .setName(ChatColor.AQUA + "Hunter's Sword")
-            .unbreakable()
-            .build();
-    public static final MiniGameItem HUNTERS_BOW = new MiniGameItem.Builder(Material.BOW)
+            .unbreakable().build());
+    public static final MiniGameItem HUNTERS_BOW = register(new MiniGameItem.Builder(Material.BOW)
             .setName(ChatColor.AQUA + "Hunter's Bow")
             .unbreakable()
-            .build();
-    public static final MiniGameItem HUNTERS_ARROWS = new MiniGameItem.Builder(Material.ARROW)
+            .build());
+    public static final MiniGameItem HUNTERS_ARROW = register(new MiniGameItem.Builder(Material.ARROW)
             .setName(ChatColor.AQUA + "Hunter's Arrow")
-            .build();
-    public static final MiniGameItem PROP_COMPASS = new MiniGameItem.Builder(Material.COMPASS)
+            .build());
+    public static final MiniGameItem PROP_COMPASS = register(new MiniGameItem.Builder(Material.COMPASS)
             .setName(ChatColor.DARK_AQUA + "Prop Compass")
             .addTooltip("Reveals the location of the closest props.")
             .setMeta(() -> {
@@ -89,7 +86,7 @@ public class MiniGameItems {
                 meta.setLodestoneTracked(false);
                 return meta;
             })
-            .onToggled(PropHuntMiniGame.PROP_COMPASS_DURATION, PropHuntMiniGame.PROP_COMPASS_COOLDOWN, event -> {
+            .onToggled(30, 30, event -> {
                 Player player = event.getPlayer();
                 double range = (double) PropHuntMiniGame.PLAYGROUND_RADIUS.get() * 2;
                 double distance = Double.POSITIVE_INFINITY;
@@ -99,7 +96,7 @@ public class MiniGameItems {
                     if (!(entity instanceof Player)) continue;
                     double to = player.getLocation().distance(entity.getLocation());
                     if (to > distance) continue;
-                    if (!Main.MINIGAME_ENGINE.getCurrentGame().isInTeam((Player) entity, MiniGameTeams.PROPS)) continue;
+                    if (!Main.MINIGAME_ENGINE.getCurrentGame().isInTeam((Player) entity, AllTeams.PROPS)) continue;
                     distance = to;
                     target = (Player) entity;
                 }
@@ -127,17 +124,17 @@ public class MiniGameItems {
                     });
                 }
             })
-            .build();
-    public static final MiniGameItem STUN_INK = new MiniGameItem.Builder(Material.INK_SAC)
+            .build());
+    public static final MiniGameItem STUN_INK = register(new MiniGameItem.Builder(Material.INK_SAC)
             .setName(ChatColor.DARK_AQUA + "Stun Juice")
             .addTooltip("Blinds any nearby hunter for a brief moment.")
-            .onTriggered(PropHuntMiniGame.STUN_JUICE_COOLDOWN, event -> {
+            .onTriggered(30, event -> {
                 Player player = event.getPlayer();
                 double range = PropHuntMiniGame.STUN_JUICE_RANGE.get();
 
                 for (Entity entity : player.getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player victim) {
-                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(victim, MiniGameTeams.HUNTERS)) {
+                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(victim, AllTeams.HUNTERS)) {
                             int duration = PropHuntMiniGame.STUN_JUICE_DURATION.get() * 20;
                             victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration + 20, 5));
                             victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 5));
@@ -145,16 +142,16 @@ public class MiniGameItems {
                     }
                 }
             })
-            .build();
-    public static final MiniGameItem GLOW_DUST = new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
+            .build());
+    public static final MiniGameItem GLOW_DUST = register(new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
             .setName(ChatColor.YELLOW + "Glow Dust")
             .addTooltip("Reveals all hunters in the game for a brief moment.")
-            .onToggled(PropHuntMiniGame.GLOW_DUST_DURATION, PropHuntMiniGame.GLOW_DUST_COOLDOWN, event -> {
+            .onToggled(30, 30, event -> {
                 int range = PropHuntMiniGame.GLOW_DUST_RANGE.get();
 
                 for (Entity entity : event.getPlayer().getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player player) {
-                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.HUNTERS)) {
+                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, AllTeams.HUNTERS)) {
                             player.setGlowing(true);
                         }
                     }
@@ -164,17 +161,17 @@ public class MiniGameItems {
 
                 for (Entity entity : event.getPlayer().getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player player) {
-                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.HUNTERS)) {
+                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, AllTeams.HUNTERS)) {
                             player.setGlowing(false);
                         }
                     }
                 }
             })
-            .build();
-    public static final MiniGameItem TELEPORTER = new MiniGameItem.Builder(Material.FEATHER)
+            .build());
+    public static final MiniGameItem TELEPORTER = register(new MiniGameItem.Builder(Material.FEATHER)
             .setName(ChatColor.DARK_PURPLE + "Teleporter")
             .addTooltip("Teleports you straight to the pointed direction.")
-            .onTriggered(PropHuntMiniGame.TELEPORTER_COOLDOWN, event -> {
+            .onTriggered(30, event -> {
                 Player player = event.getPlayer();
                 Location eyeLoc = player.getEyeLocation();
                 Vector eyeDirection = eyeLoc.getDirection();
@@ -205,46 +202,48 @@ public class MiniGameItems {
                     }
                 }
             })
-            .build();
-    public static final MiniGameItem COCAINE = new MiniGameItem.Builder(Material.SUGAR)
+            .build());
+    public static final MiniGameItem COCAINE = register(new MiniGameItem.Builder(Material.SUGAR)
             .setName(ChatColor.BLUE + "Cocaine")
             .addTooltip("Gives you extreme speed for a brief moment.")
-            .onToggled(PropHuntMiniGame.COCAINE_DURATION, PropHuntMiniGame.COCAINE_COOLDOWN, event -> {
+            .onToggled(30, 30, event -> {
                 Player player = event.getPlayer();
                 int duration = PropHuntMiniGame.COCAINE_DURATION.get() * 20;
                 PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, duration, 10);
                 player.addPotionEffect(potion);
             })
-            .build();
-    public static final MiniGameItem PROP_RANDOMIZER = new MiniGameItem.Builder(Material.FLOWER_POT)
+            .build());
+    public static final MiniGameItem PROP_RANDOMIZER = register(new MiniGameItem.Builder(Material.FLOWER_POT)
             .setName(ChatColor.LIGHT_PURPLE + "Prop Randomizer")
             .addTooltip("Changes the appears of all props with any random nearby block.")
-            .onTriggered(PropHuntMiniGame.PROP_RANDOMIZER_COOLDOWN, event -> {
-                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getCurrentPlayerRoles().keySet()) {
-                    if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, MiniGameTeams.PROPS)) {
-                        Random r = new Random();
-                        Material material = Material.AIR;
-                        Location loc = player.getLocation();
+            .onTriggered(30, event -> {
+                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getAllInTeam(AllTeams.PROPS)) {
+                    Random r = new Random();
+                    Material material = Material.AIR;
+                    Location loc = player.getLocation();
 
-                        int maxCount = 32;
-                        while (material == Material.AIR || material == Material.VOID_AIR) {
-                            maxCount--;
-                            int x = loc.getBlockX() + r.nextInt(4) - 2;
-                            int y = loc.getBlockY() + r.nextInt(2);
-                            int z = loc.getBlockZ() + r.nextInt(4) - 2;
-                            Location pos = new Location(player.getWorld(), x, y, z);
-                            material = Main.WORLD.getBlockAt(pos).getType();
-                            if (maxCount == 0) return;
-                        }
-
-                        MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
-                        DisguiseAPI.disguiseToAll(player, disguise);
-                        DisguiseAPI.setActionBarShown(player, false);
-                        String title = ChatColor.GOLD + "Your appearance changed!";
-                        String subtitle = "A hunter has changed your appearance";
-                        player.sendTitle(title, subtitle, 0, 30, 5);
+                    int maxCount = 32;
+                    while (material == Material.AIR || material == Material.VOID_AIR) {
+                        maxCount--;
+                        int x = loc.getBlockX() + r.nextInt(4) - 2;
+                        int y = loc.getBlockY() + r.nextInt(2);
+                        int z = loc.getBlockZ() + r.nextInt(4) - 2;
+                        Location pos = new Location(player.getWorld(), x, y, z);
+                        material = Main.WORLD.getBlockAt(pos).getType();
+                        if (maxCount == 0) return;
                     }
+
+                    MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
+                    DisguiseAPI.disguiseToAll(player, disguise);
+                    DisguiseAPI.setActionBarShown(player, false);
+                    String title = ChatColor.GOLD + "Your appearance changed!";
+                    String subtitle = "A hunter has changed your appearance";
+                    player.sendTitle(title, subtitle, 0, 30, 5);
                 }
             })
-            .build();
+            .build());
+
+    private static MiniGameItem register(MiniGameItem item) {
+        return ITEMS.register(item.getName(), () -> item);
+    }
 }

@@ -1,14 +1,23 @@
-package com.than00ber.mcmg;
+package com.than00ber.mcmg.core;
 
 import org.bukkit.boss.BossBar;
 
 public class MiniGameEvent {
 
+    private int tick;
     private WinCondition<?> winCondition;
     private final BossBar bossBar;
 
     public MiniGameEvent(BossBar bossBar) {
         this.bossBar = bossBar;
+    }
+
+    public void setTick(int tick) {
+        this.tick = tick;
+    }
+
+    public int getCurrentTick() {
+        return tick;
     }
 
     public BossBar getBossBar() {
