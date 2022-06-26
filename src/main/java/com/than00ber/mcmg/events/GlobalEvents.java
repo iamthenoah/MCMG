@@ -4,7 +4,6 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.MiniGameItem;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.util.ChatUtil;
-import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

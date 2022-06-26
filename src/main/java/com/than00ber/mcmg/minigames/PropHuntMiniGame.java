@@ -9,14 +9,10 @@ import com.than00ber.mcmg.events.PropHuntMiniGameEvents;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.init.WinConditions;
 import com.than00ber.mcmg.util.Console;
-import com.than00ber.mcmg.util.ScheduleUtil;
 import com.than00ber.mcmg.util.config.MiniGameProperty;
 import org.bukkit.Difficulty;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;

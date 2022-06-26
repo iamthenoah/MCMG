@@ -5,7 +5,6 @@ import com.than00ber.mcmg.init.MiniGameItems;
 import com.than00ber.mcmg.init.MiniGameTeams;
 import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
-import com.than00ber.mcmg.util.Console;
 import com.than00ber.mcmg.util.ScheduleUtil;
 import com.than00ber.mcmg.util.TextUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -15,7 +14,6 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -97,10 +95,10 @@ public class PropHuntMiniGameEvents extends MiniGameEvents<PropHuntMiniGame> {
             player.setCooldown(event.getBow().getType(), cooldown);
 
             ScheduleUtil.doDelayed(cooldown, () -> {
-                boolean hasArrow = player.getInventory().contains(MiniGameItems.HUNTERS_ARROWS.get());
+                boolean hasArrow = player.getInventory().contains(MiniGameItems.HUNTERS_ARROW);
 
                 if (Main.MINIGAME_ENGINE.hasRunningGame() && !hasArrow) {
-                    player.getInventory().setItem(8, MiniGameItems.HUNTERS_ARROWS.get());
+                    player.getInventory().setItem(8, MiniGameItems.HUNTERS_ARROW);
                 }
             });
         }

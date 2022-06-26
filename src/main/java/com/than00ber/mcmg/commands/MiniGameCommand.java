@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class MiniGameCommand extends PluginCommand {
 
@@ -42,7 +41,7 @@ public class MiniGameCommand extends PluginCommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
         if (option.equals("play")) {
-            return TextUtil.getMatching(args, MiniGames.MINI_GAMES.keySet().stream().toList());
+            return TextUtil.getMatching(args, MiniGames.MINIGAMES.getRegistryKeys());
         }
         return args.length == 0 ? TextUtil.getMatching(args, List.of("play", "start", "end", "restart")) : List.of();
     }
@@ -50,18 +49,12 @@ public class MiniGameCommand extends PluginCommand {
     private ActionResult handleGameMount(String[] args) {
         if (args.length == 0) return PluginCommand.INVALID_COMMAND;
 
-        Supplier<? extends MiniGame> supplier = MiniGames.MINI_GAMES.getOrDefault(args[1].toLowerCase(), null);
+        MiniGame game = MiniGames.MINIGAMES.get(args[1].toLowerCase());
+        ActionResult result = Main.MINIGAME_ENGINE.mount(game);
+        if (!result.isSuccessful()) return result;
+        ConfigUtil.loadConfigs(instance, game);
 
-        if (supplier != null) {
-            MiniGame game = supplier.get();
-
-            ActionResult result = Main.MINIGAME_ENGINE.mount(game);
-            if (!result.isSuccessful()) return result;
-            ConfigUtil.loadConfigs(instance, game);
-
-            return ActionResult.info("Minigame set to " + TextUtil.formatMiniGame(game));
-        }
-        return ActionResult.failure("Minigame '" + args[1] + "' not found.");
+        return ActionResult.info("Minigame set to " + TextUtil.formatMiniGame(game));
     }
 
     private static String getReason(CommandSender sender, String[] args, String action) {
