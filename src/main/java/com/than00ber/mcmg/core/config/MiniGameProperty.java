@@ -193,6 +193,11 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
             configs.set(getPath(), get().getChar());
         }
 
+        @Override
+        public String toString() {
+            return getPath() + "#" + ChatColor.getByChar(get().toString());
+        }
+
         private static ChatColor toChatColor(Player player, String[] args) {
             return safeValueOf(ChatColor.class, args[0]);
         }

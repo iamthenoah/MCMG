@@ -41,4 +41,9 @@ public class ConfigProperty<V> implements Supplier<V> {
     public void save(ConfigurationSection configs) {
         configs.set(path, get());
     }
+
+    @Override
+    public String toString() {
+        return getPath() + "#" + get();
+    }
 }
