@@ -38,7 +38,7 @@ public class HideNSeekMiniGame extends MiniGame {
     }
 
     @Override
-    public String getMiniGameName() {
+    public String getName() {
         return "HideNSeek";
     }
 

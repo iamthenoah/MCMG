@@ -66,4 +66,12 @@ public final class Registry<E> {
     public enum Registries {
         MINIGAMES, ITEMS, TEAMS
     }
+
+    public interface Object extends Configurable {
+        /**
+         * Get Registry object name to be used as config key.
+         * @return Registry name.
+         */
+        String getName();
+    }
 }

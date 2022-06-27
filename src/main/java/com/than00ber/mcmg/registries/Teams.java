@@ -144,9 +144,9 @@ public class Teams {
                 ItemStack compass = Items.PROP_COMPASS.toItemStack();
                 ItemStack teleporter = Items.TELEPORTER.toItemStack();
                 ItemStack propRandomizer = Items.PROP_RANDOMIZER.toItemStack();
-                player.setCooldown(compass.getType(), PropHuntMiniGame.PROP_COMPASS_COOLDOWN_START.get() * 20);
-                player.setCooldown(teleporter.getType(), PropHuntMiniGame.TELEPORTER_COOLDOWN_START.get() * 20);
-                player.setCooldown(propRandomizer.getType(), PropHuntMiniGame.PROP_RANDOMIZER_COOLDOWN_START.get() * 20);
+                player.setCooldown(compass.getType(), Items.PROP_COMPASS.getStartingCooldown());
+                player.setCooldown(teleporter.getType(), Items.TELEPORTER.getStartingCooldown());
+                player.setCooldown(propRandomizer.getType(), Items.PROP_RANDOMIZER.getStartingCooldown());
                 player.getInventory().addItem(axe, bow, compass, teleporter, propRandomizer);
                 player.getInventory().setItem(8, arrow);
             })

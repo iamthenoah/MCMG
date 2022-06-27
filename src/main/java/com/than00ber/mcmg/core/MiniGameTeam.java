@@ -2,7 +2,6 @@ package com.than00ber.mcmg.core;
 
 import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.core.config.ConfigProperty;
-import com.than00ber.mcmg.core.config.Configurable;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -12,7 +11,7 @@ import java.util.function.Consumer;
 
 import static org.bukkit.scoreboard.Team.OptionStatus;
 
-public class MiniGameTeam implements Configurable {
+public class MiniGameTeam implements Registry.Object {
 
     private final MiniGameProperty.StringProperty name;
     private final MiniGameProperty.StringProperty visibleName;
@@ -58,6 +57,7 @@ public class MiniGameTeam implements Configurable {
         this.preparePlayer = preparePlayer;
     }
 
+    @Override
     public String getName() {
         return name.get();
     }

@@ -4,7 +4,6 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.MiniGameEngine;
 import com.than00ber.mcmg.core.MiniGameItem;
 import com.than00ber.mcmg.core.Registry;
-import com.than00ber.mcmg.minigames.PropHuntMiniGame;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -38,12 +37,12 @@ public class Items {
             .addTooltip(ChatColor.ITALIC + "Who said you can't trust hoes?")
             .unbreakable()
             .build());
-    public static final MiniGameItem SURVIVORS_FOOD = register(
-            new MiniGameItem.Builder(Material.COOKED_SALMON)
+    public static final MiniGameItem SURVIVORS_FOOD = register(new MiniGameItem.Builder(Material.COOKED_SALMON)
             .setName("Survivor's Fish")
             .build());
     public static final MiniGameItem RULE_BOOK = register(new MiniGameItem.Builder(Material.WRITTEN_BOOK)
-            .setName(ChatColor.YELLOW + "WWRPG Rule Book")
+            .setName("WWRPG Rule Book")
+            .setColor(ChatColor.YELLOW)
             .setMeta(() -> {
                 List<String> pages = new ArrayList<>();
                 pages.add("This is a line");
@@ -58,27 +57,34 @@ public class Items {
 
     // HideNSeek Items
     public static final MiniGameItem SEEKERS_AXE = register(new MiniGameItem.Builder(Material.GOLDEN_AXE)
-            .setName(ChatColor.YELLOW + "Seeker's Axe")
+            .setName("Seeker's Axe")
+            .setColor(ChatColor.YELLOW)
             .unbreakable()
             .build());
     public static final MiniGameItem SEEKERS_BOW = register(new MiniGameItem.Builder(Material.BOW)
-            .setName(ChatColor.YELLOW + "Seeker's Bow")
+            .setName("Seeker's Bow")
+            .setColor(ChatColor.YELLOW)
             .unbreakable()
             .build());
 
     // PropHunt Items
     public static final MiniGameItem HUNTERS_SWORD = register(new MiniGameItem.Builder(Material.IRON_SWORD)
-            .setName(ChatColor.AQUA + "Hunter's Sword")
+            .setName("Hunter's Sword")
+            .setColor(ChatColor.AQUA)
             .unbreakable().build());
     public static final MiniGameItem HUNTERS_BOW = register(new MiniGameItem.Builder(Material.BOW)
-            .setName(ChatColor.AQUA + "Hunter's Bow")
+            .setName("Hunter's Bow")
+            .setColor(ChatColor.AQUA)
             .unbreakable()
             .build());
     public static final MiniGameItem HUNTERS_ARROW = register(new MiniGameItem.Builder(Material.ARROW)
-            .setName(ChatColor.AQUA + "Hunter's Arrow")
+            .setName("Hunter's Arrow")
+            .setColor(ChatColor.AQUA)
             .build());
     public static final MiniGameItem PROP_COMPASS = register(new MiniGameItem.Builder(Material.COMPASS)
-            .setName(ChatColor.DARK_AQUA + "Prop Compass")
+            .setName("Prop Compass")
+            .setColor(ChatColor.DARK_AQUA)
+            .setStartingCooldown(30)
             .addTooltip("Reveals the location of the closest props.")
             .setMeta(() -> {
                 CompassMeta meta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
@@ -86,12 +92,12 @@ public class Items {
                 meta.setLodestoneTracked(false);
                 return meta;
             })
-            .onToggled(30, 30, event -> {
-                Player player = event.getPlayer();
-                double range = (double) PropHuntMiniGame.PLAYGROUND_RADIUS.get() * 2;
+            .onToggle(30, 30, 50, action -> {
+                Player player = action.getEvent().getPlayer();
                 double distance = Double.POSITIVE_INFINITY;
                 Player target = null;
 
+                double range = action.getRange();
                 for (Entity entity : player.getNearbyEntities(range, range, range)) {
                     if (!(entity instanceof Player)) continue;
                     double to = player.getLocation().distance(entity.getLocation());
@@ -105,15 +111,14 @@ public class Items {
                     Player prop = target;
                     ItemStack item = player.getInventory().getItemInMainHand();
                     CompassMeta meta = (CompassMeta) item.getItemMeta();
-                    int duration = PropHuntMiniGame.PROP_COMPASS_DURATION.get() * 20;
                     prop.playSound(prop.getLocation(), Sound.ENTITY_ENDERMAN_STARE, 1, 1);
 
-                    ScheduleUtil.doWhile(duration, 10, () -> {
+                    ScheduleUtil.doWhile(action.getDuration() , 10, () -> {
                         String title = ChatColor.BOLD + "A Hunter sees you!";
                         prop.sendTitle(ChatColor.GOLD + title, "", 0, 5, 5);
                     });
 
-                    ScheduleUtil.doWhile(duration, 5, () -> {
+                    ScheduleUtil.doWhile(action.getDuration() , 5, () -> {
                         ChatUtil.toActionBar(prop, ChatColor.GOLD + "Your position is compromised!");
                         meta.setLodestone(prop.getLocation());
                         item.setItemMeta(meta);
@@ -126,40 +131,39 @@ public class Items {
             })
             .build());
     public static final MiniGameItem STUN_INK = register(new MiniGameItem.Builder(Material.INK_SAC)
-            .setName(ChatColor.DARK_AQUA + "Stun Juice")
+            .setName("Stun Juice")
+            .setColor(ChatColor.DARK_AQUA)
             .addTooltip("Blinds any nearby hunter for a brief moment.")
-            .onTriggered(30, event -> {
-                Player player = event.getPlayer();
-                double range = PropHuntMiniGame.STUN_JUICE_RANGE.get();
+            .onTrigger(30, 5, action -> {
+                Player player = action.getEvent().getPlayer();
 
+                double range = action.getRange();
                 for (Entity entity : player.getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player victim) {
                         if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(victim, Teams.HUNTERS)) {
-                            int duration = PropHuntMiniGame.STUN_JUICE_DURATION.get() * 20;
-                            victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration + 20, 5));
-                            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 5));
+                            victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, action.getDuration() + 20, 5));
+                            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, action.getDuration(), 5));
                         }
                     }
                 }
             })
             .build());
     public static final MiniGameItem GLOW_DUST = register(new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
-            .setName(ChatColor.YELLOW + "Glow Dust")
+            .setName("Glow Dust")
+            .setColor(ChatColor.YELLOW)
             .addTooltip("Reveals all hunters in the game for a brief moment.")
-            .onToggled(30, 30, event -> {
-                int range = PropHuntMiniGame.GLOW_DUST_RANGE.get();
-
-                for (Entity entity : event.getPlayer().getNearbyEntities(range, range, range)) {
+            .onToggle(30, 30, 30, action -> {
+                int range = action.getRange();
+                for (Entity entity : action.getEvent().getPlayer().getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player player) {
                         if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, Teams.HUNTERS)) {
                             player.setGlowing(true);
                         }
                     }
                 }
-            }, event -> {
-                int range = PropHuntMiniGame.GLOW_DUST_RANGE.get();
-
-                for (Entity entity : event.getPlayer().getNearbyEntities(range, range, range)) {
+            }, action -> {
+                int range = action.getRange();
+                for (Entity entity : action.getEvent().getPlayer().getNearbyEntities(range, range, range)) {
                     if (entity instanceof Player player) {
                         if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, Teams.HUNTERS)) {
                             player.setGlowing(false);
@@ -169,15 +173,16 @@ public class Items {
             })
             .build());
     public static final MiniGameItem TELEPORTER = register(new MiniGameItem.Builder(Material.FEATHER)
-            .setName(ChatColor.DARK_PURPLE + "Teleporter")
+            .setName("Teleporter")
+            .setColor(ChatColor.DARK_PURPLE)
+            .setStartingCooldown(30)
             .addTooltip("Teleports you straight to the pointed direction.")
-            .onTriggered(30, event -> {
-                Player player = event.getPlayer();
+            .onTrigger(30, 100, action -> {
+                Player player = action.getEvent().getPlayer();
                 Location eyeLoc = player.getEyeLocation();
                 Vector eyeDirection = eyeLoc.getDirection();
 
-                int range = PropHuntMiniGame.TELEPORTER_RANGE.get();
-                RayTraceResult ray = Main.WORLD.rayTraceBlocks(eyeLoc, eyeDirection, range);
+                RayTraceResult ray = Main.WORLD.rayTraceBlocks(eyeLoc, eyeDirection, action.getRange());
 
                 if (ray != null && ray.getHitBlock() != null) {
                     Location destination = ray.getHitBlock().getLocation().add(0, 1, 0);
@@ -204,19 +209,21 @@ public class Items {
             })
             .build());
     public static final MiniGameItem COCAINE = register(new MiniGameItem.Builder(Material.SUGAR)
-            .setName(ChatColor.BLUE + "Cocaine")
+            .setName("Cocaine")
+            .setColor(ChatColor.BLUE)
             .addTooltip("Gives you extreme speed for a brief moment.")
-            .onToggled(30, 30, event -> {
-                Player player = event.getPlayer();
-                int duration = PropHuntMiniGame.COCAINE_DURATION.get() * 20;
-                PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, duration, 10);
+            .onToggle(30, 30, action -> {
+                Player player = action.getEvent().getPlayer();
+                PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, action.getDuration() * 20, 10);
                 player.addPotionEffect(potion);
             })
             .build());
     public static final MiniGameItem PROP_RANDOMIZER = register(new MiniGameItem.Builder(Material.FLOWER_POT)
-            .setName(ChatColor.LIGHT_PURPLE + "Prop Randomizer")
-            .addTooltip("Changes the appears of all props with any random nearby block.")
-            .onTriggered(30, event -> {
+            .setName("Prop Randomizer")
+            .setColor(ChatColor.LIGHT_PURPLE)
+            .setStartingCooldown(30)
+            .addTooltip("Changes the appearance of props with any nearby block.")
+            .onTrigger(30, action -> {
                 for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getAllInTeam(Teams.PROPS)) {
                     Random r = new Random();
                     Material material = Material.AIR;

@@ -55,9 +55,7 @@ public class GlobalEvents implements Listener {
                         .replaceAll(" ", "_")
                 ).toLowerCase(); // TODO - review this
                 MiniGameItem item = Items.ITEMS.get(name);
-                Optional.ofNullable(item)
-                        .flatMap(i -> Optional.ofNullable(i.getAction()))
-                        .ifPresent(a -> a.onClick(event));
+                Optional.ofNullable(item).ifPresent(a -> a.onClick(event));
             }
         }
     }

@@ -29,7 +29,7 @@ public class WerewolfMiniGame extends MiniGame {
     }
 
     @Override
-    public String getMiniGameName() {
+    public String getName() {
         return "Werewolf";
     }
 

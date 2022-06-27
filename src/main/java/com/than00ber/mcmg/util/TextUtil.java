@@ -53,7 +53,7 @@ public class TextUtil {
     }
 
     public static String formatMiniGame(MiniGame minigame) {
-        return formatMiniGame(minigame.getMiniGameName());
+        return formatMiniGame(minigame.getName());
     }
 
     public static String formatMiniGame(String name) {

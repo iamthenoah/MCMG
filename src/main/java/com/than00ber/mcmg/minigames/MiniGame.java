@@ -3,9 +3,9 @@ package com.than00ber.mcmg.minigames;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.core.Registry;
 import com.than00ber.mcmg.core.*;
 import com.than00ber.mcmg.core.config.ConfigProperty;
-import com.than00ber.mcmg.core.config.Configurable;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.registries.Teams;
@@ -23,7 +23,7 @@ import org.bukkit.scoreboard.Team;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
+public abstract class MiniGame implements Registry.Object, MiniGameLifeCycle {
 
     public static final MiniGameProperty.LocationProperty PLAYGROUND_SPAWN = new MiniGameProperty.LocationProperty("playground.spawn", Main.WORLD.getSpawnLocation());
     public static final MiniGameProperty.IntegerProperty PLAYGROUND_RADIUS = new MiniGameProperty.IntegerProperty("playground.radius", 100).validate(MiniGameProperty.IntegerProperty.POSITIVE);
@@ -284,8 +284,6 @@ public abstract class MiniGame implements MiniGameLifeCycle, Configurable {
             if (entity instanceof Monster) entity.remove(); // TODO - add minigame util class
         }
     }
-
-    public abstract String getMiniGameName();
 
     public abstract ImmutableList<MiniGameTeam> getMiniGameTeams();
 
