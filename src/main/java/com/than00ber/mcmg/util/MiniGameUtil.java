@@ -2,6 +2,7 @@ package com.than00ber.mcmg.util;
 
 import com.google.common.collect.ImmutableMap;
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.core.MiniGameItem;
 import com.than00ber.mcmg.core.MiniGameTeam;
 import com.than00ber.mcmg.core.WinCondition;
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -14,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.List;
@@ -115,6 +117,7 @@ public class MiniGameUtil {
     }
 
     public static void disguiseAsBlock(Player player, Block block) {
+        player.setInvisible(true);
         Sound sound = block.getBlockData().getSoundGroup().getPlaceSound();
         Material material = block.getType();
         player.playSound(player.getLocation(), sound, 1, 1);
@@ -127,5 +130,27 @@ public class MiniGameUtil {
         String formatted = ChatColor.ITALIC + WordUtils.capitalize(name.toLowerCase());
         String message = ChatColor.RESET + "You are disguised as a " + ChatColor.YELLOW + formatted;
         ChatUtil.toActionBar(player, message);
+    }
+
+    public static void giveMiniGameItem(Player player, MiniGameItem item) {
+        giveMiniGameItem(player, item, 1);
+    }
+
+    public static void giveMiniGameItem(Player player, MiniGameItem item, int amount) {
+        ItemStack stack = item.toItemStack();
+        stack.setAmount(amount);
+        player.getInventory().addItem(stack);
+        player.setCooldown(stack.getType(), item.getStartingCooldown());
+    }
+
+    public static void giveMiniGameItemAt(Player player, MiniGameItem item, int index) {
+        giveMiniGameItemAt(player, item, 1, index);
+    }
+
+    public static void giveMiniGameItemAt(Player player, MiniGameItem item, int amount, int index) {
+        ItemStack stack = item.toItemStack();
+        stack.setAmount(amount);
+        player.getInventory().setItem(index, stack);
+        player.setCooldown(stack.getType(), item.getStartingCooldown());
     }
 }

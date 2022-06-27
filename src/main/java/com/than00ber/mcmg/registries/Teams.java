@@ -16,7 +16,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Team;
 
 public class Teams {
@@ -44,14 +43,11 @@ public class Teams {
             .setSound(Sound.ENTITY_VILLAGER_AMBIENT)
             .prepare(player -> {
                 MiniGameUtil.resetPlayer(player);
+                MiniGameUtil.giveMiniGameItem(player, Items.SURVIVORS_WEAPON);
+                MiniGameUtil.giveMiniGameItem(player, Items.SURVIVORS_FOOD, 5);
+                MiniGameUtil.giveMiniGameItemAt(player, Items.RULE_BOOK, 8);
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
                 player.setHealth(40);
-                ItemStack hoe = Items.SURVIVORS_WEAPON.toItemStack();
-                ItemStack food = Items.SURVIVORS_FOOD.toItemStack();
-                ItemStack rules = Items.RULE_BOOK.toItemStack();
-                food.setAmount(5);
-                player.getInventory().addItem(hoe, food);
-                player.getInventory().setItem(8, rules);
             })
             .build());
     public static final MiniGameTeam WEREWOLVES = register(new MiniGameTeam.Builder("Werewolve")
@@ -108,13 +104,11 @@ public class Teams {
             .isRequired()
             .prepare(player -> {
                 MiniGameUtil.resetPlayer(player);
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(PropHuntMiniGame.PROPS_MAX_HEALTH.get());
-                player.setInvisible(true);
-                ItemStack stunInk = Items.STUN_INK.toItemStack();
-                ItemStack glowDust = Items.GLOW_DUST.toItemStack();
-                ItemStack propCocaine = Items.COCAINE.toItemStack();
-                player.getInventory().addItem(stunInk, glowDust, propCocaine);
+                MiniGameUtil.giveMiniGameItem(player, Items.STUN_INK);
+                MiniGameUtil.giveMiniGameItem(player, Items.GLOW_DUST);
+                MiniGameUtil.giveMiniGameItem(player, Items.COCAINE);
                 Block block = Main.WORLD.getBlockAt(player.getLocation().add(0, -1, 0));
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(PropHuntMiniGame.PROPS_MAX_HEALTH.get());
                 MiniGameUtil.disguiseAsBlock(player, block);
             })
             .build());
@@ -129,17 +123,12 @@ public class Teams {
             .disableWhileInGrace()
             .prepare(player -> {
                 MiniGameUtil.resetPlayer(player);
-                ItemStack axe = Items.HUNTERS_SWORD.toItemStack();
-                ItemStack bow = Items.HUNTERS_BOW.toItemStack();
-                ItemStack arrow = Items.HUNTERS_ARROW.toItemStack();
-                ItemStack compass = Items.PROP_COMPASS.toItemStack();
-                ItemStack teleporter = Items.TELEPORTER.toItemStack();
-                ItemStack propRandomizer = Items.PROP_RANDOMIZER.toItemStack();
-                player.setCooldown(compass.getType(), Items.PROP_COMPASS.getStartingCooldown());
-                player.setCooldown(teleporter.getType(), Items.TELEPORTER.getStartingCooldown());
-                player.setCooldown(propRandomizer.getType(), Items.PROP_RANDOMIZER.getStartingCooldown());
-                player.getInventory().addItem(axe, bow, compass, teleporter, propRandomizer);
-                player.getInventory().setItem(8, arrow);
+                MiniGameUtil.giveMiniGameItem(player, Items.HUNTERS_SWORD);
+                MiniGameUtil.giveMiniGameItem(player, Items.HUNTERS_BOW);
+                MiniGameUtil.giveMiniGameItem(player, Items.PROP_COMPASS);
+                MiniGameUtil.giveMiniGameItem(player, Items.TELEPORTER);
+                MiniGameUtil.giveMiniGameItem(player, Items.PROP_RANDOMIZER);
+                MiniGameUtil.giveMiniGameItemAt(player, Items.HUNTERS_ARROW, 8);
             })
             .build());
 
@@ -171,9 +160,8 @@ public class Teams {
             .setSound(Sound.BLOCK_ANVIL_LAND)
             .prepare(player -> {
                 MiniGameUtil.resetPlayer(player);
-                ItemStack axe = Items.SEEKERS_AXE.toItemStack();
-                ItemStack bow = Items.SEEKERS_BOW.toItemStack();
-                player.getInventory().addItem(axe, bow);
+                MiniGameUtil.giveMiniGameItem(player, Items.SEEKERS_AXE);
+                MiniGameUtil.giveMiniGameItem(player, Items.SEEKERS_BOW);
             })
             .isRequired()
             .disableWhileInGrace()
