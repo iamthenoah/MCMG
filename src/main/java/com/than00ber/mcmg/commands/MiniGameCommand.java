@@ -39,7 +39,7 @@ public class MiniGameCommand extends PluginCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
-        if (option.equals("play")) {
+        if (option.equals("play") && args.length == 1) {
             return TextUtil.getMatching(args, MiniGames.MINIGAMES.getRegistryKeys());
         }
         return args.length == 0 ? TextUtil.getMatching(args, List.of("play", "start", "end", "restart")) : List.of();
