@@ -8,7 +8,9 @@ import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.registries.Items;
 import com.than00ber.mcmg.registries.MiniGames;
 import com.than00ber.mcmg.registries.Teams;
+import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ConfigUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -43,7 +45,7 @@ public class ConfigsCommand extends PluginCommand {
             String configurableName = args[1];
             String propertyName = args[2];
             String fullPropertyName = configurableName + "#" + propertyName;
-            Configurable configurable = (Configurable) registry.get(configurableName);
+            Configurable configurable = registry.get(configurableName);
             MiniGameProperty<?> property = (MiniGameProperty<?>) configurable.getProperties().stream()
                     .filter(p -> Objects.equals(p.getPath(), propertyName))
                     .findAny().orElse(null);
@@ -63,6 +65,12 @@ public class ConfigsCommand extends PluginCommand {
                         String s = "Property '" + fullPropertyName + "' updated [" + option + "]";
                         String path = registryName.name().toLowerCase() + "/" + configurableName;
                         ConfigUtil.save(Main.INSTANCE, path, configurable.getConfig());
+
+                        if (Main.MINIGAME_ENGINE.hasRunningGame()) {
+                            String warning = "Game running; configuration will only take effect next game.";
+                            ChatUtil.toSelf(player, ChatColor.GOLD + warning);
+                        }
+
                         return ActionResult.success(s + ".");
                     } else {
                         String s = "Invalid arguments given for property '" + fullPropertyName + "' [" + option + "].";
