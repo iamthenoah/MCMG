@@ -1,6 +1,7 @@
 package com.than00ber.mcmg.events;
 
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.core.ActionResult;
 import com.than00ber.mcmg.core.MiniGameItem;
 import com.than00ber.mcmg.registries.Items;
 import com.than00ber.mcmg.registries.Teams;
@@ -18,8 +19,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Optional;
 
 public class GlobalEvents implements Listener {
 
@@ -56,7 +55,14 @@ public class GlobalEvents implements Listener {
                         .replaceAll(" ", "_")
                 ).toLowerCase(); // TODO - review this
                 MiniGameItem item = Items.ITEMS.get(name);
-                Optional.ofNullable(item).ifPresent(a -> a.onClick(event));
+
+                if (item != null) {
+                    ActionResult result = item.onClick(event);
+
+                    if (result.hasMessages()) {
+                        ChatUtil.toActionBar(event.getPlayer(), result.getFormattedMessages()[0]);
+                    }
+                }
             }
         }
     }

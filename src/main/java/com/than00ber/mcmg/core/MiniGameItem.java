@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class MiniGameItem implements Registry.Object {
@@ -30,7 +31,7 @@ public class MiniGameItem implements Registry.Object {
     private final MiniGameProperty.IntegerProperty range;
     private final ItemMeta meta;
     private final List<String> tooltips;
-    private final Consumer<Action> onStart;
+    private final Function<Action, ActionResult> onStart;
     private final Consumer<Action> onFinish;
 
     private MiniGameItem(
@@ -44,7 +45,7 @@ public class MiniGameItem implements Registry.Object {
             int duration,
             int cooldown,
             int range,
-            Consumer<Action> onStart,
+            Function<Action, ActionResult> onStart,
             Consumer<Action> onFinish
     ) {
         this.name = new MiniGameProperty.StringProperty("name", name);
@@ -79,26 +80,32 @@ public class MiniGameItem implements Registry.Object {
         return item;
     }
 
-    public void onClick(PlayerInteractEvent event) {
-        Action actionEvent = new Action(event, duration.get(), cooldown.get(), range.get());
+    public ActionResult onClick(PlayerInteractEvent event) {
+        Action action = new Action(event, duration.get(), cooldown.get(), range.get());
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
         if (!player.hasCooldown(material.get()) && !item.containsEnchantment(Enchantment.LOYALTY)) {
             event.setCancelled(true);
 
-            onStart.accept(actionEvent);
-            item.addUnsafeEnchantment(Enchantment.LOYALTY, 1);
+            ActionResult result = onStart.apply(action);
 
-            if (duration.get() != 0) player.playEffect(player.getLocation(), Effect.CLICK1, null);
+            if (result.isSuccessful()) {
+                item.addUnsafeEnchantment(Enchantment.LOYALTY, 1);
 
-            ScheduleUtil.doDelayed(duration.get() * 20, () -> {
-                onFinish.accept(actionEvent);
-                item.removeEnchantment(Enchantment.LOYALTY);
-                player.playEffect(player.getLocation(), Effect.CLICK2, null);
-                player.setCooldown(material.get(), cooldown.get() * 20);
-            });
+                if (duration.get() != 0) player.playEffect(player.getLocation(), Effect.CLICK1, null);
+
+                ScheduleUtil.doDelayed(duration.get() * 20, () -> {
+                    onFinish.accept(action);
+                    item.removeEnchantment(Enchantment.LOYALTY);
+                    player.playEffect(player.getLocation(), Effect.CLICK2, null);
+                    player.setCooldown(material.get(), cooldown.get() * 20);
+                });
+            }
+
+            return result;
         }
+        return ActionResult.success();
     }
 
     @Override
@@ -127,7 +134,7 @@ public class MiniGameItem implements Registry.Object {
         private int duration;
         private int cooldown;
         private int range;
-        private Consumer<Action> onStart;
+        private Function<Action, ActionResult> onStart;
         private Consumer<Action> onFinish;
 
         public Builder(Material material) {
@@ -141,8 +148,8 @@ public class MiniGameItem implements Registry.Object {
             duration = 0;
             cooldown = 0;
             range = 0;
-            onStart = a -> {};
-            onFinish = a -> {};
+            onStart = a -> ActionResult.success();
+            onFinish = a -> ActionResult.success();
         }
 
         public Builder setName(String name) {
@@ -175,23 +182,23 @@ public class MiniGameItem implements Registry.Object {
             return this;
         }
 
-        public Builder onTrigger(int cooldown, Consumer<Action> onStart) {
+        public Builder onTrigger(int cooldown, Function<Action, ActionResult> onStart) {
             return onTrigger(cooldown, 0, onStart);
         }
 
-        public Builder onTrigger(int cooldown, int range, Consumer<Action> start) {
+        public Builder onTrigger(int cooldown, int range, Function<Action, ActionResult> start) {
             return onToggle(0, cooldown, range, start, onFinish);
         }
 
-        public Builder onToggle(int duration, int cooldown, Consumer<Action> onStart) {
+        public Builder onToggle(int duration, int cooldown, Function<Action, ActionResult> onStart) {
             return onToggle(duration, cooldown, 0, onStart);
         }
 
-        public Builder onToggle(int duration, int cooldown, int range, Consumer<Action> onStart) {
+        public Builder onToggle(int duration, int cooldown, int range, Function<Action, ActionResult> onStart) {
             return onToggle(duration, cooldown, range, onStart, onFinish);
         }
 
-        public Builder onToggle(int duration, int cooldown, int range, Consumer<Action> onStart, Consumer<Action> onFinish) {
+        public Builder onToggle(int duration, int cooldown, int range, Function<Action, ActionResult> onStart, Consumer<Action> onFinish) {
             this.duration = duration;
             this.cooldown = cooldown;
             this.range = range;

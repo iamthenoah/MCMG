@@ -1,11 +1,14 @@
 package com.than00ber.mcmg.registries;
 
+import com.google.common.collect.ImmutableList;
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.core.ActionResult;
 import com.than00ber.mcmg.core.MiniGameEngine;
 import com.than00ber.mcmg.core.MiniGameItem;
 import com.than00ber.mcmg.core.Registry;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ScheduleUtil;
+import com.than00ber.mcmg.util.TextUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
@@ -127,7 +130,9 @@ public class Items {
                         meta.setLodestone(null);
                         item.setItemMeta(meta);
                     });
+                    return ActionResult.info("Compass pointing at " + TextUtil.formatPlayer(target));
                 }
+                return ActionResult.warn("No props found...");
             })
             .build());
     public static final MiniGameItem STUN_INK = register(new MiniGameItem.Builder(Material.INK_SAC)
@@ -136,9 +141,10 @@ public class Items {
             .addTooltip("Blinds any nearby hunter for a brief moment.")
             .onTrigger(30, 5, action -> {
                 Player player = action.getEvent().getPlayer();
+                int range = action.getRange();
+                List<Entity> entities = player.getNearbyEntities(range, range, range);
 
-                double range = action.getRange();
-                for (Entity entity : player.getNearbyEntities(range, range, range)) {
+                for (Entity entity : entities) {
                     if (entity instanceof Player victim) {
                         if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(victim, Teams.HUNTERS)) {
                             victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, action.getDuration() + 20, 5));
@@ -146,6 +152,9 @@ public class Items {
                         }
                     }
                 }
+
+                return ActionResult.info("Stunned " + entities.size() + " hunters.");
+
             })
             .build());
     public static final MiniGameItem GLOW_DUST = register(new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
@@ -153,14 +162,19 @@ public class Items {
             .setColor(ChatColor.YELLOW)
             .addTooltip("Reveals all hunters in the game for a brief moment.")
             .onToggle(30, 30, 30, action -> {
+                Player player = action.getEvent().getPlayer();
                 int range = action.getRange();
-                for (Entity entity : action.getEvent().getPlayer().getNearbyEntities(range, range, range)) {
-                    if (entity instanceof Player player) {
-                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(player, Teams.HUNTERS)) {
-                            player.setGlowing(true);
+                List<Entity> entities = player.getNearbyEntities(range, range, range);
+
+                 for (Entity entity : entities) {
+                    if (entity instanceof Player target) {
+                        if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(target, Teams.HUNTERS)) {
+                            target.setGlowing(true);
                         }
                     }
                 }
+
+                return ActionResult.info("Revealed " + entities.size() + " hunters.");
             }, action -> {
                 int range = action.getRange();
                 for (Entity entity : action.getEvent().getPlayer().getNearbyEntities(range, range, range)) {
@@ -198,14 +212,16 @@ public class Items {
                     if (x > p1.getBlockX() && x < p2.getBlockX() && z > p1.getBlockZ() && z < p2.getBlockZ()) {
                         int count = 3;
                         while (player.getWorld().getBlockAt(destination).getType() != Material.AIR) {
-                            if (count == 0) return;
+                            if (count == 0) return ActionResult.warn("Can't teleport here.");
                             destination.add(0, 1, 0);
                             count--;
                         }
 
                         player.teleport(destination.add(0.5, 0, 0.5).setDirection(eyeDirection));
                     }
+                    return ActionResult.success();
                 }
+                return ActionResult.warn("Too far away...");
             })
             .build());
     public static final MiniGameItem COCAINE = register(new MiniGameItem.Builder(Material.SUGAR)
@@ -216,6 +232,7 @@ public class Items {
                 Player player = action.getEvent().getPlayer();
                 PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, action.getDuration() * 20, 10);
                 player.addPotionEffect(potion);
+                return ActionResult.info("Speed will last for " + action.getDuration() + " seconds");
             })
             .build());
     public static final MiniGameItem PROP_RANDOMIZER = register(new MiniGameItem.Builder(Material.FLOWER_POT)
@@ -224,20 +241,21 @@ public class Items {
             .setStartingCooldown(30)
             .addTooltip("Changes the appearance of props with any nearby block.")
             .onTrigger(30, action -> {
-                for (Player player : Main.MINIGAME_ENGINE.getCurrentGame().getAllInTeam(Teams.PROPS)) {
+                ImmutableList<Player> players = Main.MINIGAME_ENGINE.getCurrentGame().getAllInTeam(Teams.PROPS);
+                for (Player player : players) {
                     Random r = new Random();
                     Material material = Material.AIR;
                     Location loc = player.getLocation();
 
                     int maxCount = 32;
                     while (material == Material.AIR || material == Material.VOID_AIR) {
+                        if (maxCount == 0) continue;
                         maxCount--;
                         int x = loc.getBlockX() + r.nextInt(4) - 2;
                         int y = loc.getBlockY() + r.nextInt(2);
                         int z = loc.getBlockZ() + r.nextInt(4) - 2;
                         Location pos = new Location(player.getWorld(), x, y, z);
                         material = Main.WORLD.getBlockAt(pos).getType();
-                        if (maxCount == 0) return;
                     }
 
                     MiscDisguise disguise = new MiscDisguise(DisguiseType.FALLING_BLOCK, material);
@@ -247,6 +265,7 @@ public class Items {
                     String subtitle = "A hunter has changed your appearance";
                     player.sendTitle(title, subtitle, 0, 30, 5);
                 }
+                return ActionResult.info(players.size() + " props have changed appearance.");
             })
             .build());
 
