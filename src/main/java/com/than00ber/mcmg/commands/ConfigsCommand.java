@@ -2,21 +2,27 @@ package com.than00ber.mcmg.commands;
 
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.ActionResult;
-import com.than00ber.mcmg.core.Console;
-import com.than00ber.mcmg.core.config.ConfigProperty;
+import com.than00ber.mcmg.core.Registry;
+import com.than00ber.mcmg.core.config.Configurable;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
-import com.than00ber.mcmg.minigames.MiniGame;
-import com.than00ber.mcmg.util.TextUtil;
+import com.than00ber.mcmg.registries.Items;
+import com.than00ber.mcmg.registries.MiniGames;
+import com.than00ber.mcmg.registries.Teams;
+import com.than00ber.mcmg.util.ConfigUtil;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ConfigsCommand extends PluginCommand {
+
+    private static final String RESET_KEY = "RESET";
 
     public ConfigsCommand(Main instance, World world) {
         super("configs", instance, world);
@@ -24,69 +30,72 @@ public class ConfigsCommand extends PluginCommand {
 
     @Override
     public ActionResult execute(@NotNull CommandSender sender, String[] args) {
-        if (Main.MINIGAME_ENGINE.hasRunningGame()) {
-            return ActionResult.warn("Cannot update config while game running.");
-        }
-
-        if (!Main.MINIGAME_ENGINE.hasGame()) {
-            return ActionResult.warn("No minigame set.");
-        }
-
         if (sender instanceof Player player) {
-            MiniGame game = Main.MINIGAME_ENGINE.getCurrentGame();
-            String propertyName = game.getMiniGameName() + "#" + args[0];
+            Registry.Registries registryName = MiniGameProperty.safeValueOf(Registry.Registries.class, args[0]);
+            if (registryName == null) return ActionResult.failure("Registry '" + args[0] + "' does not exist.");
 
-            MiniGameProperty<?> property = (MiniGameProperty<?>) game.getProperties().stream()
-                    .filter(p -> Objects.equals(p.getPath(), args[0]))
+            Registry<?> registry = switch (registryName) {
+                case ITEMS -> Items.ITEMS;
+                case TEAMS -> Teams.TEAMS;
+                case MINIGAMES -> MiniGames.MINIGAMES;
+            };
+
+            String configurableName = args[1];
+            String propertyName = args[2];
+            String fullPropertyName = configurableName + "#" + propertyName;
+            Configurable configurable = (Configurable) registry.get(configurableName);
+            MiniGameProperty<?> property = (MiniGameProperty<?>) configurable.getProperties().stream()
+                    .filter(p -> Objects.equals(p.getPath(), propertyName))
                     .findAny().orElse(null);
 
             if (property != null) {
-                String[] options = Arrays.copyOfRange(args, 1, args.length);
-                String arguments = Arrays.toString(options);
+                String option = args[3];
 
-                try {
-                    if (options.length > 0 && Objects.equals(options[0], "reset")) {
-                        Object obj = property.reset();
-                        String s = "Property '" + propertyName + "' reset to default value";
-                        if (obj != null) s += " [" + obj + "]";
+                if (Objects.equals(option, RESET_KEY)) {
+                    Object obj = property.reset();
+                    String s = "Property '" + fullPropertyName + "' reset to default value";
+                    if (obj != null) s += " [" + obj + "]";
+                    return ActionResult.success(s + ".");
+                } else {
+                    Object obj = property.parse(player, new String[] {option});
 
+                    if (property.isValidValue(obj)) {
+                        String s = "Property '" + fullPropertyName + "' updated [" + option + "]";
+                        String path = registryName.name().toLowerCase() + "/" + configurableName;
+                        ConfigUtil.save(Main.INSTANCE, path, configurable.getConfig());
                         return ActionResult.success(s + ".");
                     } else {
-                        Object obj = property.parse(player, options);
-
-                        if (property.isValidValue(obj)) {
-                            String s = "Property '" + propertyName + "' updated";
-                            if (options.length > 0) s += " " + arguments;
-
-//                            ConfigUtil.saveConfigs(instance, game); // persist data on change
-
-                            return ActionResult.success(s + ".");
-                        } else {
-                            String s = "Invalid arguments given for property '" + propertyName + "' " + arguments;
-                            return ActionResult.warn(s);
-                        }
+                        String s = "Invalid arguments given for property '" + fullPropertyName + "' [" + option + "].";
+                        return ActionResult.warn(s);
                     }
-                } catch (Exception e) {
-                    Console.error(
-                            "Failed to update '" + propertyName + "'.",
-                            "- Error:     " + e.getMessage(),
-                            "- Property:  " + propertyName,
-                            "- Arguments: " + arguments
-                    );
-                    return PluginCommand.INVALID_COMMAND;
                 }
             }
-            return ActionResult.failure("Property '" + propertyName + "' does not exist.");
+            return ActionResult.failure("Property '" + fullPropertyName + "' does not exist.");
         }
         return PluginCommand.NOT_A_PLAYER;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
-        if (args.length == 0 && Main.MINIGAME_ENGINE.hasGame()) {
-            List<? extends ConfigProperty<?>> properties = Main.MINIGAME_ENGINE.getCurrentGame().getProperties();
-            return TextUtil.getMatching(new String[] {option}, properties, ConfigProperty::getPath);
+        if (args.length == 0) return Arrays.stream(Registry.Registries.values()).map(Object::toString).collect(Collectors.toList());
+        Registry.Registries name = MiniGameProperty.safeValueOf(Registry.Registries.class, option);
+        if (name == null) return List.of();
+
+        Registry<?> registry = switch (name) {
+            case ITEMS -> Items.ITEMS;
+            case TEAMS -> Teams.TEAMS;
+            case MINIGAMES -> MiniGames.MINIGAMES;
+        };
+
+        if (args.length == 1) {
+            return registry.getRegistryKeys();
+        } else if (args.length == 2) {
+            Configurable configurable = (Configurable) registry.get(args[0]);
+            List<String> properties = new ArrayList<>();
+            configurable.getProperties().forEach(p -> properties.add(p.getPath()));
+            return properties;
+        } else {
+            return List.of("RESET");
         }
-        return List.of();
     }
 }
