@@ -40,13 +40,4 @@ public final class ConfigUtil {
             Console.error("Error saving '" + name + "' config file: " + e.getMessage());
         }
     }
-
-//    public static void loadConfigs(Main instance, Configurable configurable) {
-//        YamlConfiguration data = load(instance, configurable.getConfigName());
-//        configurable.setConfig(data);
-//    }
-//
-//    public static void saveConfigs(Main instance, Configurable configurable) {
-//        save(instance, configurable.getConfigName(), configurable.getConfig());
-//    }
 }
