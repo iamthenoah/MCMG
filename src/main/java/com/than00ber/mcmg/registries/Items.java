@@ -139,7 +139,7 @@ public class Items {
             .setName("Stun Juice")
             .setColor(ChatColor.DARK_AQUA)
             .addTooltip("Blinds any nearby hunter for a brief moment.")
-            .onTrigger(30, 5, action -> {
+            .onToggle(3, 30, 5, action -> {
                 Player player = action.getEvent().getPlayer();
                 int range = action.getRange();
                 List<Entity> entities = player.getNearbyEntities(range, range, range);
@@ -148,7 +148,7 @@ public class Items {
                     if (entity instanceof Player victim) {
                         if (Main.MINIGAME_ENGINE.getCurrentGame().isInTeam(victim, Teams.HUNTERS)) {
                             victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, action.getDuration() + 20, 5));
-                            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, action.getDuration(), 5));
+                            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, action.getDuration() * 20, 5));
                         }
                     }
                 }
