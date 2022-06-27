@@ -22,6 +22,7 @@ public final class ConfigUtil {
                 File file = new File(instance.getDataFolder(), name);
                 if (!file.exists() && file.getParentFile().mkdirs() && file.createNewFile()) {
                     instance.saveResource(name, true);
+                    configs.save(file);
                 }
             } catch (IOException exception) {
                 Console.error("Could not create '" + name + "' config file. ");

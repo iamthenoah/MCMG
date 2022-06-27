@@ -20,12 +20,12 @@ public class ConfigProperty<V> implements Supplier<V> {
         return path;
     }
 
-    public V set(V val) {
-        return value = val;
+    public void set(V val) {
+        value = val;
     }
 
-    public V reset() {
-        return value = defaultValue;
+    public void reset() {
+        value = defaultValue;
     }
 
     @Override

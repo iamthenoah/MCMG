@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class Registry<E extends Registry.Object> {
@@ -21,7 +22,7 @@ public final class Registry<E extends Registry.Object> {
     }
 
     public E register(final Supplier<E> supplier) {
-        String key = supplier.get().getName();
+        String key = supplier.get().getRegistryName();
         if (ENTRIES.containsKey(key)) {
             Console.warn("Registry object with key '" + key + "' already registered.");
             Console.warn("  This will override the currently registered object.");
@@ -45,6 +46,8 @@ public final class Registry<E extends Registry.Object> {
             String path = getRegistryLocation(key);
             YamlConfiguration data = ConfigUtil.load(instance, path);
             obj.get().setConfig(data);
+//            Console.debug(obj.get().getProperties());
+            if (Objects.equals(key, "cocaine")) Console.debug(data.get("action.cooldown"));
         });
     }
 
@@ -56,7 +59,7 @@ public final class Registry<E extends Registry.Object> {
         });
     }
 
-    private String getRegistryLocation(String key) {
+    public String getRegistryLocation(String key) {
         return registry.name().toLowerCase() + "/" + key;
     }
 
@@ -70,5 +73,12 @@ public final class Registry<E extends Registry.Object> {
          * @return Registry name.
          */
         String getName();
+
+        default String getRegistryName() {
+            return getName()
+                    .replaceAll("[-+.^:,']", "")
+                    .replaceAll(" ", "_")
+                    .toLowerCase();
+        }
     }
 }

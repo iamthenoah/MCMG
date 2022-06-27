@@ -36,12 +36,12 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         return (P) this;
     }
 
-    public V parse(Player player, String[] args) {
-        return set(parser.apply(player, args));
+    public void parseAndSet(Player player, String[] args) {
+        set(parser.apply(player, args));
     }
 
-    public boolean isValidValue(Object value) {
-        return validator.test((V) value);
+    public boolean isValidValue(Player player, String[] args) {
+        return validator.test(parser.apply(player, args));
     }
 
     /**

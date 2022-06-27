@@ -11,7 +11,7 @@
 
     <groupId>mcmg-than00ber</groupId>
     <artifactId>mcmg</artifactId>
-    <version>1.18.1</version>
+    <version>1.17.1</version>
 
     <repositories>
         <repository>
@@ -56,7 +56,7 @@
     </dependencies>
 
     <build>
-        <directory>/Users/noahgreff/Documents/repos/mc/servers/spigot/1.18.1/plugins</directory>
+        <directory>/Users/noahgreff/Documents/repos/mc/servers/spigot/${project.version}/plugins</directory>
     </build>
 
 </project>
