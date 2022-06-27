@@ -2,6 +2,7 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.*;
 import com.than00ber.mcmg.core.config.ConfigProperty;

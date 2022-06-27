@@ -1,8 +1,8 @@
 package com.than00ber.mcmg.commands;
 
+import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.ActionResult;
-import com.than00ber.mcmg.core.Console;
 import com.than00ber.mcmg.util.ChatUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.World;

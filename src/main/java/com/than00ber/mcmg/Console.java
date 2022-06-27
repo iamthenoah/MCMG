@@ -1,4 +1,4 @@
-package com.than00ber.mcmg.core;
+package com.than00ber.mcmg;
 
 import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.Bukkit;

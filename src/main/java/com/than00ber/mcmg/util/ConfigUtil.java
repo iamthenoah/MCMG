@@ -1,7 +1,7 @@
 package com.than00ber.mcmg.util;
 
+import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.core.Console;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
