@@ -3,6 +3,7 @@ package com.than00ber.mcmg.events;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.minigames.HideNSeekMiniGame;
 import com.than00ber.mcmg.registries.Teams;
+import com.than00ber.mcmg.util.MiniGameUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
@@ -28,7 +29,7 @@ public class HideNSeekMiniGameEvents extends MiniGameEvents<HideNSeekMiniGame> {
             minigame.switchTeam(player, Teams.SPECTATORS);
         } else {
             minigame.switchTeam(player, Teams.SEEKERS);
-            minigame.sendToGameSpawn(player);
+            MiniGameUtil.sendToGameSpawn(player);
         }
     }
 

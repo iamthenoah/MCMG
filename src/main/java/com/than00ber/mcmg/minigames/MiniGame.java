@@ -3,16 +3,16 @@ package com.than00ber.mcmg.minigames;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.core.Registry;
 import com.than00ber.mcmg.core.*;
 import com.than00ber.mcmg.core.config.ConfigProperty;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.registries.Teams;
 import com.than00ber.mcmg.util.ChatUtil;
-import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Monster;
+import com.than00ber.mcmg.util.MiniGameUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -172,22 +172,22 @@ public abstract class MiniGame implements Registry.Object, MiniGameLifeCycle {
 
     @Override
     public void onMinigameStarted(List<Player> participants) {
-        prepareWorld(false);
+        MiniGameUtil.prepareWorld(false);
         currentPlayerRoles.clear();
         originalPlayerRoles.clear();
         assignRandomRoles(participants);
         ChatUtil.showRoundStartScreen(getOriginalPlayerRoles());
-        currentPlayerRoles.keySet().forEach(this::sendToGameSpawn);
+        currentPlayerRoles.keySet().forEach(MiniGameUtil::sendToGameSpawn);
     }
 
     @Override
     public void onMinigameEnded() {
-        prepareWorld(true);
+        MiniGameUtil.prepareWorld(true);
         currentPlayerRoles.clear();
         originalPlayerRoles.clear();
         getWorld().getPlayers().forEach(player -> {
-            Teams.resetPlayer(player);
-            sendToGameSpawn(player);
+            MiniGameUtil.resetPlayer(player);
+            MiniGameUtil.sendToGameSpawn(player);
         });
     }
 
@@ -254,35 +254,6 @@ public abstract class MiniGame implements Registry.Object, MiniGameLifeCycle {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, duration, 250));
             }
         });
-    }
-
-    private void prepareWorld(boolean isGameEnding) {
-        clearMonsters();
-
-        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, isGameEnding);
-        world.setGameRule(GameRule.DO_WEATHER_CYCLE, isGameEnding);
-        world.setGameRule(GameRule.MOB_GRIEFING, isGameEnding);
-        world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, isGameEnding);
-        world.setGameRule(GameRule.DO_ENTITY_DROPS, isGameEnding);
-        world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, isGameEnding);
-        world.setGameRule(GameRule.LOG_ADMIN_COMMANDS, isGameEnding);
-        world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, !isGameEnding);
-        world.setGameRule(GameRule.KEEP_INVENTORY, !isGameEnding);
-
-        world.setDifficulty(Difficulty.NORMAL);
-        world.setThundering(false);
-        world.setStorm(false);
-        world.setTime(6000);
-    }
-
-    public final void sendToGameSpawn(Player player) {
-        player.teleport(PLAYGROUND_SPAWN.get());
-    }
-
-    protected void clearMonsters() {
-        for (Entity entity : getWorld().getEntities()) {
-            if (entity instanceof Monster) entity.remove(); // TODO - add minigame util class
-        }
     }
 
     public abstract ImmutableList<MiniGameTeam> getMiniGameTeams();

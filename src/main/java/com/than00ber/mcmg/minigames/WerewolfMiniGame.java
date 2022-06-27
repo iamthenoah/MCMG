@@ -9,6 +9,7 @@ import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.WerewolfMiniGameEvents;
 import com.than00ber.mcmg.registries.Teams;
 import com.than00ber.mcmg.registries.WinConditions;
+import com.than00ber.mcmg.util.MiniGameUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
@@ -58,7 +59,7 @@ public class WerewolfMiniGame extends MiniGame {
         bar.setTitle(ChatColor.YELLOW + "It's midday in the village");
         bar.setColor(BarColor.YELLOW);
         getWorld().setTime(6000);
-        clearMonsters();
+        MiniGameUtil.clearMonsters();
     }
 
     private void setNight(BossBar bar) {
