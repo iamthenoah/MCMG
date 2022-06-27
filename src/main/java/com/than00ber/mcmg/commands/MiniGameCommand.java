@@ -48,10 +48,9 @@ public class MiniGameCommand extends PluginCommand {
     private ActionResult handleGameMount(String[] args) {
         if (args.length == 0) return PluginCommand.INVALID_COMMAND;
 
-        MiniGame game = MiniGames.MINIGAMES.get(args[1].toLowerCase());
+        MiniGame game = MiniGames.MINIGAMES.get(args[1]);
         ActionResult result = Main.MINIGAME_ENGINE.mount(game);
         if (!result.isSuccessful()) return result;
-//        ConfigUtil.loadConfigs(instance, game);
 
         return ActionResult.info("Minigame set to " + TextUtil.formatMiniGame(game));
     }

@@ -48,21 +48,16 @@ public class GlobalEvents implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getItem() != null) {
             ItemMeta meta = event.getItem().getItemMeta();
+            if (meta == null) return;
 
-            if (meta != null) {
-                String name = ChatColor.stripColor(meta.getDisplayName()
-                        .replaceAll("[-+.^:,']","")
-                        .replaceAll(" ", "_")
-                ).toLowerCase(); // TODO - review this
-                MiniGameItem item = Items.ITEMS.get(name);
+            String name = ChatColor.stripColor(meta.getDisplayName());
+            MiniGameItem item = Items.ITEMS.get(name);
+            if (item == null) return;
 
-                if (item != null) {
-                    ActionResult result = item.onClick(event);
+            ActionResult result = item.onClick(event);
 
-                    if (result.hasMessages()) {
-                        ChatUtil.toActionBar(event.getPlayer(), result.getFormattedMessages()[0]);
-                    }
-                }
+            if (result.hasMessages()) {
+                ChatUtil.toActionBar(event.getPlayer(), result.getFormattedMessages()[0]);
             }
         }
     }

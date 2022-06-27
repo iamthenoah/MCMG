@@ -39,7 +39,7 @@ public class PropHuntMiniGame extends MiniGame {
 
     @Override
     public String getName() {
-        return "Prophunt";
+        return "PropHunt";
     }
 
     @Override
