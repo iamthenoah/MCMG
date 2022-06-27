@@ -1,6 +1,9 @@
 package com.than00ber.mcmg.util;
 
+import com.google.common.collect.ImmutableMap;
 import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.core.MiniGameTeam;
+import com.than00ber.mcmg.core.WinCondition;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
@@ -13,7 +16,55 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class MiniGameUtil {
+
+    public static void showRoundStartScreen(ImmutableMap<Player, MiniGameTeam> players) {
+        players.forEach((player, team) -> {
+            ChatUtil.toSelf(player, "");
+            ChatUtil.toSelf(player, TextUtil.formatObjective(team));
+            ChatUtil.toSelf(player, "");
+            String comment = ChatColor.ITALIC + team.getCatchPhrase();
+            player.sendTitle(TextUtil.formatGameTeam(team), comment, 5, 100, 15);
+            player.playSound(player.getLocation(), team.getSound(), 100, 1);
+        });
+    }
+
+    public static void showRoundEndScreen(ImmutableMap<Player, MiniGameTeam> players, List<MiniGameTeam> teams, WinCondition<?> condition) {
+        players.forEach((player, role) -> {
+            // scoreboard
+            ChatUtil.toSelf(player, ChatColor.YELLOW + " ---------- Scoreboard ----------");
+            for (MiniGameTeam team : teams) {
+                Map<Player, MiniGameTeam> filtered = players.entrySet().stream()
+                        .filter(entry -> entry.getValue().equals(team))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+                if (!filtered.isEmpty()) {
+                    String names = "\u0020\u0020" + team.getColor() + filtered.keySet().stream()
+                            .map(TextUtil::formatPlayer)
+                            .collect(Collectors.joining(", "));
+
+                    String status = condition.getWinners().contains(team)
+                            ? ChatColor.GREEN + " [won] "
+                            : ChatColor.RED + " [lost] ";
+                    ChatUtil.toSelf(player, TextUtil.formatGameTeam(team) + status);
+                    ChatUtil.toSelf(player, String.join(", ", names));
+                }
+            }
+
+            // title
+            boolean won = condition.getWinners().contains(role);
+            String title = condition.getTitleFor(role);
+            String sub = condition.getSubTitleFor(role);
+            player.sendTitle(ChatColor.BOLD + title, sub,5, 100, 30);
+            Sound sound = won ? Sound.UI_TOAST_CHALLENGE_COMPLETE : Sound.ENTITY_CHICKEN_HURT;
+
+            player.playSound(player.getLocation(), sound, 100, 1);
+        });
+    }
 
     public static void resetPlayer(Player player) {
         DisguiseAPI.undisguiseToAll(player);

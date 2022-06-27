@@ -8,7 +8,6 @@ import com.than00ber.mcmg.core.config.ConfigProperty;
 import com.than00ber.mcmg.core.config.MiniGameProperty;
 import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.registries.Teams;
-import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.MiniGameUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -176,7 +175,7 @@ public abstract class MiniGame implements Registry.Object, MiniGameLifeCycle {
         currentPlayerRoles.clear();
         originalPlayerRoles.clear();
         assignRandomRoles(participants);
-        ChatUtil.showRoundStartScreen(getOriginalPlayerRoles());
+        MiniGameUtil.showRoundStartScreen(getOriginalPlayerRoles());
         currentPlayerRoles.keySet().forEach(MiniGameUtil::sendToGameSpawn);
     }
 
@@ -199,7 +198,7 @@ public abstract class MiniGame implements Registry.Object, MiniGameLifeCycle {
 
     @Override
     public void onRoundWon(WinCondition<?> condition) {
-        ChatUtil.showRoundEndScreen(getOriginalPlayerRoles(), getMiniGameTeams(), condition);
+        MiniGameUtil.showRoundEndScreen(getOriginalPlayerRoles(), getMiniGameTeams(), condition);
     }
 
     private void assignRandomRoles(List<Player> participants) {
