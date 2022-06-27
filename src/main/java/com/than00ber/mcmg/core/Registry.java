@@ -5,14 +5,13 @@ import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.config.Configurable;
 import com.than00ber.mcmg.util.ConfigUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.function.Supplier;
 
-public final class Registry<E> {
+public final class Registry<E extends Registry.Object> {
 
     private final Registries registry;
     private final HashMap<String, Supplier<E>> ENTRIES = new HashMap<>();
@@ -21,16 +20,13 @@ public final class Registry<E> {
         this.registry = registry;
     }
 
-    public E register(final String key, final Supplier<E> supplier) {
+    public E register(final Supplier<E> supplier) {
+        String key = supplier.get().getName();
         if (ENTRIES.containsKey(key)) {
             Console.warn("Registry object with key '" + key + "' already registered.");
             Console.warn("  This will override the currently registered object.");
         }
-        String name = ChatColor.stripColor(key
-                .replaceAll("[-+.^:,']","")
-                .replaceAll(" ", "_")
-        ).toLowerCase(); // TODO - review this
-        ENTRIES.put(name, supplier);
+        ENTRIES.put(key, supplier);
         return supplier.get();
     }
 
@@ -46,22 +42,22 @@ public final class Registry<E> {
     public void load(final Main instance) {
         Console.debug("Loading " + registry + " registry.");
         ENTRIES.forEach((key, obj) -> {
-            if (obj.get() instanceof Configurable configurable) {
-                String path = registry.name().toLowerCase() + "/" + key;
-                YamlConfiguration data = ConfigUtil.load(instance, path);
-                configurable.setConfig(data);
-            }
+            String path = getRegistryLocation(key);
+            YamlConfiguration data = ConfigUtil.load(instance, path);
+            obj.get().setConfig(data);
         });
     }
 
     public void unload(final Main instance) {
         Console.debug("Unloading " + registry + " registry.");
         ENTRIES.forEach((key, obj) -> {
-            if (obj.get() instanceof Configurable configurable) {
-                String path = registry.name().toLowerCase() + "/" + key;
-                ConfigUtil.save(instance, path, configurable.getConfig());
-            }
+            String path = getRegistryLocation(key);
+            ConfigUtil.save(instance, path, obj.get().getConfig());
         });
+    }
+
+    private String getRegistryLocation(String key) {
+        return registry.name().toLowerCase() + "/" + key;
     }
 
     public enum Registries {

@@ -12,8 +12,8 @@ public class MiniGames {
     public static final Registry<MiniGame> MINIGAMES = new Registry<>(Registry.Registries.MINIGAMES);
 
     static {
-        MINIGAMES.register("prophunt", () -> new PropHuntMiniGame(Main.INSTANCE, Main.WORLD));
-        MINIGAMES.register("werewolf", () -> new WerewolfMiniGame(Main.INSTANCE, Main.WORLD));
-        MINIGAMES.register("hidenseek", () -> new HideNSeekMiniGame(Main.INSTANCE, Main.WORLD));
+        MINIGAMES.register(() -> new PropHuntMiniGame(Main.INSTANCE, Main.WORLD));
+        MINIGAMES.register(() -> new WerewolfMiniGame(Main.INSTANCE, Main.WORLD));
+        MINIGAMES.register(() -> new HideNSeekMiniGame(Main.INSTANCE, Main.WORLD));
     }
 }

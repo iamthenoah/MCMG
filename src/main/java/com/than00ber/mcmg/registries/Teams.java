@@ -23,7 +23,7 @@ public class Teams {
     public static final Registry<MiniGameTeam> TEAMS = new Registry<>(Registry.Registries.TEAMS);
 
     // Misc Teams
-    public static final MiniGameTeam SPECTATORS = register(new MiniGameTeam.Builder("Spectator")
+    public static final MiniGameTeam SPECTATORS = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Spectator")
             .setColor(ChatColor.BLUE)
             .setSpectator()
             .prepare(player -> {
@@ -33,7 +33,7 @@ public class Teams {
             .build());
 
     // Werewolf Teams
-    public static final MiniGameTeam VILLAGERS = register(new MiniGameTeam.Builder("Villager")
+    public static final MiniGameTeam VILLAGERS = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Villager")
             .setWeight(0.75)
             .setThreshold(0)
             .setColor(ChatColor.GREEN)
@@ -50,7 +50,7 @@ public class Teams {
                 player.setHealth(40);
             })
             .build());
-    public static final MiniGameTeam WEREWOLVES = register(new MiniGameTeam.Builder("Werewolve")
+    public static final MiniGameTeam WEREWOLVES = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Werewolve")
             .setWeight(0.15)
             .setThreshold(0)
             .setColor(ChatColor.DARK_RED)
@@ -61,7 +61,7 @@ public class Teams {
             .isRequired()
             .prepare(VILLAGERS::prepare)
             .build());
-    public static final MiniGameTeam TRAITORS = register(new MiniGameTeam.Builder("Traitor")
+    public static final MiniGameTeam TRAITORS = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Traitor")
             .setWeight(0.05)
             .setThreshold(4)
             .setColor(ChatColor.GOLD)
@@ -71,7 +71,7 @@ public class Teams {
             .setSound(Sound.ENTITY_PILLAGER_CELEBRATE)
             .prepare(VILLAGERS::prepare)
             .build());
-    public static final MiniGameTeam VAMPIRES = register(new MiniGameTeam.Builder("Vampire")
+    public static final MiniGameTeam VAMPIRES = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Vampire")
             .setWeight(0.05)
             .setThreshold(9)
             .setColor(ChatColor.RED)
@@ -81,7 +81,7 @@ public class Teams {
             .setSound(Sound.ENTITY_BAT_AMBIENT)
             .prepare(VILLAGERS::prepare)
             .build());
-    public static final MiniGameTeam POSSESSED = register(new MiniGameTeam.Builder("Possessed")
+    public static final MiniGameTeam POSSESSED = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Possessed")
             .setDisplayName("Villager")
             .setWeight(0.05)
             .setThreshold(9)
@@ -94,7 +94,7 @@ public class Teams {
             .build());
 
     // Prophunt Teams
-    public static final MiniGameTeam PROPS = register(new MiniGameTeam.Builder("Prop")
+    public static final MiniGameTeam PROPS = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Prop")
             .setWeight(0.75)
             .setColor(ChatColor.YELLOW)
             .setVisibility(Team.OptionStatus.NEVER)
@@ -112,7 +112,7 @@ public class Teams {
                 MiniGameUtil.disguiseAsBlock(player, block);
             })
             .build());
-    public static final MiniGameTeam HUNTERS = register(new MiniGameTeam.Builder("Hunter")
+    public static final MiniGameTeam HUNTERS = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Hunter")
             .setWeight(0.25)
             .setColor(ChatColor.BLUE)
             .setVisibility(Team.OptionStatus.FOR_OTHER_TEAMS)
@@ -133,7 +133,7 @@ public class Teams {
             .build());
 
     // HideNSeek Teams
-    public static final MiniGameTeam HIDERS = register(new MiniGameTeam.Builder("Hider")
+    public static final MiniGameTeam HIDERS = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Hider")
             .setWeight(0.75)
             .setColor(ChatColor.DARK_GREEN)
             .setVisibility(Team.OptionStatus.FOR_OWN_TEAM)
@@ -151,7 +151,7 @@ public class Teams {
                 DisguiseAPI.setActionBarShown(player, false);
             })
             .build());
-    public static final MiniGameTeam SEEKERS = register(new MiniGameTeam.Builder("Seeker")
+    public static final MiniGameTeam SEEKERS = Teams.TEAMS.register(() -> new MiniGameTeam.Builder("Seeker")
             .setWeight(0.25)
             .setColor(ChatColor.DARK_RED)
             .setVisibility(Team.OptionStatus.FOR_OWN_TEAM)
@@ -166,8 +166,4 @@ public class Teams {
             .isRequired()
             .disableWhileInGrace()
             .build());
-
-    private static MiniGameTeam register(MiniGameTeam team) {
-        return TEAMS.register(team.getName(), () -> team);
-    }
 }
