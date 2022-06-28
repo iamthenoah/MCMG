@@ -50,7 +50,7 @@ public class GlobalEvents implements Listener {
             ItemMeta meta = event.getItem().getItemMeta();
             if (meta == null) return;
 
-            String name = ChatColor.stripColor(meta.getDisplayName());
+            String name = TextUtil.simplify(meta.getDisplayName());
             MiniGameItem item = Items.ITEMS.get(name);
             if (item == null) return;
 

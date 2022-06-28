@@ -2,11 +2,13 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
-import com.than00ber.mcmg.core.*;
-import com.than00ber.mcmg.core.config.ConfigProperty;
-import com.than00ber.mcmg.core.config.MiniGameProperty;
+import com.than00ber.mcmg.core.MiniGameEngine;
+import com.than00ber.mcmg.core.MiniGameEvent;
+import com.than00ber.mcmg.core.MiniGameTeam;
+import com.than00ber.mcmg.core.WinCondition;
+import com.than00ber.mcmg.core.configuration.Configurable;
+import com.than00ber.mcmg.core.configuration.ConfigurableProperty;
 import com.than00ber.mcmg.events.MiniGameEvents;
 import com.than00ber.mcmg.registries.Teams;
 import com.than00ber.mcmg.util.MiniGameUtil;
@@ -23,17 +25,17 @@ import org.bukkit.scoreboard.Team;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class MiniGame implements Registry.Object, MiniGameLifeCycle {
+public abstract class MiniGame implements Configurable, MiniGameLifeCycle {
 
-    public static final MiniGameProperty.LocationProperty PLAYGROUND_SPAWN = new MiniGameProperty.LocationProperty("playground.spawn", Main.WORLD.getSpawnLocation());
-    public static final MiniGameProperty.IntegerProperty PLAYGROUND_RADIUS = new MiniGameProperty.IntegerProperty("playground.radius", 100).validate(MiniGameProperty.IntegerProperty.POSITIVE);
-    public static final MiniGameProperty.IntegerProperty DURATION_GRACE = new MiniGameProperty.IntegerProperty("duration.grace", 30).validate(i -> i > 0 && i < 86400);
-    public static final MiniGameProperty.IntegerProperty DURATION_ROUND = new MiniGameProperty.IntegerProperty("duration.round", 120).validate(i -> i > 0 && i < 84600);
-    public static final MiniGameProperty.IntegerProperty PLAYER_MINIMUM = new MiniGameProperty.IntegerProperty("player.minimum", 2).validate(i -> i > 1 && i <= Main.WORLD.getPlayers().size());
+    public static final ConfigurableProperty.LocationProperty PLAYGROUND_SPAWN = new ConfigurableProperty.LocationProperty("playground.spawn", Main.WORLD.getSpawnLocation());
+    public static final ConfigurableProperty.IntegerProperty PLAYGROUND_RADIUS = new ConfigurableProperty.IntegerProperty("playground.radius", 100).verify(ConfigurableProperty.CheckIf.POSITIVE_INT);
+    public static final ConfigurableProperty.IntegerProperty DURATION_GRACE = new ConfigurableProperty.IntegerProperty("duration.grace", 30).verify(ConfigurableProperty.CheckIf.LESS_THAN_A_DAY);
+    public static final ConfigurableProperty.IntegerProperty DURATION_ROUND = new ConfigurableProperty.IntegerProperty("duration.round", 120).verify(ConfigurableProperty.CheckIf.LESS_THAN_A_DAY);
+    public static final ConfigurableProperty.IntegerProperty PLAYER_MINIMUM = new ConfigurableProperty.IntegerProperty("player.minimum", 2).verify(ConfigurableProperty.CheckIf.LESS_THEN_PLAYERS);
 
     protected final HashMap<Player, MiniGameTeam> originalPlayerRoles;
     protected final HashMap<Player, MiniGameTeam> currentPlayerRoles;
-    private final List<MiniGameProperty<?>> properties;
+    private final List<ConfigurableProperty<?>> properties;
     private MiniGameEvents<?> listener;
     private final World world;
 
@@ -75,12 +77,12 @@ public abstract class MiniGame implements Registry.Object, MiniGameLifeCycle {
         return listener != null;
     }
 
-    protected final void addProperties(MiniGameProperty<?>... props) {
+    protected final void addProperties(ConfigurableProperty<?>... props) {
         properties.addAll(List.of(props));
     }
 
     @Override
-    public final ImmutableList<? extends ConfigProperty<?>> getProperties() {
+    public final ImmutableList<ConfigurableProperty<?>> getProperties() {
         return ImmutableList.copyOf(properties);
     }
 
@@ -111,7 +113,7 @@ public abstract class MiniGame implements Registry.Object, MiniGameLifeCycle {
     }
 
     public final void removePlayer(Player player) {
-        originalPlayerRoles.remove(player);
+//        originalPlayerRoles.remove(player);
         currentPlayerRoles.remove(player);
     }
 
@@ -126,10 +128,10 @@ public abstract class MiniGame implements Registry.Object, MiniGameLifeCycle {
             Team newTeam = scoreboard.getTeam(newMiniGameTeam.getName());
 
             if (!previousMiniGameTeam.isSpectator() && currentTeam == null) {
-                Console.warn("Current player team not registered " + previousMiniGameTeam.getVisibleName());
+                Main.CONSOLE.warn("Current player team not registered " + previousMiniGameTeam.getVisibleName());
             }
             if (!newMiniGameTeam.isSpectator() && newTeam == null) {
-                Console.warn("New player team not registered " + newMiniGameTeam.getVisibleName());
+                Main.CONSOLE.warn("New player team not registered " + newMiniGameTeam.getVisibleName());
             }
 
             if (currentTeam == null || newTeam == null) return;

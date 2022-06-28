@@ -3,14 +3,11 @@ package com.than00ber.mcmg.commands;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.ActionResult;
 import com.than00ber.mcmg.core.Registry;
-import com.than00ber.mcmg.core.config.ConfigProperty;
-import com.than00ber.mcmg.core.config.Configurable;
-import com.than00ber.mcmg.core.config.MiniGameProperty;
-import com.than00ber.mcmg.registries.Items;
-import com.than00ber.mcmg.registries.MiniGames;
-import com.than00ber.mcmg.registries.Teams;
+import com.than00ber.mcmg.core.configuration.Configurable;
+import com.than00ber.mcmg.core.configuration.ConfigurableProperty;
 import com.than00ber.mcmg.util.ChatUtil;
 import com.than00ber.mcmg.util.ConfigUtil;
+import com.than00ber.mcmg.util.TextUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -33,71 +30,51 @@ public class ConfigsCommand extends PluginCommand {
     @Override
     public ActionResult execute(@NotNull CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
-            Registry.Registries registryName = MiniGameProperty.safeValueOf(Registry.Registries.class, args[0]);
-            if (registryName == null) return ActionResult.failure("Registry '" + args[0] + "' does not exist.");
-
-            Registry<?> registry = switch (registryName) {
-                case ITEMS -> Items.ITEMS;
-                case TEAMS -> Teams.TEAMS;
-                case MINIGAMES -> MiniGames.MINIGAMES;
-            };
+            String registryName = args[0];
+            Registry<?> registry = Registry.REGISTRIES.get(registryName);
+            if (registry == null) return ActionResult.failure("Registry '" + registryName + "' does not exist.");
 
             String key = args[1];
             String propertyName = args[2];
-            String fullPropertyName = key + "#" + propertyName;
+            String fullPropertyName = TextUtil.simplify(key) + "#" + propertyName;
             Configurable configurable = registry.get(key);
-            MiniGameProperty<?> property = (MiniGameProperty<?>) configurable.getProperties().stream()
-                    .filter(p -> Objects.equals(p.getPath(), propertyName))
-                    .findAny().orElse(null);
 
-            if (property != null) {
-                String[] options = Arrays.copyOfRange(args, 3, args.length);
-                String arguments = Arrays.toString(options);
+            if (configurable != null) {
+                for (ConfigurableProperty<?> property : configurable.getProperties()) {
+                    if (property.getName().equals(propertyName)) {
+                        String[] options = Arrays.copyOfRange(args, 3, args.length);
+                        String arguments = Arrays.toString(options);
 
-                if (Objects.equals(options[0], RESET_KEY)) {
-                    property.reset();
-                    return ActionResult.success("Property '" + fullPropertyName + "' reset [" + property.get() + "].");
-                } else {
-                    if (property.isValidValue(player, options)) {
-                        property.parseAndSet(player, options);
-                        String path = registry.getRegistryLocation(key);
-                        ConfigUtil.save(Main.INSTANCE, path, configurable.getConfig());
+                        if (Objects.equals(options[0], RESET_KEY)) {
+                            property.reset();
+                            return ActionResult.success("Property '" + fullPropertyName + "' reset [" + property.get() + "].");
+                        } else {
+                            if (property.setIfValid(player, options)) {
+                                ConfigUtil.save(Main.INSTANCE, registry.getRegistryLocation(configurable), configurable.getConfig());
+                                registry.reload(key);
 
-                        if (Main.MINIGAME_ENGINE.hasRunningGame()) {
-                            String warning = "Configuration will only take effect next game.";
-                            ChatUtil.toSelf(player, ChatColor.GOLD + warning);
+                                if (Main.MINIGAME_ENGINE.hasRunningGame()) {
+                                    ChatUtil.toSelf(player, ChatColor.GOLD + "Configuration will only take effect next game.");
+                                }
+                                return ActionResult.success("Property '" + fullPropertyName + "' updated " + arguments + ".");
+                            }
+                            return ActionResult.warn("Invalid arguments given for property '" + fullPropertyName + "' " + arguments + ".");
                         }
-                        return ActionResult.success("Property '" + fullPropertyName + "' updated " + arguments + ".");
                     }
-                    return ActionResult.warn("Invalid arguments given for property '" + fullPropertyName + "' " + arguments + ".");
                 }
+                return ActionResult.failure("Property '" + fullPropertyName + "' does not exist.");
             }
-            return ActionResult.failure("Property '" + fullPropertyName + "' does not exist.");
+            return ActionResult.failure("Configurable '" + key + "' not found in '" + registryName + "'.");
         }
         return PluginCommand.NOT_A_PLAYER;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String option, String[] args) {
-        if (args.length == 0) return Arrays.stream(Registry.Registries.values()).map(Object::toString).collect(Collectors.toList());
-        Registry.Registries name = MiniGameProperty.safeValueOf(Registry.Registries.class, option);
-        if (name == null) return List.of();
-
-        Registry<?> registry = switch (name) {
-            case ITEMS -> Items.ITEMS;
-            case TEAMS -> Teams.TEAMS;
-            case MINIGAMES -> MiniGames.MINIGAMES;
-        };
-
-        if (args.length == 1) {
-            return registry.getRegistryKeys();
-        } else if (args.length == 2) {
-            Configurable configurable = registry.get(args[0]);
-            return configurable.getProperties().stream()
-                    .map(ConfigProperty::getPath)
-                    .collect(Collectors.toList());
-        } else {
-            return List.of(RESET_KEY);
-        }
+        if (args.length == 0) return Registry.REGISTRIES.keySet().stream().toList();
+        Registry<?> registry = Registry.REGISTRIES.get(option);
+        if (args.length == 1) return registry.getRegistryKeys();
+        if (args.length == 2) return registry.get(args[0]).getProperties().stream().map(ConfigurableProperty::getName).collect(Collectors.toList());
+        return args.length == 3 ? List.of(RESET_KEY) : List.of();
     }
 }

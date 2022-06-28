@@ -1,31 +1,29 @@
-package com.than00ber.mcmg.core.config;
+package com.than00ber.mcmg.core.configuration;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class ConfigProperty<V> implements Supplier<V> {
+@SuppressWarnings({"unchecked", "unused"})
+public class Property<V> implements Supplier<V> {
 
-    private final String path;
+    private final String name;
     protected final V defaultValue;
     protected V value;
 
-    public ConfigProperty(String path, V defaultValue) {
-        this.path = path;
+    public Property(String name, @NotNull V defaultValue) {
+        this.name = name;
         this.defaultValue = defaultValue;
     }
 
-    public String getPath() {
-        return path;
+    public String getName() {
+        return name;
     }
 
     public void set(V val) {
         value = val;
-    }
-
-    public void reset() {
-        value = defaultValue;
     }
 
     @Override
@@ -33,17 +31,21 @@ public class ConfigProperty<V> implements Supplier<V> {
         return Optional.ofNullable(value).orElse(defaultValue);
     }
 
+    public void reset() {
+        value = defaultValue;
+    }
+
     public void load(ConfigurationSection configs) {
-        Object obj = configs.get(getPath());
+        Object obj = configs.get(getName());
         if (obj != null) set((V) obj);
     }
 
     public void save(ConfigurationSection configs) {
-        configs.set(path, get());
+        configs.set(getName(), get());
     }
 
     @Override
     public String toString() {
-        return getPath() + "#" + get();
+        return getName() + ":" + get();
     }
 }

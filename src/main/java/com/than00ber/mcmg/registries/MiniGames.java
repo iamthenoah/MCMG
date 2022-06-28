@@ -9,7 +9,7 @@ import com.than00ber.mcmg.minigames.WerewolfMiniGame;
 
 public class MiniGames {
 
-    public static final Registry<MiniGame> MINIGAMES = new Registry<>(Registry.Registries.MINIGAMES);
+    public static final Registry<MiniGame> MINIGAMES = Registry.create("minigames");
 
     static {
         MINIGAMES.register(() -> new PropHuntMiniGame(Main.INSTANCE, Main.WORLD));

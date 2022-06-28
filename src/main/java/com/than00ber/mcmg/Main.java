@@ -19,12 +19,14 @@ public class Main extends JavaPlugin {
     public static MiniGameEngine<MiniGame> MINIGAME_ENGINE;
     public static Main INSTANCE;
     public static World WORLD;
+    public static Console CONSOLE;
 
     @Override
     public void onEnable() {
         INSTANCE = this;
         WORLD = Bukkit.getWorlds().get(0);
         MINIGAME_ENGINE = new MiniGameEngine<>(this);
+        CONSOLE = new Console(true);
 
         Bukkit.getPluginManager().registerEvents(new GlobalEvents(), this);
 
@@ -32,23 +34,21 @@ public class Main extends JavaPlugin {
         new ConfigsCommand(this, WORLD);
         new AssignCommand(this, WORLD);
 
+        MiniGames.MINIGAMES.load(this);
         Items.ITEMS.load(this);
         Teams.TEAMS.load(this);
-        MiniGames.MINIGAMES.load(this);
     }
 
     @Override
     public void onDisable() {
         if (MINIGAME_ENGINE != null && MINIGAME_ENGINE.hasGame()) {
-//            ConfigUtil.saveConfigs(this, MINIGAME_ENGINE.getCurrentGame());
-
             if (MINIGAME_ENGINE.hasRunningGame()) {
                 MINIGAME_ENGINE.endMiniGame("Minigame ending caused by plugin disabling.");
             }
         }
 
+        MiniGames.MINIGAMES.unload(this);
         Items.ITEMS.unload(this);
         Teams.TEAMS.unload(this);
-        MiniGames.MINIGAMES.unload(this);
     }
 }

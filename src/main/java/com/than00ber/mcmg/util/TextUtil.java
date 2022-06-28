@@ -38,6 +38,14 @@ public class TextUtil {
         return matching;
     }
 
+    public static String simplify(String text) {
+        return ChatColor.stripColor(text
+                .replaceAll("[-+.^:,']", "")
+                .replaceAll(" ", "_")
+                .toLowerCase()
+        );
+    }
+
     public static String formatPlayer(Player player) {
         return ChatColor.AQUA + player.getDisplayName() + ChatColor.RESET;
     }

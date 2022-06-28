@@ -5,7 +5,7 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.MiniGameEvent;
 import com.than00ber.mcmg.core.MiniGameTeam;
 import com.than00ber.mcmg.core.WinCondition;
-import com.than00ber.mcmg.core.config.MiniGameProperty;
+import com.than00ber.mcmg.core.configuration.ConfigurableProperty;
 import com.than00ber.mcmg.events.WerewolfMiniGameEvents;
 import com.than00ber.mcmg.registries.Teams;
 import com.than00ber.mcmg.registries.WinConditions;
@@ -17,9 +17,9 @@ import org.bukkit.boss.BossBar;
 
 public class WerewolfMiniGame extends MiniGame {
 
-    public static final MiniGameProperty.IntegerProperty AGGRO_DISTANCE = new MiniGameProperty.IntegerProperty("aggro.distance", 10).validate(d -> d > 0);
-    public static final MiniGameProperty.IntegerProperty ZOMBIE_COUNT = new MiniGameProperty.IntegerProperty("zombie.count", 5).validate(d -> d > 0);
-    public static final MiniGameProperty.BooleanProperty DEATH_SKULL = new MiniGameProperty.BooleanProperty("death.skull", true);
+    public static final ConfigurableProperty.IntegerProperty AGGRO_DISTANCE = new ConfigurableProperty.IntegerProperty("aggro.distance", 10).verify(ConfigurableProperty.CheckIf.POSITIVE_INT);
+    public static final ConfigurableProperty.IntegerProperty ZOMBIE_COUNT = new ConfigurableProperty.IntegerProperty("zombie.count", 5).verify(ConfigurableProperty.CheckIf.POSITIVE_INT);
+    public static final ConfigurableProperty.BooleanProperty DEATH_SKULL = new ConfigurableProperty.BooleanProperty("death.skull", true);
 
     private boolean isDaytime;
 

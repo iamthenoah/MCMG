@@ -1,8 +1,9 @@
 package com.than00ber.mcmg.core;
 
 import com.google.common.collect.ImmutableList;
-import com.than00ber.mcmg.core.config.ConfigProperty;
-import com.than00ber.mcmg.core.config.MiniGameProperty;
+import com.than00ber.mcmg.Main;
+import com.than00ber.mcmg.core.configuration.Configurable;
+import com.than00ber.mcmg.core.configuration.ConfigurableProperty;
 import com.than00ber.mcmg.util.ScheduleUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -15,20 +16,21 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class MiniGameItem implements Registry.Object {
+public class MiniGameItem implements Configurable {
 
-    private final MiniGameProperty.StringProperty name;
-    private final MiniGameProperty.ChatColorProperty color;
-    private final MiniGameProperty.EnumProperty<Material> material;
-    private final MiniGameProperty.BooleanProperty unbreakable;
-    private final MiniGameProperty.IntegerProperty startingCooldown;
-    private final MiniGameProperty.IntegerProperty duration;
-    private final MiniGameProperty.IntegerProperty cooldown;
-    private final MiniGameProperty.IntegerProperty range;
+    private final ConfigurableProperty.StringProperty name;
+    private final ConfigurableProperty.ChatColorProperty color;
+    private final ConfigurableProperty.EnumProperty<Material> material;
+    private final ConfigurableProperty.BooleanProperty unbreakable;
+    private final ConfigurableProperty.IntegerProperty startingCooldown;
+    private final ConfigurableProperty.IntegerProperty duration;
+    private final ConfigurableProperty.IntegerProperty cooldown;
+    private final ConfigurableProperty.IntegerProperty range;
     private final ItemMeta meta;
     private final List<String> tooltips;
     private final Function<Action, ActionResult> onStart;
@@ -48,18 +50,20 @@ public class MiniGameItem implements Registry.Object {
             Function<Action, ActionResult> onStart,
             Consumer<Action> onFinish
     ) {
-        this.name = new MiniGameProperty.StringProperty("name", name);
-        this.material = new MiniGameProperty.EnumProperty<>("material", Material.class, material);
-        this.color = new MiniGameProperty.ChatColorProperty("color", color);
-        this.unbreakable = new MiniGameProperty.BooleanProperty("unbreakable", unbreakable);
-        this.startingCooldown = new MiniGameProperty.IntegerProperty("starting.cooldown", startingCooldown);
-        this.duration = new MiniGameProperty.IntegerProperty("action.duration", duration);
-        this.cooldown = new MiniGameProperty.IntegerProperty("action.cooldown", cooldown);
-        this.range = new MiniGameProperty.IntegerProperty("action.range", range);
+        this.name = new ConfigurableProperty.StringProperty("name", name);
+        this.material = new ConfigurableProperty.EnumProperty<>("material", Material.class, material);
+        this.color = new ConfigurableProperty.ChatColorProperty("color", color);
+        this.unbreakable = new ConfigurableProperty.BooleanProperty("unbreakable", unbreakable);
+        this.startingCooldown = new ConfigurableProperty.IntegerProperty("starting.cooldown", startingCooldown);
+        this.duration = new ConfigurableProperty.IntegerProperty("action.duration", duration);
+        this.cooldown = new ConfigurableProperty.IntegerProperty("action.cooldown", cooldown);
+        this.range = new ConfigurableProperty.IntegerProperty("action.range", range);
         this.meta = meta;
-        this.tooltips = tooltips;
         this.onStart = onStart;
         this.onFinish = onFinish;
+
+        // lore has dark purple color set by default
+        this.tooltips = tooltips.stream().map(s -> ChatColor.WHITE + s).toList();
     }
 
     @Override
@@ -87,14 +91,11 @@ public class MiniGameItem implements Registry.Object {
 
         if (!player.hasCooldown(material.get()) && !item.containsEnchantment(Enchantment.LOYALTY)) {
             event.setCancelled(true);
-
             ActionResult result = onStart.apply(action);
 
             if (result.isSuccessful()) {
-                item.addUnsafeEnchantment(Enchantment.LOYALTY, 1);
-
                 if (duration.get() != 0) player.playEffect(player.getLocation(), Effect.CLICK1, null);
-
+                item.addUnsafeEnchantment(Enchantment.LOYALTY, 1);
                 ScheduleUtil.doDelayed(duration.get() * 20, () -> {
                     onFinish.accept(action);
                     item.removeEnchantment(Enchantment.LOYALTY);
@@ -102,15 +103,14 @@ public class MiniGameItem implements Registry.Object {
                     player.setCooldown(material.get(), cooldown.get() * 20);
                 });
             }
-
             return result;
         }
         return ActionResult.success();
     }
 
     @Override
-    public ImmutableList<? extends ConfigProperty<?>> getProperties() {
-        List<ConfigProperty<?>> properties = new ArrayList<>();
+    public ImmutableList<ConfigurableProperty<?>> getProperties() {
+        List<ConfigurableProperty<?>> properties = new ArrayList<>();
         properties.add(name);
         properties.add(color);
         properties.add(material);
@@ -127,7 +127,7 @@ public class MiniGameItem implements Registry.Object {
         private String name;
         private ChatColor color;
         private final Material material;
-        private List<String> tooltips;
+        private final List<String> tooltips;
         private boolean unbreakable;
         private int startingCooldown;
         private ItemMeta meta;
@@ -149,7 +149,7 @@ public class MiniGameItem implements Registry.Object {
             cooldown = 0;
             range = 0;
             onStart = a -> ActionResult.success();
-            onFinish = a -> ActionResult.success();
+            onFinish = a -> {};
         }
 
         public Builder setName(String name) {
@@ -208,13 +208,6 @@ public class MiniGameItem implements Registry.Object {
         }
 
         public MiniGameItem build() {
-            if (range > 0) tooltips.add(ChatColor.GRAY + "  Range: " + ChatColor.YELLOW + range + "b");
-            if (duration > 0) tooltips.add(ChatColor.GRAY + "  Duration: " + ChatColor.YELLOW + duration + "s");
-            if (cooldown > 0) tooltips.add(ChatColor.GRAY + "  Cooldown: " + ChatColor.YELLOW + cooldown + "s");
-
-            // lore has dark purple color set by default
-            this.tooltips = tooltips.stream().map(s -> ChatColor.WHITE + s).toList();
-
             return new MiniGameItem(
                     material,
                     name,

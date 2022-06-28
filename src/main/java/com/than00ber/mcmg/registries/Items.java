@@ -32,18 +32,18 @@ import java.util.Random;
 
 public class Items {
 
-    public static final Registry<MiniGameItem> ITEMS = new Registry<>(Registry.Registries.ITEMS);
+    public static final Registry<MiniGameItem> ITEMS = Registry.create("items");
 
     // Werewolf Items
-    public static final MiniGameItem SURVIVORS_WEAPON = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.WOODEN_HOE)
+    public static final MiniGameItem SURVIVORS_WEAPON = ITEMS.register(() -> new MiniGameItem.Builder(Material.WOODEN_HOE)
             .setName("Survivor's weapon")
             .addTooltip(ChatColor.ITALIC + "Who said you can't trust hoes?")
             .unbreakable()
             .build());
-    public static final MiniGameItem SURVIVORS_FOOD = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.COOKED_SALMON)
+    public static final MiniGameItem SURVIVORS_FOOD = ITEMS.register(() -> new MiniGameItem.Builder(Material.COOKED_SALMON)
             .setName("Survivor's Fish")
             .build());
-    public static final MiniGameItem RULE_BOOK = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.WRITTEN_BOOK)
+    public static final MiniGameItem RULE_BOOK = ITEMS.register(() -> new MiniGameItem.Builder(Material.WRITTEN_BOOK)
             .setName("WWRPG Rule Book")
             .setColor(ChatColor.YELLOW)
             .setMeta(() -> {
@@ -59,32 +59,32 @@ public class Items {
             .build());
 
     // HideNSeek Items
-    public static final MiniGameItem SEEKERS_AXE = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.GOLDEN_AXE)
+    public static final MiniGameItem SEEKERS_AXE = ITEMS.register(() -> new MiniGameItem.Builder(Material.GOLDEN_AXE)
             .setName("Seeker's Axe")
             .setColor(ChatColor.YELLOW)
             .unbreakable()
             .build());
-    public static final MiniGameItem SEEKERS_BOW = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.BOW)
+    public static final MiniGameItem SEEKERS_BOW = ITEMS.register(() -> new MiniGameItem.Builder(Material.BOW)
             .setName("Seeker's Bow")
             .setColor(ChatColor.YELLOW)
             .unbreakable()
             .build());
 
     // PropHunt Items
-    public static final MiniGameItem HUNTERS_SWORD = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.IRON_SWORD)
+    public static final MiniGameItem HUNTERS_SWORD = ITEMS.register(() -> new MiniGameItem.Builder(Material.IRON_SWORD)
             .setName("Hunter's Sword")
             .setColor(ChatColor.AQUA)
             .unbreakable().build());
-    public static final MiniGameItem HUNTERS_BOW = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.BOW)
+    public static final MiniGameItem HUNTERS_BOW = ITEMS.register(() -> new MiniGameItem.Builder(Material.BOW)
             .setName("Hunter's Bow")
             .setColor(ChatColor.AQUA)
             .unbreakable()
             .build());
-    public static final MiniGameItem HUNTERS_ARROW = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.ARROW)
+    public static final MiniGameItem HUNTERS_ARROW = ITEMS.register(() -> new MiniGameItem.Builder(Material.ARROW)
             .setName("Hunter's Arrow")
             .setColor(ChatColor.AQUA)
             .build());
-    public static final MiniGameItem PROP_COMPASS = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.COMPASS)
+    public static final MiniGameItem PROP_COMPASS = ITEMS.register(() -> new MiniGameItem.Builder(Material.COMPASS)
             .setName("Prop Compass")
             .setColor(ChatColor.DARK_AQUA)
             .setStartingCooldown(30)
@@ -135,7 +135,7 @@ public class Items {
                 return ActionResult.warn("No props found...");
             })
             .build());
-    public static final MiniGameItem STUN_INK = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.INK_SAC)
+    public static final MiniGameItem STUN_INK = ITEMS.register(() -> new MiniGameItem.Builder(Material.INK_SAC)
             .setName("Stun Juice")
             .setColor(ChatColor.DARK_AQUA)
             .addTooltip("Blinds any nearby hunter for a brief moment.")
@@ -157,7 +157,7 @@ public class Items {
 
             })
             .build());
-    public static final MiniGameItem GLOW_DUST = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
+    public static final MiniGameItem GLOW_DUST = ITEMS.register(() -> new MiniGameItem.Builder(Material.GLOWSTONE_DUST)
             .setName("Glow Dust")
             .setColor(ChatColor.YELLOW)
             .addTooltip("Reveals all hunters in the game for a brief moment.")
@@ -186,7 +186,7 @@ public class Items {
                 }
             })
             .build());
-    public static final MiniGameItem TELEPORTER = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.FEATHER)
+    public static final MiniGameItem TELEPORTER = ITEMS.register(() -> new MiniGameItem.Builder(Material.FEATHER)
             .setName("Teleporter")
             .setColor(ChatColor.DARK_PURPLE)
             .setStartingCooldown(30)
@@ -224,7 +224,7 @@ public class Items {
                 return ActionResult.warn("Too far away...");
             })
             .build());
-    public static final MiniGameItem COCAINE = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.SUGAR)
+    public static final MiniGameItem COCAINE = ITEMS.register(() -> new MiniGameItem.Builder(Material.SUGAR)
             .setName("Cocaine")
             .setColor(ChatColor.BLUE)
             .addTooltip("Gives you extreme speed for a brief moment.")
@@ -235,7 +235,7 @@ public class Items {
                 return ActionResult.info("Speed will last for " + action.getDuration() + " seconds");
             })
             .build());
-    public static final MiniGameItem PROP_RANDOMIZER = Items.ITEMS.register(() -> new MiniGameItem.Builder(Material.FLOWER_POT)
+    public static final MiniGameItem PROP_RANDOMIZER = ITEMS.register(() -> new MiniGameItem.Builder(Material.FLOWER_POT)
             .setName("Prop Randomizer")
             .setColor(ChatColor.LIGHT_PURPLE)
             .setStartingCooldown(30)

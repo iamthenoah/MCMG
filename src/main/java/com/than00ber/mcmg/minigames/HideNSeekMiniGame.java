@@ -5,7 +5,7 @@ import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.MiniGameEvent;
 import com.than00ber.mcmg.core.MiniGameTeam;
 import com.than00ber.mcmg.core.WinCondition;
-import com.than00ber.mcmg.core.config.MiniGameProperty;
+import com.than00ber.mcmg.core.configuration.ConfigurableProperty;
 import com.than00ber.mcmg.events.HideNSeekMiniGameEvents;
 import com.than00ber.mcmg.registries.Teams;
 import com.than00ber.mcmg.registries.WinConditions;
@@ -23,10 +23,10 @@ import java.util.Random;
 
 public class HideNSeekMiniGame extends MiniGame {
 
-    public static final MiniGameProperty.DoubleProperty DAMAGE_PENALTY = new MiniGameProperty.DoubleProperty("damage.penalty", .5).validate(d -> d <= 40);
-    public static final MiniGameProperty.EnumProperty<EntityType> ENTITY_TYPE = new MiniGameProperty.EnumProperty<>("entity.type", EntityType.class, EntityType.VILLAGER);
-    public static final MiniGameProperty.BooleanProperty VIEW_DISGUISE = new MiniGameProperty.BooleanProperty("view.disguise", true);
-    public static final MiniGameProperty.IntegerProperty HIDER_MAX_HEALTH = new MiniGameProperty.IntegerProperty("health.hiders", 10).validate(i -> i <= 40);
+    public static final ConfigurableProperty.DoubleProperty DAMAGE_PENALTY = new ConfigurableProperty.DoubleProperty("damage.penalty", .5).verify(ConfigurableProperty.CheckIf.POSITIVE_DOUBLE);
+    public static final ConfigurableProperty.EnumProperty<EntityType> ENTITY_TYPE = new ConfigurableProperty.EnumProperty<>("entity.type", EntityType.class, EntityType.VILLAGER);
+    public static final ConfigurableProperty.BooleanProperty VIEW_DISGUISE = new ConfigurableProperty.BooleanProperty("view.disguise", true);
+    public static final ConfigurableProperty.IntegerProperty HIDER_MAX_HEALTH = new ConfigurableProperty.IntegerProperty("health.hiders", 10).verify(ConfigurableProperty.CheckIf.POSITIVE_INT);
 
     private final List<Entity> entities;
 
