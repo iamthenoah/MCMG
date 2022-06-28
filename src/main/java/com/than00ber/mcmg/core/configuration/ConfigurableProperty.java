@@ -1,5 +1,6 @@
-package com.than00ber.mcmg.core.config;
+package com.than00ber.mcmg.core.configuration;
 
+import com.than00ber.mcmg.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -7,47 +8,34 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
-@SuppressWarnings("unused")
-public class MiniGameProperty<V> extends ConfigProperty<V> {
+@SuppressWarnings({"unchecked", "unused"})
+public class ConfigurableProperty<V> extends Property<V> {
 
     private final BiFunction<Player, String[], V> parser;
     private Predicate<V> validator;
 
-    public MiniGameProperty(String name, V defaultValue, BiFunction<Player, String[], V> parser, Predicate<V> validator) {
+    private ConfigurableProperty(String name, V defaultValue, BiFunction<Player, String[], V> parser, Predicate<V> validator) {
         super(name, defaultValue);
         this.parser = parser;
         this.validator = validator;
     }
 
-    public MiniGameProperty(String name, V defaultValue) {
-        this(name, defaultValue, (p, a) -> (V) a[0], b -> true);
-    }
-
-    public MiniGameProperty(String name) {
-        this(name, null);
-    }
-
-    public <P extends MiniGameProperty<V>> P validate(Predicate<V> predicate) {
-        validator = predicate;
+    public <P extends ConfigurableProperty<V>> P verify(Predicate<V> validator) {
+        this.validator = validator;
         return (P) this;
     }
 
-    public void parseAndSet(Player player, String[] args) {
-        set(parser.apply(player, args));
+    public boolean setIfValid(Player player, String[] args) {
+        V value = parser.apply(player, args);
+        boolean isValid = validator.test(value);
+        if (isValid) set(value);
+        return isValid;
     }
 
-    public boolean isValidValue(Player player, String[] args) {
-        return validator.test(parser.apply(player, args));
-    }
-
-    /**
-     * BooleanProperty
-     */
-    public static class BooleanProperty extends MiniGameProperty<Boolean> {
+    public static final class BooleanProperty extends ConfigurableProperty<Boolean> {
 
         public BooleanProperty(String name, Boolean defaultValue) {
             super(name, defaultValue, (p, a) -> Boolean.valueOf(a[0]), b -> true);
@@ -58,10 +46,7 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         }
     }
 
-    /**
-     * StringProperty
-     */
-    public static class StringProperty extends MiniGameProperty<String> {
+    public static final class StringProperty extends ConfigurableProperty<String> {
 
         public StringProperty(String name, String defaultValue) {
             super(name, defaultValue, (p, a) -> a[0], s -> true);
@@ -72,27 +57,18 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         }
     }
 
-    /**
-     * IntegerProperty
-     */
-    public static class IntegerProperty extends MiniGameProperty<Integer> {
-
-        public static final Predicate<Integer> POSITIVE = i -> i >= 0;
-        public static final Predicate<Integer> NEGATIVE = i -> i <= 0;
+    public static final class IntegerProperty extends ConfigurableProperty<Integer> {
 
         public IntegerProperty(String name, Integer defaultValue) {
             super(name, defaultValue, (p, a) -> Integer.parseInt(a[0]), i -> true);
         }
 
         public IntegerProperty(String name) {
-            this(name, 1);
+            this(name, 0);
         }
     }
 
-    /**
-     * DoubleProperty
-     */
-    public static class DoubleProperty extends MiniGameProperty<Double> {
+    public static final class DoubleProperty extends ConfigurableProperty<Double> {
 
         public DoubleProperty(String name, Double defaultValue) {
             super(name, defaultValue, (p, a) -> Double.parseDouble(a[0]), d -> true);
@@ -103,10 +79,7 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         }
     }
 
-    /**
-     * EnumProperty
-     */
-    public static class EnumProperty<E extends Enum<E>> extends MiniGameProperty<E> {
+    public static class EnumProperty<E extends Enum<E>> extends ConfigurableProperty<E> {
 
         private final Class<E> enumClass;
 
@@ -125,24 +98,17 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
 
         @Override
         public void load(ConfigurationSection configs) {
-            Object obj = configs.get(getPath());
-            if (obj != null) {
-                set(E.valueOf(enumClass, (String) obj));
-            }
+            Object obj = configs.get(getName());
+            if (obj != null) set(E.valueOf(enumClass, (String) obj));
         }
 
         @Override
         public void save(ConfigurationSection configs) {
-            if (get() != null) {
-                configs.set(getPath(), get().toString());
-            }
+            if (get() != null) configs.set(getName(), get().toString());
         }
     }
 
-    /**
-     * LocationProperty
-     */
-    public static class LocationProperty extends MiniGameProperty<Location> {
+    public static class LocationProperty extends ConfigurableProperty<Location> {
 
         public LocationProperty(String name, Location defaultValue) {
             super(name, defaultValue, LocationProperty::toLocation, l -> true);
@@ -167,10 +133,7 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         }
     }
 
-    /**
-     * ChatColorProperty
-     */
-    public static class ChatColorProperty extends MiniGameProperty<ChatColor> {
+    public static class ChatColorProperty extends ConfigurableProperty<ChatColor> {
 
         private ChatColorProperty(String name, ChatColor defaultValue, BiFunction<Player, String[], ChatColor> parser, Predicate<ChatColor> validator) {
             super(name, defaultValue, parser, validator);
@@ -182,20 +145,18 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
 
         @Override
         public void load(ConfigurationSection configs) {
-            Object obj = configs.get(getPath());
-            if (obj != null) {
-                set(ChatColor.getByChar((String) obj));
-            }
+            Object obj = configs.get(getName());
+            if (obj != null) set(ChatColor.getByChar((String) obj));
         }
 
         @Override
         public void save(ConfigurationSection configs) {
-            configs.set(getPath(), get().getChar());
+            configs.set(getName(), get().getChar());
         }
 
         @Override
         public String toString() {
-            return getPath() + "#" + ChatColor.getByChar(get().toString());
+            return getName() + ":" + get().getChar();
         }
 
         private static ChatColor toChatColor(Player player, String[] args) {
@@ -211,7 +172,12 @@ public class MiniGameProperty<V> extends ConfigProperty<V> {
         }
     }
 
-    public static <E extends Enum<E>> E safeValueOf(Class<E> enumClass, String string, E defaultValue) {
-        return Optional.ofNullable(safeValueOf(enumClass, string)).orElse(defaultValue);
+    public static final class CheckIf {
+        public static final Predicate<Integer> POSITIVE_INT = i -> i >= 0;
+        public static final Predicate<Integer> NEGATIVE_INT = i -> i <= 0;
+        public static final Predicate<Double> POSITIVE_DOUBLE = i -> i >= 0;
+        public static final Predicate<Double> NEGATIVE_DOUBLE = i -> i <= 0;
+        public static final Predicate<Integer> LESS_THAN_A_DAY = i -> i > 0 && i <= 86400;
+        public static final Predicate<Integer> LESS_THEN_PLAYERS = i -> i > 0 && i <= Main.WORLD.getPlayers().size();
     }
 }

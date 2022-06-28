@@ -1,8 +1,8 @@
 package com.than00ber.mcmg.core;
 
 import com.google.common.collect.ImmutableList;
-import com.than00ber.mcmg.core.config.ConfigProperty;
-import com.than00ber.mcmg.core.config.MiniGameProperty;
+import com.than00ber.mcmg.core.configuration.Configurable;
+import com.than00ber.mcmg.core.configuration.ConfigurableProperty;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -11,20 +11,20 @@ import java.util.function.Consumer;
 
 import static org.bukkit.scoreboard.Team.OptionStatus;
 
-public class MiniGameTeam implements Registry.Object {
+public class MiniGameTeam implements Configurable {
 
-    private final MiniGameProperty.StringProperty name;
-    private final MiniGameProperty.StringProperty visibleName;
-    private final MiniGameProperty.DoubleProperty weight;
-    private final MiniGameProperty.IntegerProperty threshold;
-    private final MiniGameProperty.ChatColorProperty color;
-    private final MiniGameProperty.EnumProperty<OptionStatus> visibility;
-    private final MiniGameProperty.StringProperty catchPhrase;
-    private final MiniGameProperty.StringProperty objective;
-    private final MiniGameProperty.EnumProperty<Sound> sound;
-    private final MiniGameProperty.BooleanProperty isSpectator;
-    private final MiniGameProperty.BooleanProperty isRequired;
-    private final MiniGameProperty.BooleanProperty disableWhileGrace;
+    private final ConfigurableProperty.StringProperty name;
+    private final ConfigurableProperty.StringProperty visibleName;
+    private final ConfigurableProperty.DoubleProperty weight;
+    private final ConfigurableProperty.IntegerProperty threshold;
+    private final ConfigurableProperty.ChatColorProperty color;
+    private final ConfigurableProperty.EnumProperty<OptionStatus> visibility;
+    private final ConfigurableProperty.StringProperty catchPhrase;
+    private final ConfigurableProperty.StringProperty objective;
+    private final ConfigurableProperty.EnumProperty<Sound> sound;
+    private final ConfigurableProperty.BooleanProperty isSpectator;
+    private final ConfigurableProperty.BooleanProperty isRequired;
+    private final ConfigurableProperty.BooleanProperty disableWhileGrace;
     private final Consumer<Player> preparePlayer;
 
     private MiniGameTeam(
@@ -42,18 +42,18 @@ public class MiniGameTeam implements Registry.Object {
             boolean disableWhileGrace,
             Consumer<Player> preparePlayer
     ) {
-        this.name = new MiniGameProperty.StringProperty("name", name);
-        this.visibleName = new MiniGameProperty.StringProperty("visibleName", visibleName);
-        this.weight = new MiniGameProperty.DoubleProperty("weight", weight);
-        this.threshold = new MiniGameProperty.IntegerProperty("threshold", threshold);
-        this.color = new MiniGameProperty.ChatColorProperty("color", color);
-        this.visibility = new MiniGameProperty.EnumProperty<>("visibility", OptionStatus.class, visibility);
-        this.catchPhrase = new MiniGameProperty.StringProperty("phrase", catchPhrase);
-        this.objective = new MiniGameProperty.StringProperty("objective", objective);
-        this.sound = new MiniGameProperty.EnumProperty<>("sound", Sound.class, sound);
-        this.isSpectator = new MiniGameProperty.BooleanProperty("spectator", isSpectator);
-        this.isRequired = new MiniGameProperty.BooleanProperty("required", isRequired);
-        this.disableWhileGrace = new MiniGameProperty.BooleanProperty("disableWhileGrace", disableWhileGrace);
+        this.name = new ConfigurableProperty.StringProperty("name", name);
+        this.visibleName = new ConfigurableProperty.StringProperty("visibleName", visibleName);
+        this.weight = new ConfigurableProperty.DoubleProperty("weight", weight);
+        this.threshold = new ConfigurableProperty.IntegerProperty("threshold", threshold);
+        this.color = new ConfigurableProperty.ChatColorProperty("color", color);
+        this.visibility = new ConfigurableProperty.EnumProperty<>("visibility", OptionStatus.class, visibility);
+        this.catchPhrase = new ConfigurableProperty.StringProperty("phrase", catchPhrase);
+        this.objective = new ConfigurableProperty.StringProperty("objective", objective);
+        this.sound = new ConfigurableProperty.EnumProperty<>("sound", Sound.class, sound);
+        this.isSpectator = new ConfigurableProperty.BooleanProperty("spectator", isSpectator);
+        this.isRequired = new ConfigurableProperty.BooleanProperty("required", isRequired);
+        this.disableWhileGrace = new ConfigurableProperty.BooleanProperty("disableWhileGrace", disableWhileGrace);
         this.preparePlayer = preparePlayer;
     }
 
@@ -111,7 +111,7 @@ public class MiniGameTeam implements Registry.Object {
     }
 
     @Override
-    public ImmutableList<? extends ConfigProperty<?>> getProperties() {
+    public ImmutableList<ConfigurableProperty<?>> getProperties() {
         return ImmutableList.of(
                 visibleName,
                 weight,

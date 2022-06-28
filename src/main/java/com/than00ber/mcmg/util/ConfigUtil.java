@@ -2,7 +2,6 @@ package com.than00ber.mcmg.util;
 
 import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -15,7 +14,7 @@ public final class ConfigUtil {
         YamlConfiguration configs = new YamlConfiguration();
         try {
             configs.load(new File(instance.getDataFolder(), name));
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (Exception e) {
             Console.warn("Config File '" + name + "' not found. Generating new one.");
 
             try {
@@ -24,9 +23,8 @@ public final class ConfigUtil {
                     instance.saveResource(name, true);
                     configs.save(file);
                 }
-            } catch (IOException exception) {
+            } catch (Exception exception) {
                 Console.error("Could not create '" + name + "' config file. ");
-                Console.error(exception);
             }
         }
         return configs;
