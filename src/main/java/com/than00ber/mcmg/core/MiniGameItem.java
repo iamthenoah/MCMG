@@ -1,6 +1,7 @@
 package com.than00ber.mcmg.core;
 
 import com.google.common.collect.ImmutableList;
+import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.configuration.Configurable;
 import com.than00ber.mcmg.core.configuration.ConfigurableProperty;
 import com.than00ber.mcmg.util.ScheduleUtil;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -59,10 +61,6 @@ public class MiniGameItem implements Configurable {
         this.meta = meta;
         this.onStart = onStart;
         this.onFinish = onFinish;
-
-        if (range > 0) tooltips.add(ChatColor.GRAY + "  Range: " + ChatColor.YELLOW + range + "b");
-        if (duration > 0) tooltips.add(ChatColor.GRAY + "  Duration: " + ChatColor.YELLOW + duration + "s");
-        if (cooldown > 0) tooltips.add(ChatColor.GRAY + "  Cooldown: " + ChatColor.YELLOW + cooldown + "s");
 
         // lore has dark purple color set by default
         this.tooltips = tooltips.stream().map(s -> ChatColor.WHITE + s).toList();
@@ -129,7 +127,7 @@ public class MiniGameItem implements Configurable {
         private String name;
         private ChatColor color;
         private final Material material;
-        private List<String> tooltips;
+        private final List<String> tooltips;
         private boolean unbreakable;
         private int startingCooldown;
         private ItemMeta meta;

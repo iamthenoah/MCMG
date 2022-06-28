@@ -113,7 +113,7 @@ public abstract class MiniGame implements Configurable, MiniGameLifeCycle {
     }
 
     public final void removePlayer(Player player) {
-        originalPlayerRoles.remove(player);
+//        originalPlayerRoles.remove(player);
         currentPlayerRoles.remove(player);
     }
 
