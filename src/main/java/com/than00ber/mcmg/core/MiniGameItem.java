@@ -1,7 +1,6 @@
 package com.than00ber.mcmg.core;
 
 import com.google.common.collect.ImmutableList;
-import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.core.configuration.Configurable;
 import com.than00ber.mcmg.core.configuration.ConfigurableProperty;
 import com.than00ber.mcmg.util.ScheduleUtil;
@@ -49,8 +48,6 @@ public class MiniGameItem implements Configurable {
             Function<Action, ActionResult> onStart,
             Consumer<Action> onFinish
     ) {
-        Console.error("MiniGameItem");
-
         this.name = new ConfigurableProperty.StringProperty("name", name);
         this.material = new ConfigurableProperty.EnumProperty<>("material", Material.class, material);
         this.color = new ConfigurableProperty.ChatColorProperty("color", color);
@@ -143,8 +140,6 @@ public class MiniGameItem implements Configurable {
         private Consumer<Action> onFinish;
 
         public Builder(Material material) {
-            Console.error("Builder");
-
             this.material = material;
             name = material.name();
             color = ChatColor.WHITE;

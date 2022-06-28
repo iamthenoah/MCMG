@@ -1,6 +1,7 @@
 package com.than00ber.mcmg.core.configuration;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -12,7 +13,7 @@ public class Property<V> implements Supplier<V> {
     protected final V defaultValue;
     protected V value;
 
-    public Property(String name, V defaultValue) {
+    public Property(String name, @NotNull V defaultValue) {
         this.name = name;
         this.defaultValue = defaultValue;
     }
