@@ -26,6 +26,7 @@ public class Main extends JavaPlugin {
         INSTANCE = this;
         WORLD = Bukkit.getWorlds().get(0);
         MINIGAME_ENGINE = new MiniGameEngine<>(this);
+        CONSOLE = new Console(true);
 
         Bukkit.getPluginManager().registerEvents(new GlobalEvents(), this);
 
