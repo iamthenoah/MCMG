@@ -19,6 +19,7 @@ public class Main extends JavaPlugin {
     public static MiniGameEngine<MiniGame> MINIGAME_ENGINE;
     public static Main INSTANCE;
     public static World WORLD;
+    public static Console CONSOLE;
 
     @Override
     public void onEnable() {

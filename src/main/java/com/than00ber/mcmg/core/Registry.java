@@ -1,7 +1,6 @@
 package com.than00ber.mcmg.core;
 
 import com.google.common.collect.ImmutableList;
-import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.configuration.Configurable;
 import com.than00ber.mcmg.util.ConfigUtil;
@@ -33,8 +32,8 @@ public final class Registry<O extends Configurable> {
     public O register(final Supplier<O> object) {
         String key = TextUtil.simplify(object.get().getName());
         if (entries.containsKey(key)) {
-            Console.warn("Registry object with key '" + key + "' already registered.");
-            Console.warn("  This will override the currently registered object.");
+            Main.CONSOLE.warn("Registry object with key '" + key + "' already registered.");
+            Main.CONSOLE.warn("  This will override the currently registered object.");
         }
         entries.put(key, object);
         return object.get();
@@ -59,24 +58,24 @@ public final class Registry<O extends Configurable> {
     }
 
     public void load(final Main instance) {
-        Console.debug("Loading registry: '" + registry + "'...");
+        Main.CONSOLE.debug("Loading registry: '" + registry + "'...");
         getRegistryObjects().forEach(obj -> {
-            Console.debug("| " + obj.get().getName());
+            Main.CONSOLE.debug("| " + obj.get().getName());
             String path = getRegistryLocation(obj.get());
             YamlConfiguration data = ConfigUtil.load(instance, path);
             obj.get().setConfig(data);
         });
-        Console.debug("DONE.");
+        Main.CONSOLE.debug("DONE.");
     }
 
     public void unload(final Main instance) {
-        Console.debug("Unloading registry: '" + registry + "'...");
+        Main.CONSOLE.debug("Unloading registry: '" + registry + "'...");
         getRegistryObjects().forEach(obj -> {
-            Console.debug("| " + obj.get().getName());
+            Main.CONSOLE.debug("| " + obj.get().getName());
             String path = getRegistryLocation(obj.get());
             ConfigUtil.save(instance, path, obj.get().getConfig());
         });
-        Console.debug("DONE.");
+        Main.CONSOLE.debug("DONE.");
     }
 
     public void reload(final String key) {

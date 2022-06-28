@@ -6,19 +6,25 @@ import org.bukkit.ChatColor;
 
 public final class Console {
 
-    public static void debug(Object... args) {
-        log(ChatColor.GRAY, args);
+    private final boolean isDebug;
+
+    public Console(boolean isDebug) {
+        this.isDebug = isDebug;
     }
 
-    public static void warn(Object... args) {
+    public void debug(Object... args) {
+        if (isDebug) log(ChatColor.GRAY, args);
+    }
+
+    public void warn(Object... args) {
         log(ChatColor.GOLD, args);
     }
 
-    public static void error(Object... args) {
+    public void error(Object... args) {
         log(ChatColor.RED, args);
     }
 
-    private static void log(ChatColor color, Object... args) {
+    private void log(ChatColor color, Object... args) {
         for (Object obj : args) {
             String message = TextUtil.addPluginPrefix(color + "" + obj);
             Bukkit.getConsoleSender().sendMessage(message);

@@ -1,6 +1,5 @@
 package com.than00ber.mcmg.util;
 
-import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -15,7 +14,7 @@ public final class ConfigUtil {
         try {
             configs.load(new File(instance.getDataFolder(), name));
         } catch (Exception e) {
-            Console.warn("Config File '" + name + "' not found. Generating new one.");
+            Main.CONSOLE.warn("Config File '" + name + "' not found. Generating new one.");
 
             try {
                 File file = new File(instance.getDataFolder(), name);
@@ -24,7 +23,7 @@ public final class ConfigUtil {
                     configs.save(file);
                 }
             } catch (Exception exception) {
-                Console.error("Could not create '" + name + "' config file. ");
+                Main.CONSOLE.error("Could not create '" + name + "' config file. ");
             }
         }
         return configs;
@@ -36,7 +35,7 @@ public final class ConfigUtil {
             File file = new File(instance.getDataFolder(), name);
             configs.save(file);
         } catch (IOException e) {
-            Console.error("Error saving '" + name + "' config file: " + e.getMessage());
+            Main.CONSOLE.error("Error saving '" + name + "' config file: " + e.getMessage());
         }
     }
 }

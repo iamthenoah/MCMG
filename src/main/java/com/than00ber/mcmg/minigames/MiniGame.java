@@ -2,7 +2,6 @@ package com.than00ber.mcmg.minigames;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.MiniGameEngine;
 import com.than00ber.mcmg.core.MiniGameEvent;
@@ -129,10 +128,10 @@ public abstract class MiniGame implements Configurable, MiniGameLifeCycle {
             Team newTeam = scoreboard.getTeam(newMiniGameTeam.getName());
 
             if (!previousMiniGameTeam.isSpectator() && currentTeam == null) {
-                Console.warn("Current player team not registered " + previousMiniGameTeam.getVisibleName());
+                Main.CONSOLE.warn("Current player team not registered " + previousMiniGameTeam.getVisibleName());
             }
             if (!newMiniGameTeam.isSpectator() && newTeam == null) {
-                Console.warn("New player team not registered " + newMiniGameTeam.getVisibleName());
+                Main.CONSOLE.warn("New player team not registered " + newMiniGameTeam.getVisibleName());
             }
 
             if (currentTeam == null || newTeam == null) return;

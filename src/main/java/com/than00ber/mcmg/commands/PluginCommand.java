@@ -1,6 +1,5 @@
 package com.than00ber.mcmg.commands;
 
-import com.than00ber.mcmg.Console;
 import com.than00ber.mcmg.Main;
 import com.than00ber.mcmg.core.ActionResult;
 import com.than00ber.mcmg.util.ChatUtil;
@@ -38,12 +37,12 @@ public abstract class PluginCommand implements CommandExecutor, TabCompleter {
 
             if (result.hasMessages()) {
                 String[] messages = result.getFormattedMessages();
-                Console.debug(messages);
+                Main.CONSOLE.debug(messages);
                 ChatUtil.toSelf(sender, messages);
             }
         } catch (Exception e) {
-            Console.error(e.getMessage());
-            Console.error(e.getStackTrace());
+            Main.CONSOLE.error(e.getMessage());
+            Main.CONSOLE.error(e.getStackTrace());
             ChatUtil.toSelf(sender, INVALID_COMMAND.getFormattedMessages());
             ChatUtil.toSelf(sender, ChatColor.RED + "Should be: " + ChatColor.ITALIC + command.getUsage());
         }
