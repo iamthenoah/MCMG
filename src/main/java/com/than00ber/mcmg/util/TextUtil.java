@@ -39,7 +39,11 @@ public class TextUtil {
     }
 
     public static String simplify(String text) {
-        return  text.replaceAll("[-+.^:,']", "").replaceAll(" ", "_").toLowerCase();
+        return ChatColor.stripColor(text
+                .replaceAll("[-+.^:,']", "")
+                .replaceAll(" ", "_")
+                .toLowerCase()
+        );
     }
 
     public static String formatPlayer(Player player) {

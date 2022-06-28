@@ -31,7 +31,7 @@ public final class Registry<O extends Configurable> {
     }
 
     public O register(final Supplier<O> object) {
-        String key = object.get().getName();
+        String key = TextUtil.simplify(object.get().getName());
         if (entries.containsKey(key)) {
             Console.warn("Registry object with key '" + key + "' already registered.");
             Console.warn("  This will override the currently registered object.");
